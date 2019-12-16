@@ -34,9 +34,9 @@ function cascdeInit(na,os,v1,v2,v3,v4,v5) {
 
     //打开xlmdocm文档
     if (new_area == 1) {
-        var xmlfile = '../addons/lionfish_comshop/static/js/dist/area/AreaNew.xml';
+        var xmlfile = '/static/js/dist/area/AreaNew.xml';
     } else {
-        var xmlfile = '../addons/lionfish_comshop/static/js/dist/area/Area.xml';
+        var xmlfile = '/static/js/dist/area/Area.xml';
     }
 
     xmlDoc = loadXmlFile(xmlfile);
