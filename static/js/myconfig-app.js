@@ -1,7 +1,7 @@
 var version = +new Date();
 require.config({
     urlArgs: 'v=' + version, 
-    baseUrl: '../addons/lionfish_comshop/static/js/app',
+    baseUrl: '../static/js/app',
     paths: {
         'jquery': '../dist/jquery/jquery-1.11.1.min',
         'jquery.gcjs': '../dist/jquery/jquery.gcjs',

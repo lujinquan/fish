@@ -1,6 +1,6 @@
 var version = +new Date();
 var myconfig = {
-    path: '../addons/lionfish_comshop/static/js/',
+    path: '../static/js/',
     alias: {
         'jquery': 'dist/jquery/jquery-1.11.1.min',
         'jquery.form': 'dist/jquery/jquery.form',

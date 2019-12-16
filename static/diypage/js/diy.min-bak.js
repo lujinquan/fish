@@ -2026,7 +2026,7 @@ define(['jquery.ui', '../../js/web/goods_selector.js'], function (ui, gSelector)
             if (typeof src != 'string') {
                 return ''
             }
-            if (src.indexOf('http://') == 0 || src.indexOf('https://') == 0 || src.indexOf('../addons/lionfish_comshop/') == 0) {
+            if (src.indexOf('http://') == 0 || src.indexOf('https://') == 0 || src.indexOf('../') == 0) {
                 return src
             } else if (src.indexOf('images/') == 0 || src.indexOf('audios/') == 0) {
                 return modal.attachurl + src

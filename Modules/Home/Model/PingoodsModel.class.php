@@ -1274,7 +1274,7 @@ class PingoodsModel {
 		
 		//imagecopymerge($dst, $avatar_src, 24, 615, 0, 0, $avatar_w, $avatar_h, 100);
 		
-		//IA_ROOT."/addons/lionfish_comshop/static/fonts/simhei.ttf"
+		//IA_ROOT."/static/fonts/simhei.ttf"
 		//$ttf_path = ROOT_PATH."Common/js/simhei.ttf";
 		
 		$ttf_path = ROOT_PATH."/static/fonts/simhei.ttf";

@@ -668,6 +668,6 @@ define(['jquery', 'bootstrap'], function($, bs) {
 		})
 	}
 	$("img").error(function() {
-		$(this).attr('src', '../addons/lionfish_comshop/static/images/nopic.png')
+		$(this).attr('src', '../static/images/nopic.png')
 	})
 });
