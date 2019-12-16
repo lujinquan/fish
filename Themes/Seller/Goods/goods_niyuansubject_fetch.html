@@ -1,0 +1,25 @@
+<form class="form-horizontal"  id="validation-form" method="post" onsubmit="return vl_form_sub()" action='{:U("Goods/niyuansubject_sub")}'>
+			
+	<div class="form-group required">
+	 <?php foreach($subject as $super_val){ ?>
+		<div class="col-sm-12">
+			 	<label>
+			 		<input type="radio" name="subject" value="<?php echo $super_val['id']; ?>" />
+			 		<?php echo $super_val['name'] ?>(申请成功将锁定商品价格：{$super_val['price']}元)
+			 	</label>
+		</div>
+		<div class="col-sm-12">
+			开始时间：<?php echo date('Y-m-d H:i:s',$super_val['begin_time']) ?>
+			&nbsp;&nbsp;  
+			结束时间：<?php echo date('Y-m-d H:i:s',$super_val['end_time']) ?>
+		</div>
+		 <?php } ?>
+	</div>	
+	<div class="form-group">
+		<label class="col-sm-1 control-label no-padding-left"> </label>	
+		<div class="col-sm-11">
+			<input type="hidden" name="goods_id" value="{$goods_id}" />
+			<input name="send" type="submit" id="submitactivity" value="提交" class="btn btn-primary" />
+		</div>
+	</div>
+</form>

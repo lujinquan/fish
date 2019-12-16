@@ -1,0 +1,88 @@
+<div class="tab-content" >
+		
+	<div class="row">
+		<div class="col-xs-12"> 
+			<div class="panel panel-info">
+				<div class="panel-heading">添加商品</div>
+					<div class="panel-body">
+						<div class="col-xs-12 search-row"> 
+							<div class="col-sm-6">
+								<span class="form-label">商品名称：</span>
+								<input type="text" id="goods_name" name="goods_name" value="">
+							</div>
+							<div class="col-sm-3"> 
+								<button name="subtype" id="search2" value="search" class="btn btn-white btn-search"> <i class="icon-search"></i> 检 索 </button>
+								
+							</div> 
+							<div class="col-sm-3" style="display:none;">
+								<button name="subtype" id="baom" value="search" class="btn btn-white btn-search"> 
+								<i class="icon-ok"></i> 提交 </button>
+							</div>
+						</div> 
+						<div class="col-xs-12 search-row"> 
+							<div class="tags" style="border:none;width:100%;">
+							</div>
+						</div> 
+				  </div>
+			</div>
+		 </div>
+		 <div class="col-xs-12" id="goods_result2" style="max-height:500px;overflow-y:scroll;"> 
+			
+		
+		 </div>
+		 
+		 
+	</div>
+
+</div>
+<script>
+
+var sub_url ="{:U('Goodscomment/sub_comment')}";
+
+$(function(){
+	search_goods2();
+	$('#search2').click(function(){
+		search_goods2();
+	});
+	
+	$('.close').live('click',function(){
+		$(this).parent().remove();
+	})
+	$('#goods_result2 .cgoods_id').live('click',function(){
+		var rel_id = $(this).val();
+		var goods_name = $(this).attr('rel_name');
+		
+		if($(this).is(':checked')) { 
+			
+			if($('#dialog2 .tag'+rel_id).length ==0)
+			{
+				
+				var rel_html = '<span class="tag tag'+rel_id+'" rel_goods_id="'+rel_id+'">'+goods_name+'<button type="button" class="close">×</button></span>';
+				//$('.tags').append(ret.html);	
+				
+				$('#dialog2 .tags').append(rel_html);
+			}
+		}else {
+			$('#dialog2 .tag'+rel_id).remove();
+		}
+	})
+	
+	
+	
+})
+
+function search_goods2()
+{
+	var goods_name = $('#goods_name').val();
+	$.ajax({
+		url:"{:U('Goods/goods_search_all')}",
+		type:'post',
+		data:{goods_name:goods_name},
+		dataType:'json',
+		success:function(ret){
+			$('#goods_result2').html(ret.html);
+		}
+	})
+}
+
+</script>

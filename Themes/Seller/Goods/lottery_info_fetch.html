@@ -1,0 +1,28 @@
+<volist name="list" id="v" empty="$empty">
+<tr>		
+	<td class="center">
+	<label>
+		<input class="ace ids" type="checkbox" name="ids" value="{$v.order_id}"/>
+		<span class="lbl"></span>
+	</label>
+	</td>				
+	<td>{$v.order_id}</td>
+	<td>
+		<?php if($v['lottery_state'] == 0) { ?>
+		<span class="green">等待开奖</span>
+		<?php }else { ?>
+			<?php if($v['lottery_win'] == 1) { ?>
+				<span class="red">一等奖</span>
+			<?php } else { ?> 	
+				<span class="blue">二等奖</span>	
+			<?php } ?>	
+		<?php } ?>
+	</td>
+	<td>{$v.uname}</td>
+	<td>
+		<img src="{$v.avatar}" width="50" />
+	</td>
+	<td>{$v.pin_id}</td>
+	<td><?php echo date('Y-m-d H:i:s', $v['pay_time']); ?></td>
+</tr>
+</volist>	

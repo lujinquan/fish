@@ -1,0 +1,117 @@
+<extend name="Public:base" />
+
+<block name="content">
+	<div class="page-header">
+		<a href="{:U('Pickup/add')}" class="btn btn-primary">新增</a>
+	</div>	
+	
+<div class="row">
+	
+	<include file="Pickup:header" />
+	<div class="col-xs-12"> 
+    	<div class="panel panel-info">
+			<div class="panel-heading">查询</div>
+			<form name="order_search" method="post" action="{:U('Pickup/hexiao')}">
+				<div class="panel-body">
+			      	<div class="col-xs-12 search-row"> 
+				       	<div class="col-sm-6">
+					        <span class="form-label">提货单序号：</span>
+					        <input type="text" name="pick_sn" class="form-item" value="{$pick_sn}">
+							<button type="submit" name="subtype"  value="search" class="btn btn-white btn-search"> <i class="icon-search"></i> 查 询 </button>
+				     	</div> 
+			     	</div> 
+			  </div>
+			</form>
+		</div>
+	</div>
+	 
+	<div class="col-xs-12">	
+		<div class="table-responsive">
+			<?php if(!empty($pick_order)){  ?>
+			<table class="table table-striped table-bordered table-hover">
+				<thead>
+					<tr>											
+						<th>商品名称</th>							
+						<th>商品数量</th>
+						<th>商品总价</th>  
+						<th>自提点名称</th>  
+						<th>自提点电话</th>  
+						<th>提货状态</th>  
+						<th>自提单序列号</th>  
+						<th>操作</th>							
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>{$order_goods.name}(规格：{$option_str})</td>
+						<td>{$order_goods.quantity}</td>
+						<td>{$order_goods.total}</td>
+						<td>{$pick_up.pick_name}</td>
+						<td>{$pick_up.telephone}</td>
+						<td id="state">
+							<?php 
+								if($pick_order['state'] == 0)
+								{
+									echo '<span class="red">未提货</span>';
+								}else {
+									echo '<span class="red">已提货</span>';
+								}
+							?>
+						</td>
+						<td>
+							{$pick_order.pick_sn}
+						</td>
+						<td>
+							<?php if($pick_order['state'] == 0){ ?> 
+							<a class="btn btn-xs btn-info" id="sub_hexiao" rel='{:U("Pickup/hexiao_sub",array("id"=>$pick_order["id"]))}' >
+								确认提货
+							</a>
+							<?php } ?>
+							<?php 
+								if(!$is_cur_dian)
+								{
+									echo '<span class="red">非当前店铺的订单</span>';
+								}
+							?>
+						</td>
+					</tr>
+						  
+				</tbody> 
+			</table>
+			<?php } ?>
+		</div>
+	</div>
+</div>
+</block>
+<block name="javascript">
+<script>
+
+$(function(){
+	
+	$('#sub_hexiao').click(function(){
+		if(!confirm('确认核销吗?')) 
+		{
+			return false;
+		}
+		var re_url = $(this).attr('rel');
+		$.ajax({
+			url:re_url,
+			type:'post',
+			dataType:'json',
+			success:function(ret){
+				if(ret.code == 1)
+				{
+					alert('核销成功');
+					$('#state').html('提货成功');
+					$('#sub_hexiao').hide();
+					return false;
+				} else {
+					alert(ret.msg);
+				}
+			}
+		})
+		
+	})
+});		
+</script>
+</block>

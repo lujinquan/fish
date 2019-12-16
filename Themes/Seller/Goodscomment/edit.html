@@ -1,0 +1,424 @@
+<extend name="Public:base" />
+<block name="content">
+<style>
+#mult_option_new{
+	width: 98%;
+    height: 260px;
+    overflow-y: scroll;
+}
+</style>
+	<link rel="stylesheet" href="__CSS__/dialog.css" />	
+	<div class="page-header">
+		<h1>
+			{$breadcrumb2}
+		</h1>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">	
+			<form class="form-horizontal"  enctype="multipart/form-data" id="form" method="post" action="{:U('Goodscomment/save_vircomment')}">	
+				<div class="form-group">
+					<label class="col-sm-2 control-label no-padding-left"> 评价内容 </label>
+					<div class="col-sm-5">
+						<div class="clearfix">
+							<textarea name="content" id="content" class="col-xs-10 col-sm-10 form-control"></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label no-padding-left"> 描述等级 </label>
+					<div class="col-sm-10">
+						<div class="ft18 rating inline"></div>
+						<div class="hr hr-16 hr-dotted"></div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label no-padding-left"> 价格合理等级 </label>
+					<div class="col-sm-10">
+						<div class="ft18 price_rating inline"></div>
+						<div class="hr hr-16 hr-dotted"></div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label no-padding-left"> 质量满意等级 </label>
+					<div class="col-sm-10">
+						<div class="ft18 zhiliang_rating inline"></div>
+						<div class="hr hr-16 hr-dotted"></div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label no-padding-left"> 选择机器人 </label>
+					<div class="col-sm-3">
+						<div class="clearfix">
+							<a href="javascript:;" class="chose_jiqi btn btn-sm btn-success bigger-120">
+								<i class="ace-icon fa fa-refresh "></i>
+								点击选择
+							</a>
+						</div>
+					</div>
+					<div class="col-sm-5">
+						<p id="jiqi_man" class="tags" style="border:none;"></p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label no-padding-left"> 选择评价商品 </label>
+					<div class="col-sm-3">
+						<div class="clearfix">
+							<a href="javascript:;" class="chose_goods btn btn-sm btn-success bigger-120">
+								<i class="ace-icon fa fa-refresh "></i>
+								点击选择
+							</a>
+						</div>
+					</div>
+					<div class="col-sm-5">
+						<p id="goods_list" class="tags" style="border:none;"></p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label no-padding-left"> 评价图片 </label>
+					<div class="col-sm-5">
+						<input multiple="" type="file" id="id-input-file-3" />
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label class="col-sm-2 control-label no-padding-left"> 评价时间 </label>
+					<div class="col-sm-5">
+						<input type="text" name="date_added_begin" value="<?php echo date('Y-m-d H:i:s');  ?>" id="begin_time" class="datetimepicker data_input">
+					</div>
+				</div>
+				
+				
+				<div class="form-group">
+					<label class="col-sm-2 control-label no-padding-left"> &nbsp; </label>
+					<div class="col-sm-5">
+						<button name="send" form="form-goods" id="submit" type="submit" style="width:100px;"  class="btn btn-sm btn-primary">确认评价</button>
+					</div>
+				</div>
+				
+			</form>
+		</div>
+	</div>
+	
+	<div class="ks-ext-mask" style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 999; display:none"></div>
+	<div id="dialog" class="dialog" style="z-index: 9999; display:none;top:110px;">
+	    <div class="ks-contentbox">
+	      <div class="title"><span>请选择</span><a class="ks-ext-close" href="javascript:void(0)">X</a></div>
+	     	
+	        <div class="J_DefaultMessage"></div>
+	       	 <div class="bottom">
+	        	 <a href="javascript:void(0);" class="J_SubmitPL ncsc-btn ncsc-btn-green">确认</a> 
+	        	 <a href="javascript:void(0);" class="J_Cancel ncsc-btn">取消</a> </div>
+	      
+	   		</div>
+	  </div>
+	  <div id="dialog2" class="dialog" style="z-index: 9999; display:none;top:110px;">
+	    <div class="ks-contentbox">
+	      <div class="title"><span>请选择</span><a class="ks-ext-close" href="javascript:void(0)">X</a></div>
+	     	
+	        <div class="J_DefaultMessage"></div>
+	       	 <div class="bottom">
+	        	 <a href="javascript:void(0);" class="J_SubmitPL ncsc-btn ncsc-btn-green">确认</a> 
+	        	 <a href="javascript:void(0);" class="J_Cancel ncsc-btn">取消</a> </div>
+	      
+	   		</div>
+	  </div>
+  
+<style>
+.ft18{
+	font-size:18px;
+}
+.cancel-on-png, .cancel-off-png, .star-on-png, .star-off-png, .star-half-png {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    font-family: "FontAwesome";
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 1;
+    speak: none;
+    text-transform: none;
+    color: #777777;
+}
+.star-on-png {
+  color: #feb902;
+}
+.star-on-png:before {
+  content: "\f005";
+}
+.star-off-png {
+  color: #777777;
+}
+.star-off-png:before {
+  content: "\f006";
+}
+.star-half-png {
+  color: #feb902;
+}
+.star-half-png:before {
+  content: "\f123";
+}
+#goods_result{
+	max-height: 400px;
+    overflow-y: scroll;
+}
+  </style>
+</block>
+<block name="javascript">
+<script src="__PUBLIC__/js/moment/moment.js"></script>
+<script src="__PUBLIC__/js/moment/locale/zh-cn.js"></script> 
+
+<script src="__PUBLIC__/js/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script>
+<link rel="stylesheet" href="__PUBLIC__/js/bootstrap-timepicker/css/bootstrap-timepicker.css" />
+
+<script src="__PUBLIC__/fileupload/jquery.ui.widget.js"></script>
+<script src="__PUBLIC__/fileupload/jquery.fileupload.js"></script>
+<script src="__PUBLIC__/js/jquery.raty.js"></script>
+
+<script>
+var s_imgs = [];
+	$(function(){
+		
+		$('#begin_time').datetimepicker({
+		 format: 'YYYY-MM-DD H:mm:ss',//use this option to display seconds
+		 icons: {
+			time: 'btn btn-lg icon-time',
+			date: 'btn btn-lg icon-calendar',
+			up: 'fa icon-chevron-up',
+			down: 'fa icon-chevron-down',
+			previous: 'fa icon-chevron-left',
+			next: 'fa icon-chevron-right',
+			today: 'fa icon-arrows ',
+			clear: 'fa icon-trash',
+			close: 'fa icon-times'
+		 }
+		}).next().on(ace.click_event, function(){
+			$(this).prev().focus();
+		});
+		
+		$('#submit').click(function(){
+			var content = $('#content').val();
+			var star = $('.rating input[name=score]').val();
+			var star2 = $('.price_rating input[name=score]').val();
+			var star3 = $('.zhiliang_rating input[name=score]').val();
+			
+			var begin_time = $('#begin_time').val();
+			
+			var jia_id = $('#jiqi_man .tag').attr('rel_goods_id');
+			var goods_id_arr = [];
+			
+			$('#goods_list .tag').each(function(){
+				goods_id_arr.push( $(this).attr('rel_goods_id') );
+			})
+			var goods_id_str = '';
+			if(goods_id_arr.length > 0)
+			{
+				goods_id_str = goods_id_arr.join(',');
+			}
+			var s_imgs_str = '';
+			if(s_imgs.length > 0)
+			{
+				s_imgs_str = s_imgs.join(',');
+			}
+			
+			$.ajax({
+				url:"{:U('Goodscomment/save_vir_comment')}",
+				type:'post',
+				dataType:'json',
+				data:{goods_id_str:goods_id_str,begin_time:begin_time,jia_id:jia_id,star:star,star2:star2,star3:star3,content:content,s_imgs_str:s_imgs_str},
+				success:function(ret){
+					
+					if(ret.code ==0)
+					{
+						alert('添加成功');
+						location.href = ret.ref_url;
+						return false;
+					}else{
+						alert(ret.msg);
+						return false;
+					}
+				}
+			})
+			
+			return false;
+		});
+		$('#dialog .J_SubmitPL').click(function(){
+			$('#jiqi_man').html( $('#dialog .tags').html() );
+			$('.ks-ext-mask').hide();
+			$('#dialog').hide();
+		})
+		$('#dialog2 .J_SubmitPL').click(function(){
+			$('#goods_list').html( $('#dialog2 .tags').html() );
+			$('.ks-ext-mask').hide();
+			$('#dialog2').hide();
+		})
+		$('.chose_jiqi').click(function(){
+			$.ajax({
+				url:"{:U('Goodscomment/get_jiqi')}",
+				type:'get',
+				dataType:'json',
+				success:function(ret){
+					$('#dialog .J_DefaultMessage').html(ret.html);
+					$('.ks-ext-mask').show();
+					$('#dialog').show();
+				}
+			})
+		})
+		$('.chose_goods').click(function(){
+			$.ajax({
+				url:"{:U('Goodscomment/get_goods_all')}",
+				type:'get',
+				dataType:'json',
+				success:function(ret){
+					$('#dialog2 .J_DefaultMessage').html(ret.html);
+					$('.ks-ext-mask').show();
+					$('#dialog2').show();
+				}
+			})
+		})
+		
+		$('.zhiliang_rating').raty({
+			'cancel' : true,
+			'half': true,
+			'starType' : 'i'/**,
+			'click': function(e) {
+				//console.log(e);
+				//setRatingColors.call(this);
+			}
+			,
+			'mouseover': function() {
+				setRatingColors.call(this);
+			},
+			'mouseout': function() {
+				setRatingColors.call(this);
+			}*/
+		})//.find('i:not(.star-raty)').addClass('grey');
+		
+		$('.price_rating').raty({
+			'cancel' : true,
+			'half': true,
+			'starType' : 'i'/**,
+			'click': function(e) {
+				//console.log(e);
+				//setRatingColors.call(this);
+			}
+			,
+			'mouseover': function() {
+				setRatingColors.call(this);
+			},
+			'mouseout': function() {
+				setRatingColors.call(this);
+			}*/
+		})//.find('i:not(.star-raty)').addClass('grey');
+		
+		$('.rating').raty({
+			'cancel' : true,
+			'half': true,
+			'starType' : 'i'/**,
+			'click': function(e) {
+				//console.log(e);
+				//setRatingColors.call(this);
+			}
+			,
+			'mouseover': function() {
+				setRatingColors.call(this);
+			},
+			'mouseout': function() {
+				setRatingColors.call(this);
+			}*/
+		})//.find('i:not(.star-raty)').addClass('grey');
+
+		$('#id-input-file-3').ace_file_input({
+			style:'well',
+			btn_choose:'点击上传',
+			btn_change:null,
+			
+			no_icon:'ace-icon fa icon-cloud-upload',
+			droppable:true,
+			thumbnail:'small'//large | fit
+			//,icon_remove:null//set null, to hide remove/reset button
+			,before_change:function(files, dropped) {
+				//Check an example below
+				//or examples/file-upload.html
+				s_imgs = [];
+				for(var i in files)
+				{
+					var fd = new FormData();
+					fd.append("file", files[i]);
+					var deferred = $.ajax({
+						url: "{:U('image/upload_image')}",
+						type: "post",
+						processData: false,
+						contentType: false,
+						dataType: 'json',
+						data: fd
+					})
+					deferred.done(function (result) {
+						if(result.code == 0)
+						{
+							s_imgs.push(result.image);
+						}
+						console.log(result);
+					}).fail(function (result) {
+						console.log(result);
+					});
+				}
+				 
+				return true;
+			}
+			,before_remove : function() {
+				s_imgs = [];
+				return true;
+			}
+			,
+			preview_error : function(filename, error_code) {
+				//name of the file that failed
+				//error_code values
+				//1 = 'FILE_LOAD_FAILED',
+				//2 = 'IMAGE_LOAD_FAILED',
+				//3 = 'THUMBNAIL_FAILED'
+				//alert(error_code);
+			}
+
+		}).on('change', function(){
+			//console.log($(this).data('ace_input_files'));
+			//console.log($(this).data('ace_input_method'));
+		});
+		//关闭弹出层
+		$('#dialog').on('click','.ks-ext-close',function(){	
+			$("#dialog").css('display','none');
+			$('.ks-ext-mask').css('display','none');
+			return false;
+		});
+		//关闭弹出层
+		$('#dialog').on('click','.J_Cancel',function(){	
+			$("#dialog").css('display','none');
+			$('.ks-ext-mask').css('display','none');
+			return false;
+		});
+		
+		//关闭弹出层
+		$('#dialog2').on('click','.ks-ext-close',function(){	
+			$("#dialog2").css('display','none');
+			$('.ks-ext-mask').css('display','none');
+			return false;
+		});
+		//关闭弹出层
+		$('#dialog2').on('click','.J_Cancel',function(){	
+			$("#dialog2").css('display','none');
+			$('.ks-ext-mask').css('display','none');
+			return false;
+		});
+	})
+</script>
+
+<script>
+$(function(){	
+	
+	<present name="Think.get.id">
+			Oscshop.setValue("a_status", {$data.a_status|default=1});		
+	</present>
+	
+		
+});
+</script>							
+</block>

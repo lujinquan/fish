@@ -1,0 +1,18 @@
+
+<table class="table table-binfoed">
+	<tbody>
+		<tr>
+			<th>ID</th>
+			<th>机器人名称</th>
+			<th>头像</th>
+		</tr>
+		<?php foreach($jia_list as $val){ ?> 
+		<tr>
+			<td><input type="radio" class="cgoods_id" rel_name="<?php echo $val['username']; ?>" name="jia_id[]" value="<?php echo $val['id']; ?>"></td>
+			<td><?php echo $val['username']; ?></td>
+			<td><img src="<?php echo $val['avatar']; ?>" style="width:40px;height:40px;" /></td>
+		</tr>
+		<?php } ?>
+	</tbody>
+</table>
+				

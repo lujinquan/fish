@@ -1,0 +1,87 @@
+<extend name="HomePublic:base" />
+<block name="content">
+<link rel="stylesheet" href="__PUBLIC__/css/plugin_detail.css" />
+<style>
+</style>
+<div class="row" id="app-container">
+	<div class="app-inner clearfix">
+		<div class="app-init-container">
+			<div class="app__content js-app-content">
+				<div class="js-app">
+					
+					<div class="js-app-board ">
+						<div class="widget-app-board ui-box">
+							<div class="activity-img">
+								<img src="__PUBLIC__/<?php echo $pin_plugin['logo']; ?>">
+							</div>
+							<div class="app-board-intro">
+						        <h3 class="title">{$pin_plugin.plugin_name}</h3>
+						        <p class="intro">{$pin_plugin.plugin_desc}</p>
+						        <div class="original-price">
+						            <span class="original-price-label">服务价格：</span>
+						            <span class="price-range" style="display: none;">￥{$pin_plugin.money}</span>
+					                <div class="sku-info sku-info-49" style="display: inline-block;">
+					                    <span class="normal-price" data-price="580">
+					                       	 ￥{$pin_plugin.money}
+					                    </span>
+					                    <span class="gray average-price">(￥<?php echo round($pin_plugin['money']/12,2); ?>/月)</span>
+					                </div>
+						        </div>
+						        <!-- 促销价 -->
+						        <!-- sku区域 -->
+						        <div class="activity-date clearfix js-activity-date" data-countdown="">
+						            <span class="pull-left">应用版本：</span>
+						            <p class="sku-content">
+					                    <a href="javascript:void(0);" class="pull-left js-select-click selected" data-action="newOrder" data-item="49" data-index="0" data-url="" data-countdown="">
+					                        <span>12个月</span>
+					                    </a>
+						            </p>
+						        </div>
+						        <!-- 按钮区 -->
+						        <div class="btn-area">
+						            <a href="{:U('pin/buy')}" class="zent-btn zent-btn-primary zent-btn-large app-order-btn js-app-order sku-action-newOrder" style="display: inline-block;">立即订购</a>
+						        </div>
+						    </div>
+						    
+							
+						</div>
+					</div>
+					
+					<div class="js-app-tab">
+						<div class="ui-nav clearfix">
+						    <ul class="pull-left">
+						        <li class="js-app-intro active">
+						            <a href="javascript:;">应用详情</a>
+						        </li>
+						        <li class="js-app-tutorial ">
+						        	
+						        </li>
+						    </ul>
+						</div>
+					</div>
+					<div class="js-app-desc">
+						<div class="app-info-content">
+							<div class="app-desc">
+								{$pin_plugin.content}
+							</div>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	
+	</div>
+		
+	
+	
+</div>
+													
+													
+
+		
+</block>
+
+<block name="javascript">
+
+</block>

@@ -1,0 +1,25 @@
+<extend name="Public:base" />
+
+<block name="content">
+	<div class="page-header">
+	</div>	
+<div class="row" style="margin:0px auto;">
+	<div class="col-xs-10" >	
+		<h1 style="text-align:center;">{$blog_info.title}</h1>
+		
+		<p style="text-align:right;">作者：{$blog_info.author}  {$blog_info.create_time}</p>
+		<?php  if(!empty($blog_info['image'])){ ?>
+		<p style="text-align:center;"><img src="/Uploads/image/{$blog_info.image}" /></p>
+		<?php } ?>
+		
+		<?php if(!empty($blog_content['summary'])) { ?>
+			<p>{$blog_content.summary}</p>
+		<?php } ?>
+		<p>
+			<?php  
+				echo htmlspecialchars_decode($blog_content['content']);
+			?>
+		</p>
+	</div>
+</div>
+</block>

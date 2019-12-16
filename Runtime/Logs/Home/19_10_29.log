@@ -1,0 +1,3 @@
+[ 2019-10-29T10:00:44+08:00 ] 103.63.154.94 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=user&&m=lionfish_comshop&sign=fede900ea53e96aeb25a162c6dbb8eb7
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+

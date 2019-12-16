@@ -1,0 +1,414 @@
+<extend name="Public:base" />
+<block name="content">
+
+	<link rel="stylesheet" href="__CSS__/dialog.css" />	
+	<div class="page-header">
+		<h1>
+			{$breadcrumb2}
+			<small>
+				<i class="icon-double-angle-right"></i>
+				{$crumbs}
+			</small>
+		</h1>
+	</div>	
+	<ul class="nav nav-tabs">
+		<li <?php if($type == -1){ ?>class="active" <?php } ?>><a href="{:U('Quan/index')}" >动态内容</a></li>
+		<li <?php if($type == 1){ ?>class="active" <?php } ?>> <a href="{:U('Quan/config')}">圈子配置</a></li>
+	</ul>
+	<form class="form-horizontal" id="validation-form"  method="post" action='{$action}'>
+	<div class="tab-content">
+		
+			<input name="s_id" type="hidden" value="{$data.s_id}" />
+		<div class="tab-pane active" id="tab-member">
+		
+			<div class="row">
+				<div class="col-xs-12">	
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-left"> 圈子名称 </label>
+						<div class="col-sm-5">
+							<div class="clearfix">
+								<input name="title" type="text" style="width:400px;" value="{$data.title|default=''}" />
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-left"> 圈子LOGO </label>
+						<div class="col-sm-5">
+							<div class="clearfix">
+								<div class="form-group" id="goods-image-row8">
+									<div class="col-sm-10" id="image-row8">
+										<a href="#" data-toggle="image" class="img-thumbnail" type="goods" id="thumb-image8" num="8">
+										<img osctype="goods_image8" <if condition="$data['quan_logo']"> 
+											src="__ROOT__/<?php echo resize($data['quan_logo'],100,100); ?>" 
+											<else /> 
+											src="__ROOT__/Common/image/no_image_40x40.jpg" 
+											</if>  />
+										</a>
+										<input osctype="goods_image_input8" type="hidden" name="quan_logo" value="{$data.quan_logo|default=''}" id="input-image8" />
+										<span class="help-inline ">
+											<span class="middle red"><b class="blue"></b></span>
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-left"> 圈子背景图片 </label>
+						<div class="col-sm-5">
+							<div class="clearfix">
+								<div class="form-group" id="goods-image-row7">
+									<div class="col-sm-10" id="image-row7">
+										<a href="#" data-toggle="image" class="img-thumbnail" type="goods" id="thumb-image7" num="7">
+										<img osctype="goods_image7" <if condition="$data['quan_banner']"> 
+											src="__ROOT__/<?php echo resize($data['quan_banner'],100,100); ?>" 
+											<else /> 
+											src="__ROOT__/Common/image/no_image_40x40.jpg" 
+											</if>  />
+										</a>
+										<input osctype="goods_image_input7" type="hidden" name="quan_banner" value="{$site.quan_banner.value|default=''}" id="input-image7" />
+										<span class="help-inline ">
+											<span class="middle red"><b class="blue"></b></span>
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-left"> 圈子分享标题 </label>
+						<div class="col-sm-5">
+							<div class="clearfix">
+								<input name="quan_share" type="text" style="width:400px;" value="{$data.quan_share|default=''}" />
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-left"> 圈子分享描述 </label>
+						<div class="col-sm-5">
+							<div class="clearfix">
+								<textarea name="quan_share_desc" style="width:400px;height:80px;">{$data.quan_share_desc|default=''}</textarea>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-left"> 圈子状态 </label>
+						<div class="col-sm-5">
+							<div class="clearfix">
+								<label>
+									<input type="radio" name="status" value="1" <?php if($data['status'] == 1){ ?> checked<?php } ?> /> 开启
+								</label>
+								<label>
+									<input type="radio" name="status" value="0" <?php if($data['status'] == 0){ ?> checked<?php } ?> /> 关闭
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-left"> 限制发布会员 </label>
+						<div class="col-sm-5">
+							<div class="clearfix">
+								<label>
+									<input type="radio" name="limit_send_member" value="1" <?php if($data['limit_send_member'] == 1){ ?> checked<?php } ?> /> 限制
+								</label>
+								<label>
+									<input type="radio" name="limit_send_member" value="0" <?php if($data['limit_send_member'] == 0){ ?> checked<?php } ?> /> 不限制
+								</label>
+							</div>
+						</div>
+					</div>
+					<div id="chose_huiyuan" class="form-group <?php if($data['limit_send_member'] == 1){ ?> sshow<?php }else{ ?> shide<?php } ?>">
+						<label class="col-sm-2 control-label no-padding-left"> 选择会员 </label>
+						<div class="col-sm-5">
+							<div class="col-sm-3">
+								<div class="clearfix">
+									<a href="javascript:;" class="chose_jiqi btn btn-sm btn-success bigger-120">
+										<i class="ace-icon fa fa-refresh "></i>
+										点击选择
+									</a>
+								</div>
+							</div>
+							<div class="col-sm-5">
+								<p id="jiqi_man" class="tags" style="border:none;">
+								
+								<?php if(!empty($member_data)){ ?>
+								<?php foreach($member_data as $key => $val){ ?>
+								<span class="tag tag<?php echo $val['member_id']; ?>" rel_goods_id="<?php echo $val['member_id']; ?>"><?php echo $val['uname']; ?><button type="button" class="close">×</button></span>
+								<?php }} ?>
+								</p>
+								
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-left"> 评论同步到圈子 </label>
+						<div class="col-sm-5">
+							<div class="clearfix">
+								<label>
+									<input type="checkbox" name="is_synchro" <?php if(empty($data) || $data['is_synchro'] == 1){ ?> checked<?php } ?> value="1" /> 是
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-left"> &nbsp; </label>
+						<div class="col-sm-5">
+							<input name="member_ids" id="member_ids" type='hidden' value="{$data.member_ids}" />
+							<input name="send" type="submit" id="submit" value="提交" class="btn btn-primary" />
+						</div>
+					</div>
+				
+				</div>
+			</div>
+		
+		</div>
+		
+	
+	</div>
+	</form>	
+	<div class="ks-ext-mask" style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 999; display:none"></div>
+	<div id="dialog" class="dialog" style="z-index: 9999; display:none;top:110px;">
+	    <div class="ks-contentbox">
+	      <div class="title"><span>请选择</span><a class="ks-ext-close" href="javascript:void(0)">X</a></div>
+	     	
+	        <div class="J_DefaultMessage"></div>
+	       	 <div class="bottom">
+	        	 <a href="javascript:void(0);" class="J_SubmitPL ncsc-btn ncsc-btn-green">确认</a> 
+	        	 <a href="javascript:void(0);" class="J_Cancel ncsc-btn">取消</a> </div>
+	      
+	   		</div>
+   </div>
+   <div id="dialog2" class="dialog" style="z-index: 9999; display:none;top:110px;">
+	<div class="ks-contentbox">
+	  <div class="title"><span>请选择</span><a class="ks-ext-close" href="javascript:void(0)">X</a></div>
+		
+		<div class="J_DefaultMessage"></div>
+		 <div class="bottom">
+			 <a href="javascript:void(0);" class="J_SubmitPL ncsc-btn ncsc-btn-green">确认</a> 
+			 <a href="javascript:void(0);" class="J_Cancel ncsc-btn">取消</a> </div>
+	  
+		</div>
+  </div>
+<style>
+	.shide{display:none;}
+	.sshow{display:block;}
+	#goods_result{
+		max-height: 400px;
+		overflow-y: scroll;
+	}
+</style>
+</block>
+<block name="javascript">
+<script src="__PUBLIC__/fileupload/jquery.ui.widget.js"></script>
+<script src="__PUBLIC__/fileupload/jquery.fileupload.js"></script>
+<script>
+$(function(){
+	
+	$('#submit').click(function(){
+		
+		var goods_id_arr = [];
+		
+		$('#jiqi_man .tag').each(function(){
+			goods_id_arr.push( $(this).attr('rel_goods_id') );
+		})
+		var goods_id_str = '';
+		if(goods_id_arr.length > 0)
+		{
+			goods_id_str = goods_id_arr.join(',');
+		}
+		
+		$('#member_ids').val(goods_id_str);
+		
+	})
+	$('.chose_jiqi').click(function(){
+		$.ajax({
+			url:"{:U('Goodscomment/get_member')}",
+			type:'get',
+			dataType:'json',
+			success:function(ret){
+				$('#dialog .J_DefaultMessage').html(ret.html);
+				$('.ks-ext-mask').show();
+				$('#dialog').show();
+			}
+		})
+	})
+	$('#dialog .J_SubmitPL').click(function(){
+		$('#jiqi_man').append( $('#dialog .tags').html() );
+		$('.ks-ext-mask').hide();
+		$('#dialog').hide();
+	})
+	//关闭弹出层
+	$('#dialog').on('click','.ks-ext-close',function(){	
+		$("#dialog").css('display','none');
+		$('.ks-ext-mask').css('display','none');
+		return false;
+	});
+	//关闭弹出层
+	$('#dialog').on('click','.J_Cancel',function(){	
+		$("#dialog").css('display','none');
+		$('.ks-ext-mask').css('display','none');
+		return false;
+	});
+		
+	$('input[name=limit_send_member]').click(function(){
+		var s_val = $(this).val();
+		
+		if(s_val == 1)
+		{
+			$('#chose_huiyuan').removeClass('shide').addClass('sshow');
+		}else{
+			$('#chose_huiyuan').removeClass('sshow').addClass('shide');
+		}
+	})
+	
+	$(document).delegate('a[data-toggle=\'image\']', 'click', function(e) {
+		e.preventDefault();
+		
+		var index=$(this).attr('num');
+		var type=$(this).attr('type');
+		//alert(index);
+		
+		var element = this;
+		
+		if(index==undefined){
+			$(element).popover({
+				html: true,
+				placement: 'right',
+				trigger: 'manual',
+				content: function() {
+					return '<button type="button" id="thumb-image"  class="btn btn-primary"><i class="icon-edit"></i></button> <button type="button" id="button-clear" class="btn btn-danger"><i class="icon-trash"></i></button>';
+				}
+			});
+		}else{
+			$(element).popover({
+				html: true,
+				placement: 'right',
+				trigger: 'manual',
+				content: function() {
+					return '<button type="button" n="'+index+'" t="'+type+'"  class="btn btn-primary button-image"><i class="icon-edit"></i></button> ';
+				}
+			});
+		}
+		
+
+		
+		$(element).popover('toggle');	
+		
+		//商品图片
+		$('#thumb-image').on('click', function() {
+			
+			//alert('333');
+			
+			$('#modal-image').remove();
+			
+			$('#form-upload').remove();
+			
+			$('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input osctype="btn_upload_image" type="file" name="file" /></form>');
+	
+			$('#form-upload input[name=\'file\']').trigger('click');
+			
+			$(element).popover('hide');
+			
+			$('[osctype="btn_upload_image"]').fileupload({
+				
+	        	dataType: 'json',
+	            url: "{:U('Image/upload_image',array('dir'=>'shop'))}",
+	            add: function(e, data) {
+	                $parent = $('#thumb');
+	                $input = $parent.find('[osctype="image_input"]');
+	                $img = $parent.find('[osctype="image"]');
+	                data.formData = {old_goods_image:$input.val()};
+	                $img.attr('src', "__IMG__/loading.gif");
+	                data.submit();
+	            },
+	            done: function (e,data) {
+					
+	            	var image=data.result;	            	
+	            	
+	                $parent = $('#thumb');
+	                $input = $parent.find('[osctype="image_input"]');
+	                $img = $parent.find('[osctype="image"]');
+	                if(image) {
+	                   // $img.prev('i').hide();
+	                    $img.attr('src', '__ROOT__'+image.image_thumb);
+	                    $img.show();
+	                    $input.val(image.image);
+	                } else {
+	                    alert('上传失败');
+	                }
+	            }
+   		 });
+		});
+
+			
+		$('.button-image').on('click', function() {
+			$('#modal-image').remove();
+			
+			$('#form-upload').remove();
+			
+			var i=$(this).attr('n');
+			var type=$(this).attr('t');
+			
+			
+						
+			$('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input osctype="btn_upload_image" type="file" name="file" /></form>');
+	
+			$('#form-upload input[name=\'file\']').trigger('click');
+			
+			$(element).popover('hide');
+			
+			$('[osctype="btn_upload_image"]').fileupload({
+				
+	        	dataType: 'json',
+	            url: "{:U('Image/upload_image/dir')}"+'/'+type,
+	            add: function(e, data) {
+	                $parent = $('#image-row'+i);
+	                $input = $parent.find('[osctype="'+type+'_image_input'+i+'"]');
+	                $img = $parent.find('[osctype="'+type+'_image'+i+'"]');
+	                var old_name='old_'+type+'_image';
+	                data.formData = {old_name:$input.val()};
+	                $img.attr('src', "__IMG__/loading.gif");
+	                data.submit();
+	            },
+	            done: function (e,data) {
+					
+	            	var image=data.result;	            	
+	            	
+	                $parent = $('#'+type+'-image-row'+i);
+	                $input = $parent.find('[osctype="'+type+'_image_input'+i+'"]');
+	                $img = $parent.find('[osctype="'+type+'_image'+i+'"]');
+	                if(image) {
+	                   // $img.prev('i').hide();
+	                    $img.attr('src', '__ROOT__/'+image.image_thumb);
+	                    $img.show();
+	                    $input.val(image.image);
+	                } else {
+	                    alert('上传失败');
+	                }
+	            }
+   		 });
+			
+		});
+	
+		$('#button-clear').on('click', function() {
+			$(element).find('img').attr('src', $(element).find('img').attr('data-placeholder'));
+			
+			$(element).parent().find('input').attr('value', '');
+	
+			$(element).popover('hide');
+		});
+	});
+})
+</script>
+<script>
+$(function(){	
+	
+	<present name="Think.get.id">
+			Oscshop.setValue("a_status", {$data.a_status|default=1});		
+	</present>
+	
+		
+});
+</script>							
+</block>

@@ -1,0 +1,125 @@
+<extend name="Public:base" />
+
+<block name="content">
+	
+<div class="row">
+	<div class="col-xs-12">	
+		<div class="alert alert-info" style="display:none;" id="loading">
+				
+		</div>
+		<div class="table-responsive">
+			<div class="form-group">
+				<label class="col-sm-2 control-label"> * 淘宝(天猫)商品链接 </label>
+				<div class="col-sm-10">
+					<div class="clearfix">
+						<input name="url_link" id="url_link" class="col-xs-10 col-sm-5"  value="" type="text">
+					
+						<span class="help-inline ">
+							<span class="middle red">　　必须包含id=*****的链接</span>
+						</span>
+					</div>
+					
+				</div>			 
+			</div>
+			
+							
+			<div class="form-group">
+				<label class="col-sm-2 control-label"> 
+					<button name="send"  type="submit" id="sub" style="float:left;"  class="btn button btn-sm btn-primary">开始采集</button>
+				</label>
+				<div class="col-sm-10">
+				</div>			 
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+</block>
+<block name="javascript">
+<script>
+var item_id = 0;
+
+	$('#sub').click(function(){
+		var url_link = $('#url_link').val();
+		
+		
+		if(url_link == '')
+		{
+			alert('请填写采集内容');
+			return false;
+		}
+		
+		
+		var substr = url_link.match(/id\=(\d+)/);
+		if(substr.length>1)
+		{
+			item_id = substr[1];
+		}else{
+			item_id = null;
+		}
+		
+		
+		if(item_id == null)
+		{
+			alert('请填写正确的采集地址');
+			return false;
+		}
+		
+		$('#loading').html('采集中...');
+		$('#loading').show();
+		
+		$.ajax({
+		   type: "get",
+		   async: false,
+		   url: "https://hws.m.taobao.com/cache/wdetail/5.0/?id="+item_id,
+		   dataType: "jsonp",
+		   jsonp: "callback",//
+		   jsonpCallback:"flightHandler",//
+		   success: function(json){
+		   console.log(json);
+			 post_caiji_data(json)
+		   },
+		   error: function(){
+			 alert('采集失败');
+		   }
+		 });
+		
+		
+	})
+	
+	function get_url_id(str)
+	{
+		var name = 'id';
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+		 var r = str.substr(1).match(reg); //匹配目标参数
+		 
+		 if (r != null) 
+			return unescape(r[2]);
+		 return null; //返回参数值
+	}
+	function post_caiji_data(s_data)
+	{
+		$.ajax({
+			url:"{:U('Cvtaobao/caiji_ajax')}",
+			type:'post',
+			data:{ld_data:s_data,id:item_id},
+			dataType:'json',
+			success:function(ret){
+				if(ret.code == 1)
+				{
+					alert('采集成功，请到商品仓库中查看');
+					$('#loading').html('采集成功');
+					return false;
+				}else {
+					alert(ret.msg);
+					return false;
+				}
+			}
+		})
+	}
+	
+	//'http://hws.m.taobao.com/cache/wdesc/5.0/?id=' . $itemid;
+	
+</script>
+</block>

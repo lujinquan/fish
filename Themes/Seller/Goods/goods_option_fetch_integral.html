@@ -1,0 +1,86 @@
+<div class="row" style="margin-top:15px;">
+	
+	<div class="form-group required">
+		
+		<div class="col-sm-12" >
+			
+			<table class="table table-striped table-bordered table-hover">
+				<tr>
+					<td id="goods_name_vl" colspan="2">商品：<?php echo $goods_info['name']; ?></td>
+				</tr>
+			</table>
+			
+			
+			<table class="table table-striped table-bordered table-hover">
+				
+				<tr>
+					<th>单独购买价</th>
+					<th>兑换积分</th>
+					
+				</tr>
+				<tr>
+					<td>
+						<?php echo $goods_info['danprice']; ?>
+					</td>
+					<td>
+						<input type="hidden" name="goods_id" value="{$goods_info.goods_id}" />
+						<input type="hidden" name="pin_count" value="0" />
+						<input type="hidden" name="pin_hour" value="0" />
+						<input class="form-control" type="text" placeholder="兑换积分" value="{$pin_goods.score}" name="pin_price">
+					</td>
+				</tr>
+			</table>
+		
+		</div>
+	</div>
+	<?php if(!empty($goods_option_mult_value)){ ?>
+	<div class="form-group required">
+		<div class="col-sm-12" id="mult_option_new">
+			
+					<table class="table table-striped table-bordered table-hover">
+						<thead>
+							<tr>
+								<?php foreach ($goods_options as $goods_option) { ?>
+								<td class="text-left"><?php echo $goods_option['name']; ?></td>
+								<?php } ?>
+								<td class="text-left">库存数量</td>
+								<td class="text-left">单独购买价</td>
+								<td class="text-left">兑换积分</td>
+								<td class="text-left">图片</td>
+							</tr>
+						</thead>
+					   <tbody>
+						<?php foreach($goods_option_mult_value as $goods_mul_op){ ?>
+						<tr>
+							<?php foreach($goods_mul_op['option_name_list'] as $mul_name){ ?>
+							<td class="text-left"><?php echo $mul_name; ?></td>
+							<?php } ?>
+							
+							<td class="text-left">
+								<input type="text" name="<?php echo $goods_mul_op['rela_goodsoption_valueid']; ?>_quantity" value="<?php echo $goods_mul_op['quantity']; ?>" class="form-control mult_option_zuhe">
+							</td>
+							<td class="text-left">
+								<input disabled type="text" name="<?php echo $goods_mul_op['rela_goodsoption_valueid']; ?>_price" value="<?php echo $goods_mul_op['dan_price']; ?>" class="form-control mult_option_zuhe_price">
+							</td>
+							<td class="text-left">
+								<input type="text" name="<?php echo $goods_mul_op['rela_goodsoption_valueid']; ?>_pin_price" value="<?php echo $goods_mul_op['pin_price']; ?>" class="form-control mult_option_pin_price">
+							</td>
+							
+							
+							<td class="text-left">
+								<?php if(!empty($goods_mul_op['image'])){ ?>
+								<img osctype="option_image<?php echo $goods_mul_op['rela_goodsoption_valueid']; ?>" width="50" height="50" src="Uploads/image/<?php echo $goods_mul_op['image'];?>" />
+								<?php }else{ ?>
+								<img osctype="option_image<?php echo $goods_mul_op['rela_goodsoption_valueid']; ?>" src="/Common/image/no_image_100x100.jpg" />
+								<?php } ?>
+							</td>
+						</tr>
+						<?php } ?>
+						
+					    </tbody>
+					</table>
+			 
+		</div>
+	</div>
+	<?php } ?>
+</div>

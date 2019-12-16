@@ -1,0 +1,615 @@
+<extend name="Public:base" />
+
+<block name="content">
+<link rel="stylesheet" href="__CSS__/dialog.css" />	
+<div class="page-header">
+<a href="{:U('Goods/add')}" class="btn btn-primary">新增</a>
+</div>	
+	
+<table class="table table-striped table-bordered table-hover search-form">
+	<thead>
+		<th><input name="name" type="text" placeholder="输入商品名称" value="{:I('name')}" /></th>
+		<th>    				
+			<select name="category">
+				<option value="">-选择分类-</option>
+				<volist name="category" id="v" >
+					<option <?php if(isset($get_category)&&($get_category==$v['id'])){echo ' selected="selected"';} ?> value="{$v.id}">{$v.name}</option>
+				
+					<volist name="v.children" id="vv" >
+					<option <?php if(isset($get_category)&&($get_category==$vv['id'])){echo ' selected="selected"';} ?> value="{$vv.id}">　　{$vv.name}</option>
+						<volist name="vv.children" id="vvv" >
+						<option <?php if(isset($get_category)&&($get_category==$vvv['id'])){echo ' selected="selected"';} ?> value="{$vvv.id}">　　　　{$vvv.name}</option>
+						</volist>	
+					</volist>	
+					
+				</volist>	
+			</select>
+		</th>
+		<th>    										
+			<select name="type">
+				<option value="activity">-全部活动类型-</option>		
+				<option <?php if(isset($type)&&($type=='lottery')){echo ' selected="selected"';} ?> value="lottery">抽奖</option>
+				<option <?php if(isset($type)&&($type=='subject')){echo ' selected="selected"';} ?> value="subject">主题活动</option>
+				<option <?php if(isset($type)&&($type=='free_trial')){echo ' selected="selected"';} ?> value="free_trial">免费试用</option>
+				<option <?php if(isset($type)&&($type=='super_spike')){echo ' selected="selected"';} ?> value="super_spike">超值大牌</option>
+				<option <?php if(isset($type)&&($type=='spike')){echo ' selected="selected"';} ?> value="spike">限时秒杀</option>
+				<option <?php if(isset($type)&&($type=='niyuan')){echo ' selected="selected"';} ?> value="niyuan">9.9活动</option>
+				<option <?php if(isset($type)&&($type=='oneyuan')){echo ' selected="selected"';} ?> value="oneyuan">1元购活动</option>
+				<option <?php if(isset($type)&&($type=='haitao')){echo ' selected="selected"';} ?> value="haitao">海淘活动</option>
+				
+			</select>
+		</th>	
+		<th>    				
+			<select name="status">
+				<option value="">-选择状态-</option>				
+				<option <?php if(isset($get_status)&&($get_status==1)){echo ' selected="selected"';} ?> value="1">启用</option>
+				<option <?php if(isset($get_status)&&($get_status==0)){echo ' selected="selected"';} ?> value="0">停用</option>
+			</select>
+		</th>
+		<th>
+			<a class="btn btn-primary" href="javascript:;" id="search" url="{:U('Goods/activity')}">查询</a>
+		</th>
+	</thead>
+</table>	
+	
+
+	
+<div class="row">
+	<div class="col-xs-12">	
+		<div class="table-responsive">
+			<table id="table" class="table table-striped table-bordered table-hover">
+				<thead>
+					<tr>
+						<th class="center">
+							<label>
+								<input type="checkbox" class="ace check-all" />
+								<span class="lbl"></span>
+							</label>
+						</th>											
+						<th>ID</th>
+						<th>图片</th> 
+						<th>商品名称</th> 
+						<th>分类</th> 
+						<th>价格</th>
+						<th>数量</th>
+						<th>状态</th>						
+						<th>操作</th>				
+					</tr>
+				</thead>
+				<tbody>
+						<volist name="list" id="v" empty="$empty">
+						<tr>		
+							<td class="center">
+							<label>
+								<input class="ace ids" type="checkbox" name="id[]" value="{$v.goods_id}"/>
+								<span class="lbl"></span>
+							</label>
+							</td>				
+							<td>{$v.goods_id}</td>
+							<td>
+								<?php if($v['image']){ ?>
+								<img src="__ROOT__/{$v.image}" />
+								<?php }else{ ?>
+								<img src="__ROOT__/Common/image/no_image_50x50.jpg" />
+								<?php } ?>	
+							</td>
+							<td>{$v.name}</td>
+							<td>{$v.class_name1}&nbsp;{$v.class_name2}&nbsp;{$v.class_name3}
+								<?php if($v['all_comment'] > 0) { ?>
+								<br/>
+								<a  class="btn btn-xs btn-info" href='{:U("Goods/comment_info",array("id"=>$v["goods_id"]))}'>
+									查看评价(待审:{$v.wait_comment}/总数:{$v.all_comment})
+								</a> 
+								<?php } ?>
+							</td>
+							<td>{$v.price}</td>
+							<td>{$v.quantity}</td>
+							<td>
+								<switch name="v.status">
+									<case value="1"><span class="green bold">启用</span></case>
+									<case value="0"><span class="red">停用</span></case>
+								</switch>
+								<br/>
+								<?php 
+									switch($v['type'])
+									{
+										case 'lottery':
+										echo '<span class="blue bold">抽奖</span>';
+										break;
+										case 'subject':
+										echo '<span class="blue bold">主题活动</span>';
+										break;
+										case 'free_trial':
+										echo '<span class="blue bold">免费试用</span>';
+										break;
+										case 'super_spike':
+										echo '<span class="blue bold">超值大牌</span>';
+										break;
+										case 'spike':
+										echo '<span class="blue bold">限时秒杀</span>';
+										break;	
+										case 'niyuan':
+										echo '<span class="blue bold">9.9活动</span>';
+										break;
+										case 'oneyuan':
+										echo '<span class="blue bold">1元购活动</span>';
+										break;	
+										case 'haitao':
+										echo '<span class="blue bold">海淘活动</span>';
+										break;
+									}
+									
+									if($v['type'] == 'lottery')
+									{
+										$lottery_goods = M('lottery_goods')->where( array('goods_id' => $v['goods_id']) )->find();
+										if($lottery_goods['is_open_lottery'] == 1) {
+										?>
+										<br/>
+										<a  class="btn btn-xs btn-info" href='{:U("Goods/lotteryinfo",array("id"=>$v["goods_id"]))}'>
+											查看中奖名单
+										</a>	
+										<?php 
+										}else if( $lottery_goods['end_time'] < time() ){
+										?>
+										<br/>
+										<a  class="btn btn-xs btn-info" href='{:U("Goods/lotteryinfo",array("id"=>$v["goods_id"]))}'>
+											立即开奖
+										</a>	
+										<?php
+										}
+									}
+								?>
+								<?php 
+									if($v['type'] == 'normal')
+									{
+									switch($v['lock_type'])
+									{
+										case 'lottery':
+										echo '<span class="brown bold">抽奖申请中</span>';
+										break;
+										case 'subject':
+										echo '<span class="brown bold">主题活动申请中</span>';
+										break;
+										case 'free_trial':
+										echo '<span class="brown bold">免费试用申请中</span>';
+										break;
+										case 'super_spike':
+										echo '<span class="brown bold">超值大牌申请中</span>';
+										break;
+										case 'spike':
+										echo '<span class="brown bold">限时秒杀申请中</span>';
+										break;	
+										case 'niyuan':
+										echo '<span class="brown bold">9.9活动申请中</span>';
+										break;
+										case 'oneyuan':
+										echo '<span class="brown bold">1元购活动申请中</span>';
+										break;	
+										case 'haitao':
+										echo '<span class="brown bold">海淘活动申请中</span>';
+										break;
+													
+									}
+									}
+								?>
+							</td>
+							<td>
+								<a  class="btn btn-xs btn-info" href='{:U("Goods/edit",array("id"=>$v["goods_id"]))}'>
+									<i class="icon-edit bigger-120"></i>
+								</a>
+								
+								<?php if($v['status'] != 4) { ?>
+								<a  class="btn btn-xs btn-info backhuiche"  href="javascript:;" rel='{:U("Goods/backhuiche",array("id"=>$v["goods_id"]))}'>
+									删除
+								</a> 	
+								<?php } ?>
+								
+								<?php if($v['type'] == 'normal' && $v['lock_type'] == 'normal') { ?>
+								<div sytle="height:15px;margin-bottom:10px;clear:both;">&nbsp;</div>
+								<div class="pull-left pos-rel dropdown-hover">
+									<button class="btn btn-minier bigger btn-primary">
+										<i class="ace-icon fa icon-cog icon-only bigger-120"></i>
+									</button>
+			
+									<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-caret dropdown-close dropdown-menu-right">
+										<li>
+											<a href="javascript:;" class="xianshimiaosha" data-id="{$v.goods_id}">
+												<span class="green">
+													<i class="ace-icon fa icon-check bigger-110"></i>
+													申请限时秒杀 
+												</span>
+											</a>
+										</li>
+										<li>
+											<a href="javascript:;" class="chaozhidapai" data-id="{$v.goods_id}">
+												<span class="green">
+													<i class="ace-icon fa icon-check bigger-110"></i>
+													申请超值大牌
+												</span>
+											</a>
+										</li>
+										<li>
+											<a href="javascript:;" class="mianfeishiyong" data-id="{$v.goods_id}" >
+												<span class="green">
+													<i class="ace-icon fa icon-check bigger-110"></i>
+													申请免费试用
+												</span>
+											</a>
+										</li>
+										<li>
+											<a href="javascript:;" class="zhutihuodong" data-id="{$v.goods_id}">
+												<span class="green">
+													<i class="ace-icon fa icon-check bigger-110"></i>
+													申请主题活动
+												</span>
+											</a>
+										</li>
+										<li>
+											<a href="javascript:;" class="jiukuaijiu" data-id="{$v.goods_id}">
+												<span class="green">
+													<i class="ace-icon fa icon-check bigger-110"></i>
+													申请9.9元活动
+												</span>
+											</a>
+										</li>
+										<li>
+											<a href="javascript:;" class="yiyuan" data-id="{$v.goods_id}">
+												<span class="green">
+													<i class="ace-icon fa icon-check bigger-110"></i>
+													1元购
+												</span>
+											</a>
+										</li>
+										<li>
+											<a href="javascript:;" class="lottery" data-id="{$v.goods_id}">
+												<span class="green">
+													<i class="ace-icon fa icon-check bigger-110"></i>
+													申请抽奖活动
+												</span>
+											</a>
+										</li>
+										<li>
+											<a href="javascript:;" class="haitao" data-id="{$v.goods_id}">
+												<span class="green">
+													<i class="ace-icon fa icon-check bigger-110"></i>
+													申请海淘活动
+												</span>
+											</a>
+										</li>
+									</ul>
+								</div>
+								<?php } ?>
+							</td>
+						</tr>
+						</volist>	
+						
+						<tr>
+							<td colspan="20" class="page">{$page}</td>
+						</tr>
+				</tbody>
+				
+			</table>
+		</div>
+	</div>
+</div>
+
+<div id="dialog1" class="dialog" style="z-index: 9999; display:none">
+    <div class="ks-contentbox">
+      <div class="title"><span>申请限时秒杀</span><a class="ks-ext-close" href="javascript:void(0)">X</a></div>
+     	
+     	<div class="col-xs-12 " style="margin-top:10px;" id="form_div">	
+			
+		</div>
+      
+    </div>
+  </div>
+</block>
+<block name="javascript">
+<script>
+
+//提交弹出表单
+function vl_form_sub()
+{
+	var act = $('#validation-form').attr('action');
+	$.ajax({
+		url:act,
+		type:'post',
+		data:$('#validation-form').serialize(),
+		dataType:'json',
+		success:function(result){
+			if(result.code == 1){
+				alert('操作成功');
+				location.href = location.href;
+				return false;
+			} else {
+				alert(result.msg);
+				return false;
+			}
+		}
+	})
+	return false;	
+}
+$(function(){
+
+	$('.backhuiche').click(function(){
+		var rel_url = $(this).attr('rel');
+		
+		if(!confirm('确认删除吗？'))
+		{
+			return false;
+		}
+		$.ajax({
+			url:rel_url,
+			type:'get',
+			dataType:'json',
+			success:function(ret){
+				if(ret.code == 1)
+				{
+					alert('删除成功，您的商品已下架!');
+					location.href = location.href;
+					return false;
+				} else {
+					alert(ret.msg);
+					return false;
+				}
+			}
+		})
+	})
+	
+	//申请1元主题活动
+	$('.yiyuan').click(function(){
+		var goods_id = $(this).attr('data-id');
+		$.ajax({
+			url: "{:U('Goods/yiyuan_form')}",
+			type:'post',
+			data:{goods_id:goods_id},
+			dataType:'json',
+			success:function(result){
+				if(result.code == 1){
+					$('.ks-contentbox span').html('选择1元购主题活动');
+					$('#form_div').html(result.html);
+					$("#dialog1").css({'position' : 'fixed','display' : 'block', 'z-index' : '9999'});
+				} else {
+					alert(result.msg);
+				}
+			}
+		})
+	})
+	
+	//申请9.9元主题活动
+	$('.jiukuaijiu').click(function(){
+		var goods_id = $(this).attr('data-id');
+		$.ajax({
+			url: "{:U('Goods/jiukuaijiu_form')}",
+			type:'post',
+			data:{goods_id:goods_id},
+			dataType:'json',
+			success:function(result){
+				if(result.code == 1){
+					$('.ks-contentbox span').html('选择9.9元主题活动');
+					$('#form_div').html(result.html);
+					$("#dialog1").css({'position' : 'fixed','display' : 'block', 'z-index' : '9999'});
+				} else {
+					alert(result.msg);
+				}
+			}
+		})
+	})
+	
+	//申请普通主题活动
+	$('.zhutihuodong').click(function(){
+		var goods_id = $(this).attr('data-id');
+		$.ajax({
+			url: "{:U('Goods/putongsubject_form')}",
+			type:'post',
+			data:{goods_id:goods_id},
+			dataType:'json',
+			success:function(result){
+				if(result.code == 1){
+					$('.ks-contentbox span').html('选择普通主题活动');
+					$('#form_div').html(result.html);
+					$("#dialog1").css({'position' : 'fixed','display' : 'block', 'z-index' : '9999'});
+				} else {
+					alert(result.msg);
+				}
+			}
+		})
+		
+	})
+	//申请海淘活动
+	$('.haitao').click(function(){
+		var goods_id = $(this).attr('data-id');
+		$.ajax({
+			url: "{:U('Goods/haitaosubject_form')}",
+			type:'post',
+			data:{goods_id:goods_id},
+			dataType:'json',
+			success:function(result){
+				if(result.code == 1){
+					$('.ks-contentbox span').html('选择普通主题活动');
+					$('#form_div').html(result.html);
+					$("#dialog1").css({'position' : 'fixed','display' : 'block', 'z-index' : '9999'});
+				} else {
+					alert(result.msg);
+				}
+			}
+		})
+		
+	})
+	
+	//申请免费试用
+	$('.mianfeishiyong').click(function(){
+		var goods_id = $(this).attr('data-id');
+		$.ajax({
+			url: "{:U('Goods/mianfeishiyong_form')}",
+			type:'post',
+			data:{goods_id:goods_id},
+			dataType:'json',
+			success:function(result){
+				if(result.code == 1){
+					$('.ks-contentbox span').html('选择免费试用活动');
+					$('#form_div').html(result.html);
+					$("#dialog1").css({'position' : 'fixed','display' : 'block', 'z-index' : '9999'});
+				} else {
+					alert(result.msg);
+				}
+			}
+		})
+		
+	})
+	
+	//申请限时秒杀
+	$('.xianshimiaosha').click(function(){
+		var goods_id = $(this).attr('data-id');
+		$.ajax({
+			url: "{:U('Goods/spike_form')}",
+			type:'post',
+			data:{goods_id:goods_id},
+			dataType:'json',
+			success:function(result){
+				if(result.code == 1){
+					$('.ks-contentbox span').html('选择超值大牌活动');
+					$('#form_div').html(result.html);
+					$("#dialog1").css({'position' : 'fixed','display' : 'block', 'z-index' : '9999'});
+				} else {
+					alert(result.msg);
+				}
+			}
+		})
+	})
+	
+	//申请超值大牌
+	$('.chaozhidapai').click(function(){
+		var goods_id = $(this).attr('data-id');
+		$.ajax({
+			url: "{:U('Goods/chaozhidapai_form')}",
+			type:'post',
+			data:{goods_id:goods_id},
+			dataType:'json',
+			success:function(result){
+				if(result.code == 1){
+					$('.ks-contentbox span').html('选择超值大牌活动');
+					$('#form_div').html(result.html);
+					$("#dialog1").css({'position' : 'fixed','display' : 'block', 'z-index' : '9999'});
+				} else {
+					alert(result.msg);
+				}
+			}
+		})
+	})
+	
+	//申请抽奖
+	$('.lottery').click(function(){
+		var goods_id = $(this).attr('data-id');
+		$.ajax({
+			url: "{:U('Goods/lottery_form')}",
+			type:'post',
+			data:{goods_id:goods_id},
+			dataType:'json',
+			success:function(result){
+				if(result.code == 1){
+					$('.ks-contentbox span').html('选择抽奖活动');
+					$('#form_div').html(result.html);
+					$("#dialog1").css({'position' : 'fixed','display' : 'block', 'z-index' : '9999'});
+				} else {
+					alert(result.msg);
+				}
+			}
+		})
+	});
+	
+	$('.lottery2').click(function(){
+		var goods_id = $(this).attr('data-id');
+		$.ajax({
+			url: "{:U('Goods/lottery_shenqing')}",
+			type:'post',
+			data:{goods_id:goods_id},
+			dataType:'json',
+			success:function(result){
+				if(result.code ==1 ){
+					alert('申请成功');
+					window.location.href = location.href;
+					return false;
+				} else {
+					alert(result.msg);
+				}
+			}
+		})
+	});
+	//申请限时秒杀
+	$('.xianshimiaosha2').click(function(){
+		var goods_id = $(this).attr('data-id');
+		$.ajax({
+			url: "{:U('Goods/xianshimiaosha_shenqing')}",
+			type:'post',
+			data:{goods_id:goods_id},
+			dataType:'json',
+			success:function(result){
+				if(result.code ==1 ){
+					alert('申请成功');
+					window.location.href = location.href;
+					return false;
+				} else {
+					alert(result.msg);
+				}
+			}
+		})
+	})
+	//$("#dialog1").css({'position' : 'fixed','display' : 'block', 'z-index' : '9999'});
+	//关闭弹出层
+	$('#dialog1').on('click','.ks-ext-close',function(){	
+		$("#dialog1").css('display','none');
+		$('.ks-ext-mask').css('display','none');
+		return false;
+	});
+	//关闭弹出层
+	$('#dialog1').on('click','.J_Cancel',function(){	
+		$("#dialog1").css('display','none');
+		$('.ks-ext-mask').css('display','none');
+		return false;
+	});
+	
+	$("#search").click(function () {
+        var url = $(this).attr('url');
+        var query = $('.search-form').find('input,select').serialize();
+        query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g, '');
+        query = query.replace(/^&/g, '');
+        if (url.indexOf('?') > 0) {
+            url += '&' + query;
+        } else {
+            url += '?' + query;
+        }
+        window.location.href = url;
+    });
+	
+	$('.copy').click(function(){
+		$.ajax({
+		url: "{:U('Goods/copy_goods')}",
+		type: 'post',
+		data: $('input:checked'),
+		dataType: 'json',
+		beforeSend: function() {
+			$('.copy').attr('disabled', true);
+			$('.copy').after('<span class="wait">&nbsp;<img src="__IMG__/loading.gif" alt="" /></span>');
+		},	
+		complete: function() {
+			$('.copy').attr('disabled', false); 
+			$('.wait').remove();
+		},			
+		success: function(json) {
+			$('.warning, .error').remove();
+					
+			if (json['redirect']) {				
+				
+				location = json['redirect']
+								
+			} 
+		},
+		error: function(xhr, ajaxOptions, thrownError) {
+			alert('修改失败');
+		}
+	});	
+	});
+});		
+</script>
+</block>

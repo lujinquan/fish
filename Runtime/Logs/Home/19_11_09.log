@@ -1,0 +1,12 @@
+[ 2019-11-09T06:31:58+08:00 ] 103.63.154.190 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=user&&m=lionfish_comshop&sign=88b6cf045617590e65846f71a5eff8c8
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-09T09:29:39+08:00 ] 103.63.154.49 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=user&&m=lionfish_comshop&sign=98b4bc054e747a74fd66d93486528c17
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-09T10:13:06+08:00 ] 103.63.154.49 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=a8bf984cb14def6af9b535dd54433dd9&controller=index.addhistory_community&community_id=16&token=5ba081a038b207aa5a2496f01ec1fab0
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-09T13:11:05+08:00 ] 182.200.53.115 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=user&&m=lionfish_comshop&sign=d52755a31e56d251b8d712041caf5de2
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+

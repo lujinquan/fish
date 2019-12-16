@@ -1,0 +1,39 @@
+<form class="form-horizontal"  id="validation-form" method="post" onsubmit="return vl_form_sub()" action='{:U("Goods/lottery_sub")}'>
+	
+		
+	<div class="form-group required">
+	 <?php foreach($voucher_list as $voucher){ ?>
+		<div class="col-sm-12">
+			 	<label>
+			 		<input type="radio" name="voucher_id" value="<?php echo $voucher['id']; ?>" />
+			 		<?php echo $voucher['voucher_title'] ?>&nbsp;&nbsp;剩余数量：<?php echo $voucher['total_count']-$voucher['send_count']; ?>
+			 	</label>
+		</div>
+		 <?php } ?>
+	</div>	
+	<div class="form-group required">
+		<div class="col-sm-12">
+			<label>中奖人数：　　 </label><input type="text" name="win_quantity" value="" />
+		</div>
+	</div>
+	<div class="form-group required">
+		<div class="col-sm-12">
+			<label>真实中奖人数： </label><input type="text" name="real_win_quantity" value="" />
+		</div>
+	</div>
+	<div class="form-group required">
+		<div class="col-sm-12">
+			<label>是否自动开奖： </label>
+			<label><input type="radio"  name="is_auto_open" value="1" />是</label>
+			<label><input type="radio" checked name="is_auto_open" value="0" />否</label>
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-1 control-label no-padding-left"> </label>	
+		<div class="col-sm-11">
+			<input type="hidden" name="goods_id" value="{$goods_id}" />
+			<input name="send" type="submit" id="submitactivity" value="提交" class="btn btn-primary" />
+		</div>
+	</div>
+</form>

@@ -1,0 +1,6 @@
+[ 2019-11-19T09:35:00+08:00 ] 103.63.154.93 /seller.php?s=/order/orderaftersales/state/1
+ERR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ore.state' in 'where clause'
+
+[ 2019-11-19T09:35:03+08:00 ] 103.63.154.93 /seller.php?s=/order/orderaftersales/state/6
+ERR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ore.state' in 'where clause'
+

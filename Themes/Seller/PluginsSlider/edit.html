@@ -1,0 +1,316 @@
+<extend name="Public:base" />
+<block name="content">
+<link rel="stylesheet" href="__CSS__/dialog.css" />	
+<div class="page-header">
+	<h1>
+		广告位
+		<small>
+			<i class="icon-double-angle-right"></i>
+			{$crumbs}
+		</small>
+	</h1>
+</div>
+<div class="ks-ext-mask" style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 999; display:none"></div>
+<div id="dialog" class="dialog" style="z-index: 9999; display:none;top:110px;">
+	<div class="ks-contentbox">
+		  <div class="title"><span>选择链接</span><a class="ks-ext-close" href="javascript:void(0)">X</a></div>
+			<div class="J_DefaultMessage" style="margin-top:10px;">
+				<div class="row">
+					<div class="form-group col-sm-3 col-md-offset-1 "> 
+						<a href="javascript:;" data-link="/pages/index/index" class="btn btn-info btn-sm ">小程序首页</a>
+					</div>
+					<div class="form-group col-sm-3 col-md-offset-1 ">
+						<a href="javascript:;" data-link="/pages/index/one" class="btn btn-info btn-sm">小程序一分团</a>
+					</div>
+					<div class="form-group col-sm-3 col-md-offset-1  ">
+						<a href="javascript:;" data-link="/pages/index/lucky" class="btn btn-info btn-sm">小程序抽奖团</a>
+					</div>
+					<div class="form-group col-sm-3 col-md-offset-1 ">
+						<a href="javascript:;" data-link="/pages/goods/bargain" class="btn btn-info btn-sm">小程序砍价列表</a>
+					</div>
+					<div class="form-group col-sm-3 col-md-offset-1 ">
+						<a href="javascript:;" data-link="/pages/dan/bonus" class="btn btn-info btn-sm">裂变红包</a>
+					</div>
+					<div class="form-group col-sm-3 col-md-offset-1  ">
+						<a href="javascript:;" data-link="/pages/order/pintuan" class="btn btn-info btn-sm">我的拼团</a>
+					</div>
+					<div class="form-group col-sm-3 col-md-offset-1  ">
+						<a href="javascript:;" data-link="/pages/order/index" class="btn btn-info btn-sm">小程序订单列表</a>
+					</div>
+					
+					<div class="form-group col-sm-3 col-md-offset-1  ">
+						<a href="javascript:;" data-link="/pages/goods/index?id=xx" class="btn btn-info btn-sm">商品链接，xx替换成商品id</a>
+					</div>
+					<div class="form-group col-sm-3 col-md-offset-1  ">
+						<a href="javascript:;" data-link="/pages/store/index?id=xx" class="btn btn-info btn-sm">小程序订单列表</a>
+					</div>
+					<div class="form-group col-sm-3 col-md-offset-1  ">
+						<a href="javascript:;" data-link="/pages/order/index" class="btn btn-info btn-sm">小程序订单列表</a>
+					</div>
+					<div class="form-group col-sm-3 col-md-offset-1  ">
+						<a href="javascript:;" data-link="/pages/dan/me" class="btn btn-info btn-sm">小程序会员中心</a>
+					</div>
+					<div class="form-group col-sm-3 col-md-offset-1  ">
+						<a href="javascript:;" data-link="/pages/dan/myfav" class="btn btn-info btn-sm">我喜欢的商品</a>
+					</div>
+					<div class="form-group col-sm-3 col-md-offset-1  ">
+						<a href="javascript:;" data-link="/pages/dan/quan" class="btn btn-info btn-sm">我的优惠券</a>
+					</div>
+					<div class="form-group col-sm-3 col-md-offset-1  ">
+						<a href="javascript:;" data-link="/pages/goods/bargain" class="btn btn-info btn-sm">砍价列表</a>
+					</div>
+					<div class="form-group col-sm-3 col-md-offset-1  ">
+						<a href="javascript:;" data-link="/pages/goods/category?id=分类id" class="btn btn-info btn-sm">小程序分类页面</a>
+					</div>
+					<div class="form-group col-sm-3 col-md-offset-1  ">
+						<a href="javascript:;" data-link="/pages/dan/paihang" class="btn btn-info btn-sm">排行页面路径</a>
+					</div>
+					<div class="form-group col-sm-3 col-md-offset-1  ">
+						<a href="javascript:;" data-link="/pages/dan/new" class="btn btn-info btn-sm">新品页面路径</a>
+					</div>
+					<div class="form-group col-sm-3 col-md-offset-1  ">
+						<a href="javascript:;" data-link="/pages/goods/integral" class="btn btn-info btn-sm">积分商城页面路径</a>
+					</div>
+					
+				</div>
+			</div>
+	</div>
+</div>		  
+<div class="row">
+	<div class="col-xs-12" style="display:none;">
+		<div class="alert alert-block alert-success">
+			<div class="col-sm-6 ">
+				
+				<p>狮子鱼 单商户小程序 页面路径</p>
+				<p>/pages/index/index  首页</p>
+
+				<p>/pages/index/one  一分团</p>
+
+				<p>/pages/index/lucky 抽奖团</p>
+				
+				<p>/pages/goods/bargain 砍价列表</p>
+				
+				<p>/pages/order/pintuan 我的拼团</p>
+
+				<p>/pages/order/index 订单列表</p>
+
+				<p>/pages/goods/index?id=xx  商品链接，xx替换成商品id </p>
+
+				<p>/pages/store/index?id=xx  店铺链接，xx换成商家id</p>
+
+				<p>/pages/dan/me  会员中心</p>
+
+				<p>/pages/dan/myfav  我喜欢的商品</p>
+
+				<p>/pages/dan/quan  我的优惠券</p>
+				<p>/pages/goods/bargain  砍价列表</p>
+				<p>/pages/goods/category?id=分类id  小程序分类页面</p>
+				
+				<p>/pages/dan/paihang  排行页面路径</p>
+				<p>/pages/dan/new  新品页面路径</p>
+			</div>
+			<div style="clear:both;"></div>
+		</div>
+	</div>
+	
+	<div class="col-xs-12">	
+		<form class="form-horizontal"  id="validation-form" method="post" action='{$action}'>
+			<notempty name="Think.get.id">
+			<input name="slider_id" type="hidden" value="{$Think.get.id}" />
+			</notempty>
+			
+			<div class="form-group required">
+                <label class="col-sm-2 control-label" for="input-image">图片：</label>
+                
+                <div class="col-sm-10" id="thumb">
+                  <a href="#" id="thumb-image" data-toggle="image" class="img-thumbnail">
+                  	<img osctype="image" <if condition="isset($slider['image'])"> 
+						src="__ROOT__/{$thumb_image}" 
+						<else /> 
+						src="__ROOT__/Common/image/no_image_100x100.jpg" 
+						</if>  />
+						</a>
+                  <input osctype="image_input" type="hidden" name="image" value="<?php echo $slider['image']; ?>" id="input-image" />
+           		 </div>
+            </div>  
+			
+			
+			<div class="form-group required">
+						<label class="col-sm-2 control-label" for="input-slider_name">名称：</label>
+						<div class="col-sm-10">
+							<input id="input-nslider_name" class="form-control" type="text" placeholder="名称" name="slider_name"  value="{$slider.slider_name|default=''}" />
+						</div>
+			</div>
+			<div class="form-group required">
+						<label class="col-sm-2 control-label" for="input-name2">广告位置：</label>
+						<div class="col-sm-10">
+							<select  name="type">
+								<option value="">请选择广告位置</option>
+								<?php foreach($type_config as $key => $val){ ?>
+									<option value="<?php echo $key;?>" <?php if($slider['type'] == $key ){ ?> selected<?php } ?>><?php echo $val;?></option>
+								<?php } ?>
+							</select>
+						</div>
+			</div>
+			
+			<div class="form-group required">
+				<label class="col-sm-2 control-label" for="input-name2">链接：</label>
+				<div class="col-sm-4">
+					<input id="input-link" class="form-control" type="text" placeholder="链接" name="url"  value="{$slider.url|default=''}" />
+					<span class="help-inline " <?php if($system_hide_wepro){ ?>style="display:none;" <?php } ?>>
+						<span class="middle red">如果需要跳转webview,这里固定填写：/pages/index/webview,
+						其他路径，webview外链请放空
+						</span>
+					</span>
+				</div>
+				<div class="col-sm-4" <?php if($system_hide_wepro){ ?>style="display:none;" <?php } ?>>
+					<a href="javascript:;" class="btn btn-sm btn-success" id="chose_link">
+						<i class="ace-icon fa icon-fire bigger-110"></i>
+						<span class="bigger-110 no-text-shadow">选择链接</span>
+					</a>
+				</div>
+			</div>
+			<div class="form-group required" <?php if($system_hide_wepro){ ?>style="display:none;" <?php } ?>>
+						<label class="col-sm-2 control-label" for="input-name2">webview外链：</label>
+						<div class="col-sm-10">
+							<input id="input-name2" class="form-control" type="text" placeholder="WEBVIE 外链才需要填写" name="webview_url"  value="{$slider.webview_url|default=''}" />
+							<span class="help-inline ">
+								<span class="middle red">
+								webview外链说明：仅支持https链接，微信小程序后台需要添加业务域名,注意/结尾
+								例如：https://mall.shiziyu888.com/
+								</span>
+							</span>
+						</div>
+			</div>
+			
+			<div class="form-group required">
+						<label class="col-sm-2 control-label" for="input-name2">排序：</label>
+						<div class="col-sm-10">
+							<input id="input-name2" class="form-control" type="text" placeholder="排序" name="sort_order"  value="{$slider.sort_order|default=''}" />
+						</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-sm-1 control-label no-padding-left"> </label>	
+				<div class="col-sm-11">
+					<input name="send" type="submit" value="提交" class="btn btn-primary" />
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+</block>
+
+<block name="jquery">
+<script src="__PUBLIC__/js/jquery/jquery-1.10.2.min.js"></script>
+
+</block>	
+
+<block name="javascript">
+<script src="__PUBLIC__/fileupload/jquery.ui.widget.js"></script>
+<script src="__PUBLIC__/fileupload/jquery.fileupload.js"></script>
+<script>
+$(function(){
+	
+	$('#chose_link').click(function(){
+		$("#dialog").css({'position' : 'fixed','display' : 'block', 'z-index' : '9999'});
+	})
+	$('.J_DefaultMessage a').click(function(){
+		var s_link = $(this).attr('data-link');
+		$('#input-link').val(s_link);
+		$("#dialog").css('display','none');
+	    $('.ks-ext-mask').css('display','none');
+	    return false;
+	})
+	
+	
+	//关闭弹出层
+	$('#dialog').on('click','.ks-ext-close',function(){	
+	    $("#dialog").css('display','none');
+	    $('.ks-ext-mask').css('display','none');
+	    return false;
+	});
+	//关闭弹出层
+	$('#dialog').on('click','.J_Cancel',function(){	
+	    $("#dialog").css('display','none');
+	    $('.ks-ext-mask').css('display','none');
+	    return false;
+	});
+		// Image Manager
+	$(document).delegate('a[data-toggle=\'image\']', 'click', function(e) {
+		e.preventDefault();
+	
+		var element = this;
+	
+		$(element).popover({
+			html: true,
+			placement: 'right',
+			trigger: 'manual',
+			content: function() {
+				return '<button type="button" id="button-image" class="btn btn-primary"><i class="icon-edit"></i></button> <button type="button" id="button-clear" class="btn btn-danger"><i class="icon-trash"></i></button>';
+			}
+		});
+		
+		$(element).popover('toggle');		
+	
+		$('#button-image').on('click', function() {
+			$('#modal-image').remove();
+			
+			$('#form-upload').remove();
+			
+			$('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input osctype="btn_upload_image" type="file" name="file" /></form>');
+	
+			$('#form-upload input[name=\'file\']').trigger('click');
+			
+			$(element).popover('hide');
+			
+			$('[osctype="btn_upload_image"]').fileupload({
+				
+	        	dataType: 'json',
+	            url: "{:U('Image/upload_image',array('dir'=>'slider'))}",
+	            add: function(e, data) {
+	                $parent = $('#thumb');
+	                $input = $parent.find('[osctype="image_input"]');
+	                $img = $parent.find('[osctype="image"]');
+	                data.formData = {old_product_image:$input.val()};
+	                $img.attr('src', "__IMG__/loading.gif");
+	                data.submit();
+	            },
+	            done: function (e,data) {
+					
+	            	var image=data.result;
+	            	
+	            	
+	                $parent = $('#thumb');
+	                $input = $parent.find('[osctype="image_input"]');
+	                $img = $parent.find('[osctype="image"]');
+	                if(image) {
+	                   // $img.prev('i').hide();
+	                    $img.attr('src', '__ROOT__/'+image.image_thumb);
+	                    $img.show();
+	                    $input.val(image.image);
+	                } else {
+	                    alert('上传失败');
+	                }
+	            }
+   		 });
+			
+			
+			
+		});
+	
+		$('#button-clear').on('click', function() {
+			$(element).find('img').attr('src', $(element).find('img').attr('data-placeholder'));
+			
+			$(element).parent().find('input').attr('value', '');
+	
+			$(element).popover('hide');
+		});
+	});
+	
+	
+	
+	
+});
+</script>
+</block>

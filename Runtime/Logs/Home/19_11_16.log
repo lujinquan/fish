@@ -1,0 +1,21 @@
+[ 2019-11-16T09:25:21+08:00 ] 113.233.19.126 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=45e6344ab0e11d24d6a57926fdc33880&controller=index.addhistory_community&community_id=15&token=aafb91b807b9daeac4645574633a7125
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-16T11:58:31+08:00 ] 175.167.138.154 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=7b1ae7654b2d5a57eb6c053092088c52&controller=index.load_gps_community&token=289bd82d34f1d5f720cee84e9b6dd71e&pageNum=1&longitude=&latitude=&city_id=0
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*PI()/180-lat*PI()/180)/2),2)+COS(*PI()/180)*COS(lat*PI()/180)*POW(SIN((*PI()/18' at line 1
+
+[ 2019-11-16T13:46:52+08:00 ] 175.167.138.160 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=302668cb7f70f7d4aff2fb8d456dc093&controller=index.load_gps_community&token=&pageNum=1&longitude=&latitude=&city_id=0
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*PI()/180-lat*PI()/180)/2),2)+COS(*PI()/180)*COS(lat*PI()/180)*POW(SIN((*PI()/18' at line 1
+
+[ 2019-11-16T17:12:01+08:00 ] 113.224.94.194 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=user&&m=lionfish_comshop&sign=a4ea1e6ca977ef7cf457c71589db6825
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-16T17:25:56+08:00 ] 42.248.58.197 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=user&&m=lionfish_comshop&sign=0c43fd8247a7beab4250ace80339ba9c
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-16T18:02:01+08:00 ] 42.55.38.199 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=user&&m=lionfish_comshop&sign=2b2f2174168d8b8bfcf406ead5a4d047
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-16T20:06:22+08:00 ] 117.136.5.48 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=ea1965ad54106e48d794dd3823ac51ae&controller=index.addhistory_community&community_id=26&token=0fe6a590e04ff6afc745025d64e89a21
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+

@@ -1,0 +1,39 @@
+[ 2019-11-06T12:33:22+08:00 ] 103.63.154.94 /seller.php?s=/system/upgrade_check
+ERR: SQLSTATE[HY000] [2002] Connection refused
+
+[ 2019-11-06T12:33:39+08:00 ] 111.21.128.226 /seller.php?s=/system/upgrade_check
+ERR: SQLSTATE[HY000] [2002] Connection refused
+
+[ 2019-11-06T12:33:39+08:00 ] 103.63.154.94 /seller.php?s=/communityhead/index
+ERR: SQLSTATE[HY000] [2002] Connection refused
+
+[ 2019-11-06T12:33:40+08:00 ] 111.21.128.226 /seller.php?s=/system/upgrade_check
+ERR: SQLSTATE[HY000] [2002] Connection refused
+
+[ 2019-11-06T12:33:40+08:00 ] 103.63.154.94 /seller.php?s=/system/upgrade_check
+ERR: SQLSTATE[HY000] [2002] Connection refused
+
+[ 2019-11-06T12:33:40+08:00 ] 103.63.154.94 /seller.php?s=/system/upgrade_check
+ERR: SQLSTATE[HY000] [2002] Connection refused
+
+[ 2019-11-06T12:33:40+08:00 ] 103.63.154.94 /seller.php?s=/system/upgrade_check
+ERR: SQLSTATE[HY000] [2002] Connection refused
+
+[ 2019-11-06T12:33:40+08:00 ] 103.63.154.94 /seller.php?s=/communityhead/usergroup
+ERR: SQLSTATE[HY000] [2002] Connection refused
+
+[ 2019-11-06T12:33:40+08:00 ] 103.63.154.94 /seller.php?s=/system/upgrade_check
+ERR: SQLSTATE[HY000] [2002] Connection refused
+
+[ 2019-11-06T12:33:41+08:00 ] 103.63.154.94 /seller.php?s=/system/upgrade_check
+ERR: SQLSTATE[HY000] [2002] Connection refused
+
+[ 2019-11-06T12:33:42+08:00 ] 103.63.154.94 /seller.php?s=/system/upgrade_check
+ERR: SQLSTATE[HY000] [2002] Connection refused
+
+[ 2019-11-06T12:33:42+08:00 ] 103.63.154.94 /seller.php?s=/system/upgrade_check
+ERR: SQLSTATE[HY000] [2002] Connection refused
+
+[ 2019-11-06T12:33:43+08:00 ] 103.63.154.94 /seller.php?s=/system/upgrade_check
+ERR: SQLSTATE[HY000] [2002] Connection refused
+

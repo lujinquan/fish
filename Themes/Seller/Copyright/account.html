@@ -1,0 +1,54 @@
+<extend name="Public:base_new" />
+<block name="content">
+<div class="page-header">当前位置：<span class="text-primary">账户设置</span></div>
+<div class="page-content">
+	<form action="" method="post" class="form-horizontal form-validate" enctype="multipart/form-data" >
+		<div class="form-group">
+			<label class="col-lg control-label">登录用户名</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="text" name="parameter[s_uname]" data-rule-required="true" aria-required="true" class="form-control" value="{$info['s_uname']}" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg control-label">登录密码</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="text" name="parameter[s_passwd]" class="form-control" value="" />
+				<span class="help-block">为空表示不更改</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg control-label"> </label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="submit" value="提交" class="btn btn-primary"  />
+			</div>
+		</div>
+	</form>
+</div>
+<script language="javascript">
+    
+    require(['bootstrap'], function () {
+        $("[rel=pop]").popover({
+            trigger: 'manual',
+            placement: 'top',
+            title: $(this).data('title'),
+            html: 'true',
+            content: $(this).data('content'),
+            animation: false
+        }).on("mouseenter", function () {
+            var _this = this;
+            $(this).popover("show");
+            $(this).siblings(".popover").on("mouseleave", function () {
+                $(_this).popover('hide');
+            });
+        }).on("mouseleave", function () {
+            var _this = this;
+            setTimeout(function () {
+                if (!$(".popover:hover").length) {
+                    $(_this).popover("hide")
+                }
+            }, 100);
+        });
+    });
+	
+</script>
+</block>

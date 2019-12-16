@@ -1,0 +1,965 @@
+<extend name="Public:base" />
+<block name="content">
+<link rel="stylesheet" href="__CSS__/dialog.css" />	
+
+	<div class="ks-ext-mask" style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 999; display:none"></div>
+	<div id="dialog" class="dialog" style="z-index: 9999; display:none">
+    <div class="ks-contentbox">
+      <div class="title"><span>新增菜单</span><a class="ks-ext-close" href="javascript:void(0)">X</a></div>
+      <input type="hidden" name="action" value="" />	
+   		<div class="row">
+   			<div class="col-xs-12" id="ks_shipping">
+   				
+   			</div>
+   		</div>   
+    </div>
+  </div>  
+	<div class="page-header">
+		<h1>
+			{$breadcrumb2}
+			<small>
+				<i class="icon-double-angle-right"></i>
+				{$crumbs}
+			</small>
+			
+			<button name="send" form="form-goods" type="submit" style="float:right;"  class="btn btn-sm btn-primary">提交</button>
+			
+		</h1>
+	</div>
+	<div class="row">
+	<div class="col-xs-12">	
+		<div class="panel-body">
+        <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="form-goods" class="form-horizontal">
+        
+        <notempty name="Think.get.id">
+			<input name="goods_id" type="hidden" value="{$Think.get.id}" />
+		</notempty>
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab-general" data-toggle="tab">常规项</a></li>
+            <li><a href="#tab-data" data-toggle="tab">基本信息</a></li>              
+            <li><a href="#tab-image" data-toggle="tab">图片参数</a></li>  
+            <li><a href="#tab-area" data-toggle="tab">地域配置</a></li>           
+          </ul>
+          <div class="tab-content">
+          	<!-- 常规 START -->
+	          	<div class="tab-pane active" id="tab-general">
+	          		
+	          		<div class="form-group required">
+						<label class="col-sm-2 control-label" for="input-name2">商品名称：</label>
+						<div class="col-sm-10">
+							<input id="input-name2" class="form-control" type="text" placeholder="商品名称：" value="{$goods.name|default=''}" name="goods_description[name]">
+						</div>
+					</div>
+					
+					<div class="form-group">
+	                    <label class="col-sm-2 control-label" for="input-description">商品简介：</label>
+	                    <div class="col-sm-10">
+	                      <textarea name="goods_description[summary]" class="form-control" rows="5">{$description.summary|default=''}</textarea>	
+	                    </div>
+                  	</div>
+					
+					<div class="form-group">
+	                    <label class="col-sm-2 control-label" for="input-description">商品详情：</label>
+	                    <div class="col-sm-10">
+	                      <textarea name="goods_description[description]" id="description">{$description.description|default=''}</textarea>	
+	                    </div>
+                  	</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-tag2">
+							<span title="" data-toggle="tooltip" data-original-title="使用逗号分开">商品标签：</span>
+						</label>
+						<div class="col-sm-10">
+							<input id="input-tag2" class="form-control" type="text" placeholder="商品标签：" value="{$description.tag|default=''}" name="goods_description[tag]">
+						</div>
+					</div>
+					
+	          	</div>
+	          	<!-- 常规 END -->
+	          	<!-- 基本信息 START -->
+	          	<div class="tab-pane" id="tab-data">
+	          		
+	          		<div class="form-group required">
+		                <label class="col-sm-2 control-label" for="input-image">
+		                <span title="" data-toggle="tooltip" data-original-title="上传800x800的图片">商品图片：</span>
+		                </label>
+		                
+		                <div class="col-sm-10" id="thumb">
+		                  <a href="#" data-toggle="image" class="img-thumbnail">
+		                  	<img osctype="image" <if condition="$goods['image']"> 
+								src="__ROOT__/{$goods.thumb_image}" 
+								<else /> 
+								src="__ROOT__/Common/image/no_image_100x100.jpg" 
+								</if>  />
+								</a>
+		                  <input osctype="image_input" type="hidden" name="image" value="{$goods.image|default=''}" id="input-image" />
+		            	</div>
+		            
+		            </div>   
+		            
+		            <div class="form-group required">
+						<label class="col-sm-2 control-label" for="input-meta-title2">商品型号：</label>
+						<div class="col-sm-10">
+							<input id="input-meta-title2" class="form-control" type="text" placeholder="商品型号" value="{$goods.model|default=''}" name="model">
+						</div>
+					</div>
+					
+					<div class="form-group required">
+						<label class="col-sm-2 control-label" for="input-meta-title2">销售价格：</label>
+						<div class="col-sm-10">
+							<input id="input-meta-title2" <?php if($goods['lock_price'] == 1){ ?> disabled <?php } ?> class="form-control" type="text" placeholder="销售价格" value="{$goods.price|default=''}" name="price">
+						</div>
+					</div>
+					<div class="form-group required">
+						<label class="col-sm-2 control-label" for="input-meta-title2">拼团价格：</label>
+						<div class="col-sm-10">
+							<input id="input-meta-title2" class="form-control" type="text" placeholder="拼团价格" value="{$goods.pinprice|default=''}" name="pinprice">
+						</div>
+					</div>
+					<div class="form-group required">
+						<label class="col-sm-2 control-label" for="input-meta-title2">单独购买价格：</label>
+						<div class="col-sm-10">
+							<input id="input-meta-title2" class="form-control" type="text" placeholder="单独购买价格" value="{$goods.danprice|default=''}" name="danprice">
+						</div>
+					</div>
+					
+					<div class="form-group required">
+						<label class="col-sm-2 control-label" for="input-meta-title2">商品数量：</label>
+						<div class="col-sm-10">
+							<input id="input-meta-title2" class="form-control" type="text" placeholder="商品数量" value="{$goods.quantity|default=''}" name="quantity">
+						</div>
+					</div>
+					
+					<div class="form-group required">
+						<label class="col-sm-2 control-label" for="input-meta-title2">拼团人数：</label>
+						<div class="col-sm-10">
+							<input id="input-meta-title2" class="form-control" type="text" placeholder="拼团人数" value="{$goods.pin_count|default='1'}" name="pin_count">
+						</div>
+					</div>
+					<div class="form-group required">
+						<label class="col-sm-2 control-label" for="input-meta-title2">拼团小时：</label>
+						<div class="col-sm-10">
+							<input id="input-meta-title2" class="form-control" type="text" placeholder="拼团小时" value="{$goods.pin_hour|default=''}" name="pin_hour">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<label class="col-sm-2 control-label">运费：</label>
+							<div class="col-sm-10" id="shipping">
+								<label class="radio-inline">
+								<input type="radio" checked="checked" value="1" name="shipping">固定运费</label>
+								<label class="radio-inline" style=display:none;"">
+								<input type="radio" value="2" name="shipping">使用运费模板</label>
+							</div>
+						</div>
+						
+					</div>
+					<div class="form-group" id="shipping_tp">
+							<label class="col-sm-2 control-label">&nbsp;</label>
+							<div class="col-sm-10" id="shipping_temp">
+								<div class="col-sm-12" <if condition="!empty($goods) && $goods.shipping eq 2">style="display:none;"</if>>
+									<input id="input-goods_freight" disabled class="col-sm-4" type="text" placeholder="" value="{$goods.goods_freight|default='0'}" name="goods_freight">
+								
+									<span class="help-inline col-sm-8">
+										<span class="middle">(元)0表示免运费</span>
+									</span>
+								</div>
+								<div class="col-sm-4" style="display:none;" <if condition="empty($goods) || $goods.shipping eq 1">style="display:none;"</if>>
+									<span id="transport_name" class="help-inline">
+									<notempty name="transport">
+										{$transport['title']}
+									</notempty>
+									</span>
+									<span class="btn btn-info btn-sm popover-info" id="shipping_chose">
+									<i class="icon-truck"></i>选择运费模板
+									</span>
+									<input type="hidden" name="transport_id" id="transport_id" value="{$goods.transport_id}" />
+								</div>
+							</div>
+					</div>
+					<div class="form-group required">
+						<label class="col-sm-2 control-label">选择分类：</label>
+						<div class="col-sm-8" id="cateclass">
+							<span class="help-inline">
+							<volist name="goods_categories" id="cate_one" empty="$empty">
+									{$cate_one.name}&nbsp;
+								</volist>
+							</span>
+							<select id="class_1" class="checkbox-inline" name="class_1" rel="1">
+								<option value="0">请选择类目</option>
+								<volist name="cate_data" id="cate" empty="$empty">
+									<option value="{$cate.id}">{$cate.name}</option>
+								</volist>	
+							</select>
+						</div>
+					</div>
+					<div class="form-group required">
+						<label class="col-sm-2 control-label">商品选项：</label>
+					</div>
+					<div class="form-group" id="option-list">
+						<div class="row">
+							<div class="col-sm-2">
+		       					<ul class="nav nav-pills nav-stacked" id="option">
+				                    <?php $option_row = 0; ?>
+				                     <?php $option_value_row = 0; ?>
+				                    <?php foreach ($goods_options as $goods_option) { ?>
+				                    <li><a href="#tab-option<?php echo $option_row; ?>" type="<?php echo $goods_option['type']; ?>" data-toggle="tab"><i class="icon-ban-circle" onclick="$('a[href=\'#tab-option<?php echo $option_row; ?>\']').parent().remove(); $('#tab-option<?php echo $option_row; ?>').remove(); $('#option a:first').tab('show');"></i> <?php echo $goods_option['name']; ?></a></li>
+				                    <?php $option_row++; ?>
+				                    <?php } ?>
+				                    <li>
+				                      <input type="text" name="option" value="" id="input-option" class="form-control" />
+				                    </li>
+				                </ul>
+		       				</div>
+		       				<div class="col-sm-10">
+		       					<div class="tab-content">
+		       						
+								<?php $option_row = 0; ?>
+			                    <?php $option_value_row = 0; ?>
+			                    <?php foreach ($goods_options as $goods_option) { ?>
+			                    <div class="tab-pane" id="tab-option<?php echo $option_row; ?>">
+			                      <input type="hidden" name="goods_option[<?php echo $option_row; ?>][goods_option_id]" value="<?php echo $goods_option['goods_option_id']; ?>" />
+			                      <input type="hidden" name="goods_option[<?php echo $option_row; ?>][name]" value="<?php echo $goods_option['name']; ?>" />
+			                      <input type="hidden" name="goods_option[<?php echo $option_row; ?>][option_id]" value="<?php echo $goods_option['option_id']; ?>" />
+			                      <input type="hidden" name="goods_option[<?php echo $option_row; ?>][type]" value="<?php echo $goods_option['type']; ?>" />
+			                      <div class="form-group" style="display:none;">
+			                        <label class="col-sm-2 control-label" for="input-required<?php echo $option_row; ?>">必选</label>
+			                        <div class="col-sm-10">
+			                          <select name="goods_option[<?php echo $option_row; ?>][required]" id="input-required<?php echo $option_row; ?>" class="form-control">
+			                            <?php if ($goods_option['required']) { ?>
+			                            <option value="1" selected="selected">是</option>
+			                            <option value="0">否</option>
+			                            <?php } else { ?>
+			                            <option value="1">是</option>
+			                            <option value="0" selected="selected">否</option>
+			                            <?php } ?>
+			                          </select>
+			                        </div>
+			                      </div>
+			                      
+			                      <?php if ($goods_option['type'] == 'select' || $goods_option['type'] == 'radio' || $goods_option['type'] == 'checkbox') { ?>
+			                      <div class="table-responsive">
+			                        <table id="option-value<?php echo $option_row; ?>" class="table table-striped table-bordered table-hover">
+			                          <thead>
+			                            <tr>
+			                              
+			                              <?php if($goods_option['type'] == 'select'){ ?>
+			                              	<td class="text-left"></td>
+			                              <?php }else{ ?>
+			                              	<td class="text-left">图片</td>
+			                              <?php } ?>
+			                              
+			                              <td class="text-left">选项值</td>
+			                              <td class="text-right">商品数量</td>
+			                              <td class="text-left">扣减库存</td>
+			                              
+			                            </tr>
+			                          </thead>
+			                          <tbody>
+			                            <?php foreach ($goods_option['goods_option_value'] as $goods_option_value) { ?>
+			                            <tr id="option-value-row<?php echo $option_value_row; ?>">
+			                              
+			                              <?php if($goods_option['type'] == 'select'){ ?>
+			                              	<td class="text-left"></td>
+			                              <?php }else{ ?>
+			                              	<td class="text-left">
+			                              		<a href="#" id="option-image-row<?php echo $option_value_row; ?>" data-toggle="image" num="<?php echo $option_value_row; ?>" type="option" class="img-thumbnail" >
+			                              		<img osctype="option_image<?php echo $option_value_row; ?>" src="<?php if(!empty($goods_option_value['image'])){echo resize($goods_option_value['image'],100,100);}else{ echo '__ROOT__/Common/image/no_image_100x100.jpg'; } ?>" alt="" title="" />
+			                              		<input osctype="option_image_input<?php echo $option_value_row; ?>" type="hidden" name="goods_option[<?php echo $option_row; ?>][goods_option_value][<?php echo $option_value_row; ?>][option_value_imgae]" value="<?php echo $goods_option_value['image']; ?>" id="input-image<?php echo $option_value_row; ?>" />
+			                              		</a>
+			                              	</td>
+			                              <?php } ?>
+			                              
+			                              <td class="text-left"><select name="goods_option[<?php echo $option_row; ?>][goods_option_value][<?php echo $option_value_row; ?>][option_value_id]" class="form-control">
+			                                  <?php if (isset($option_values[$goods_option['option_id']])) { ?>                                
+				                                  <?php foreach ($option_values[$goods_option['option_id']] as $option_value) { ?>                                  
+					                                  
+					                                  <option value="<?php echo $option_value['option_value_id']; ?>" <?php if ($option_value['option_value_id'] == $goods_option_value['option_value_id']) {echo '  selected="selected"';} ?>><?php echo $option_value['value']; ?></option>
+					                                                                   
+				                                  <?php } ?>
+			                                  <?php } ?>
+			                                </select>
+			                                <input type="hidden" name="goods_option[<?php echo $option_row; ?>][goods_option_value][<?php echo $option_value_row; ?>][goods_option_value_id]" value="<?php echo $goods_option_value['goods_option_value_id']; ?>" /></td>
+			                              <td class="text-right"><input type="text" name="goods_option[<?php echo $option_row; ?>][goods_option_value][<?php echo $option_value_row; ?>][quantity]" value="<?php echo $goods_option_value['quantity']; ?>" placeholder="<?php echo $entry_quantity; ?>" class="form-control" /></td>
+			                              <td class="text-left"><select name="goods_option[<?php echo $option_row; ?>][goods_option_value][<?php echo $option_value_row; ?>][subtract]" class="form-control">
+			                                  <?php if ($goods_option_value['subtract']) { ?>
+			                                  <option value="1" selected="selected">是</option>
+			                                  <option value="0">否</option>
+			                                  <?php } else { ?>
+			                                  <option value="1">是</option>
+			                                  <option value="0" selected="selected">否</option>
+			                                  <?php } ?>
+			                                </select></td>
+			                              
+			                            </tr>
+			                            <?php $option_value_row++; ?>
+			                            <?php } ?>
+			                          </tbody>
+			                          <tfoot>
+			                            <tr>
+			                              <td colspan="6"></td>
+			                              <td class="text-left"><button type="button" onclick="addOptionValue('<?php echo $option_row; ?>','<?php echo $goods_option['type']; ?>');" data-toggle="tooltip"  class="btn btn-primary">添加选项</button></td>
+			                            </tr>
+			                          </tfoot>
+			                        </table>
+			                      </div>
+			                      <select id="option-values<?php echo $option_row; ?>" style="display: none;">
+			                        <?php if (isset($option_values[$goods_option['option_id']])) { ?>
+			                        <?php foreach ($option_values[$goods_option['option_id']] as $option_value) { ?>
+			                        <option value="<?php echo $option_value['option_value_id']; ?>"><?php echo $option_value['value']; ?></option>
+			                        <?php } ?>
+			                        <?php } ?>
+			                      </select>
+			                      <?php } ?>
+			                    </div>
+			                    <?php $option_row++; ?>
+			                    <?php } ?>	       						
+		       						
+		       						
+		       					</div>
+		       				</div>
+	       				</div>
+	       				
+					</div>
+		            <div class="form-group">
+						<label class="col-sm-2 control-label">商品状态：</label>
+						<div class="col-sm-10">
+							<label class="radio-inline">
+							<input type="radio" checked="checked" value="1" name="status">启用</label>
+							<label class="radio-inline">
+							<input type="radio" value="0" name="status">停用</label>
+						</div>
+					</div>
+		            
+		            <div class="form-group required">
+						<label class="col-sm-2 control-label" for="input-meta-title2">排序：</label>
+						<div class="col-sm-10">
+							<input id="input-meta-title2" class="form-control" type="text" placeholder="排序" value="{$goods.sort_order|default=''}" name="sort_order">
+						</div>
+					</div>
+		            
+	          	</div>
+	          	<!-- 基本信息 END -->
+	          	
+	          	<!-- 图片 START -->
+	          	<div class="tab-pane" id="tab-image">
+	          		<div class="table-responsive">
+	                	<table id="images" class="table table-striped table-bordered table-hover">
+		                  <thead>
+		                    <tr>
+		                      <td class="text-left">商品图片</td>
+		                      <td class="text-right">选项排序</td>
+		                      <td></td>
+		                    </tr>
+		                  </thead>
+		                	 <tbody>
+                     <?php $image_row = 0; ?>
+                     <?php if(isset($goods_images)){ ?>
+	                    <?php foreach ($goods_images as $goods_image) { ?>
+		                    <tr id="gallery-image-row<?php echo $image_row; ?>">
+		                      <td class="text-left"><a href="" id="thumb-image<?php echo $image_row; ?>" num="<?php echo $image_row; ?>" type="gallery" data-toggle="image" class="img-thumbnail"><img osctype="gallery_image<?php echo $image_row; ?>" src="<?php echo $goods_image['thumb']; ?>" alt="" title="" /></a><input osctype="gallery_image_input<?php echo $image_row; ?>" type="hidden" name="goods_image[<?php echo $image_row; ?>][image]" value="<?php echo $goods_image['image']; ?>" id="input-image<?php echo $image_row; ?>" /></td>
+		                      <td class="text-right"><input type="text" name="goods_image[<?php echo $image_row; ?>][sort_order]" value="<?php echo $goods_image['sort_order']; ?>" class="form-control" /></td>
+		                      <td class="text-left"><button type="button" onclick="$('#gallery-image-row<?php echo $image_row; ?>').remove();" data-toggle="tooltip" class="btn btn-danger"><i class="icon-trash"></i></button></td>
+		                    </tr>
+	                    <?php $image_row++; ?>
+	                    <?php } ?>
+	                 <?php } ?>
+                  </tbody>
+		          </table>
+		                <div>
+		                	<a  onclick="addImage();" class="add_image btn btn-primary ">添加图片</a>
+			                <span class="help-inline ">
+								<span class="middle red">参考图片尺寸：640*400</span>
+							</span>
+		                </div>
+                  </div>
+	          	</div>
+	          	<!-- 图片 END -->
+	          	
+	          
+	          <!-- 地域配置 START -->
+	       		<div class="tab-pane" id="tab-area">
+	       			<div class="row">
+	       				<div class="col-xs-12">
+	       					<div class="alert alert-block alert-success">
+								勾选后只允许勾选的地区用户进行下单购买;<br>
+								区域全选或全不选时,都表示无限制！
+						   	</div>
+	       				</div>
+	       				<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							
+							<div class="scrollable-area">
+				                    <form method="post" id="area-info-form">
+				                        <table class="table table-striped table-hover table-bordered">
+				                            <tbody>
+				                            	  <?php foreach($parent_area as $area){ ?>
+				                            	  <tr>
+				                                        <td width="2%">                                                                  
+				                                            <input type="checkbox" class="prochk" value="<?php echo $area['area_id']; ?>">
+				                                        </td>
+				                                        <td width="10%"><?php echo $area['area_name']; ?></td>
+				                                        <td width="100px">
+				                                        	<?php foreach($area['child'] as $vv){ ?>
+				                                    		<input type="checkbox" name="citychk[]" <?php if( in_array($vv['area_id'],$goods_area['area_ids']) ){ ?> checked<?php } ?>  value="<?php echo $vv['area_id']; ?>">
+				                                            <span><?php echo $vv['area_name']; ?>    </span>
+				                                            <?php } ?>
+				                                    	</td>
+				                                  </tr>
+				                                  <?php } ?>
+				                                  <tr>
+				                                 	<td colspan="3"> 
+				                                 		<label><input type="checkbox" id="pktype_check">全选</label><br>
+				                                 		<span style="color:red;"></span>
+				                                 	</td>
+				                                 </tr> 
+				                            </tbody>
+				                        </table>
+				                    </form>
+				                </div>
+							<!-- PAGE CONTENT ENDS -->
+						</div>
+			
+			
+	       			</div>
+	       		</div>
+	       		<!-- 地域配置 END -->
+	       		
+	       		<!-- 选项 START -->
+	       		<div class="tab-pane" id="tab-option">
+	       			<div class="row">
+	       				
+	       			</div>
+	       		</div>
+	       		<!-- 选项 END -->
+        
+          </div>
+        </form>
+	</div>
+	</div>
+</div>
+</block>
+<block name="javascript">
+<script language="JavaScript">
+$(document).ready(function(){
+	
+	//checkbox
+	 $(".prochk").click(function () {
+            var chk = ($($(this).closest("tr").find("td")[2]).find("input"));
+            var bl = true;
+            if ($(this).attr("checked")!="checked") {
+            	$(this).removeAttr("checked");
+                bl = false;
+            }else{
+            	$(this).attr("checked", "checked");
+                bl = true;
+            }
+           
+            chk.each(function (i,e) {
+                $(e).prop("checked", bl);
+                if(bl){
+                	$(e).attr("checked",true);
+                }else{
+                	$(e).removeAttr("checked");
+                }
+            })
+        });
+       	$("#pktype_check").click(function(){
+       		var bl = true;
+            if ($(this).attr("checked")!="checked") {
+            	$(this).removeAttr("checked");
+                bl = false;
+            }else{
+            	$(this).attr("checked", "checked");
+                bl = true;
+            }
+       		$(".scrollable-area input[type=checkbox]").each(function (i,e) {
+                $(e).prop("checked", bl);
+                if(bl){
+                	$(e).attr("checked",true);
+                }else{
+                	$(e).removeAttr("checked");
+                }
+            })
+       	});
+        $("input[name='citychk[]']").click(function () {           
+            var prochk = ($($(this).closest("tr").find("td")[0]).find("input"));
+            
+            if ($(this).attr("checked")!='checked') {
+                $(this).removeAttr("checked");
+                 var citychk = ($($(this).closest("tr").find("td")[2]).find("input"));
+                var bl = true;
+                citychk.each(function (i, e) {                    
+                    if ($(e).attr("checked")=='checked') {
+                        bl = true;
+                        return false;
+                    }
+                    else {
+                        bl= false;
+                    }
+                })
+                if(bl){
+                	$(prochk).attr("checked", "checked");
+                }else{
+                	$(prochk).removeAttr("checked");
+                }
+                prochk.prop("checked", bl);
+            }
+            else {
+            	$(this).attr("checked",true);
+            	$(prochk).attr("checked", "checked");
+               	prochk.prop("checked", true);
+            }
+        });
+	
+});
+</script>
+<style>
+.table thead > tr > td, .table tbody > tr > td {
+    vertical-align: middle;
+}	
+.table thead td span[data-toggle="tooltip"]:after, label.control-label span:after {
+	font-family: FontAwesome;
+	color: #1E91CF;
+	content: "\f059";
+	margin-left: 4px;
+}
+</style>	
+
+<script src="__PUBLIC__/ckeditor/ckeditor.js"></script> 
+<script src="__PUBLIC__/fileupload/jquery.ui.widget.js"></script>
+<script src="__PUBLIC__/fileupload/jquery.fileupload.js"></script>
+<script>
+	CKEDITOR.replace('description', {
+		filebrowserImageUploadUrl: '{:U("Image/ckupload")}',	
+		toolbar: [
+					[ 'Source', 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ],
+					[ 'FontSize', 'TextColor', 'BGColor' ],
+					[ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock','Image','Multiimg','Format']
+				]	
+	});
+
+var option_row = '<?php echo $option_row; ?>';
+
+$('input[name=\'option\']').autocomplete({
+	'source': function(request, response) {
+		$.ajax({
+			url:'{:U("Option/autocomplete")}' +'/filter_name/'+  encodeURIComponent(request),
+			dataType: 'json',			
+			success: function(json) {
+				response($.map(json, function(item) {
+					return {
+						category: item['category'],
+						label: item['name'],
+						value: item['option_id'],
+						type: item['type'],
+						option_value: item['option_value']
+					}
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+		html  = '<div class="tab-pane" id="tab-option' + option_row + '">';
+		html += '	<input type="hidden" name="goods_option[' + option_row + '][goods_option_id]" value="" />';
+		html += '	<input type="hidden" name="goods_option[' + option_row + '][name]" value="' + item['label'] + '" />';
+		html += '	<input type="hidden" name="goods_option[' + option_row + '][option_id]" value="' + item['value'] + '" />';
+		html += '	<input type="hidden" name="goods_option[' + option_row + '][type]" value="' + item['type'] + '" />';
+		
+		html += '	<div class="form-group" style="display:none;">';
+		html += '	  <label class="col-sm-2 control-label" for="input-required' + option_row + '">必选</label>';
+		html += '	  <div class="col-sm-10"><select name="goods_option[' + option_row + '][required]" id="input-required' + option_row + '" class="form-control">';
+		html += '	      <option value="1">是</option>';
+		html += '	      <option value="0">否</option>';
+		html += '	  </select></div>';
+		html += '	</div>';
+			
+		if (item['type'] == 'select' || item['type'] == 'radio' || item['type'] == 'checkbox') {		
+			
+			html += '<div class="table-responsive">';
+			html += '  <table id="option-value' + option_row + '" class="table table-striped table-bordered table-hover">';
+			html += '  	 <thead>'; 
+			html += '      <tr>';
+			
+			if(item['type']!='select'){			
+				html += '    <td class="text-right">图片</td>';				
+			}else{
+				html += '    <td class="text-right"></td>';	
+			}	
+			
+			html += '        <td class="text-left">选项值</td>';			
+			html += '        <td class="text-right">商品数量</td>';
+			html += '        <td class="text-left">扣减库存</td>';
+			html += '        <td class="text-right">销售价格</td>';					
+			html += '        <td></td>';
+			html += '      </tr>';
+			html += '  	 </thead>';
+			html += '  	 <tbody>';
+			html += '    </tbody>';
+			html += '    <tfoot>';
+			html += '      <tr>';
+			html += '        <td colspan="6"></td>';
+			html += '        <td class="text-left"><button type="button" onclick="addOptionValue(' + option_row+",'"+item['type']+"'"+');" data-toggle="tooltip" title="<?php echo $button_option_value_add; ?>" class="btn btn-primary">新增</button></td>';
+			html += '      </tr>';
+			html += '    </tfoot>';
+			html += '  </table>';
+			html += '</div>';
+			
+            html += '  <select id="option-values' + option_row + '" style="display: none;">';
+			
+            for (i = 0; i < item['option_value'].length; i++) {
+				html += '  <option value="' + item['option_value'][i]['option_value_id'] + '">' + item['option_value'][i]['name'] + '</option>';
+            }
+
+            html += '  </select>';	
+			html += '</div>';	
+		}
+		
+		$('#option-list .tab-content').append(html);
+			
+		$('#option > li:last-child').before('<li><a href="#tab-option' + option_row + '" data-toggle="tab"><i class="icon-ban-circle" onclick="$(\'a[href=\\\'#tab-option' + option_row + '\\\']\').parent().remove(); $(\'#tab-option' + option_row + '\').remove(); $(\'#option a:first\').tab(\'show\')"></i> ' + item['label'] + '</li>');
+		
+		$('#option a[href=\'#tab-option' + option_row + '\']').tab('show');		
+				
+		option_row++;
+	}	
+});	
+	
+var option_value_row = '<?php echo $option_value_row; ?>';
+
+function addOptionValue(option_row,type) {	
+	html  = '<tr id="option-value-row' + option_value_row + '">';
+	
+	if(type=='select'){
+		html+='		<td></td>';
+	}else{			
+		html+= '  <td class="text-left"><a href="#" id="option-image-row' + option_value_row + '"data-toggle="image" num="'+option_value_row+'" type="option" class="img-thumbnail"><img osctype="option_image'+option_value_row+'" src="__ROOT__/Common/image/no_image_100x100.jpg" alt="" title="" /><input osctype="option_image_input'+option_value_row+'" type="hidden" name="goods_option[' + option_row + '][goods_option_value][' + option_value_row + '][option_value_imgae]" value="" id="input-image' + option_value_row + '" /></td>';
+	}		
+	
+	
+	html += '  <td class="text-left"><select name="goods_option[' + option_row + '][goods_option_value][' + option_value_row + '][option_value_id]" class="form-control">';
+	html += $('#option-values' + option_row).html();
+	html += '  </select><input type="hidden" name="goods_option[' + option_row + '][goods_option_value][' + option_value_row + '][goods_option_value_id]" value="" /></td>';
+	html += '  <td class="text-right"><input type="text" name="goods_option[' + option_row + '][goods_option_value][' + option_value_row + '][quantity]" value=""  class="form-control" /></td>'; 
+	html += '  <td class="text-left"><select name="goods_option[' + option_row + '][goods_option_value][' + option_value_row + '][subtract]" class="form-control">';
+	html += '    <option value="1">是</option>';
+	html += '    <option value="0">否</option>';
+	html += '  </select></td>';
+	
+	
+	html += '  <td class="text-left"><button type="button" onclick="$(this).tooltip(\'destroy\');$(\'#option-value-row' + option_value_row + '\').remove();" data-toggle="tooltip" rel="tooltip" title="<?php echo $button_remove; ?>" class="btn btn-danger"><i class="icon-trash bigger-120"></i></button></td>';
+	html += '</tr>';
+	
+	$('#option-value' + option_row + ' tbody').append(html);
+        $('[rel=tooltip]').tooltip();
+        
+	option_value_row++;
+}	
+	
+$('input[name=\'category\']').autocomplete({
+	'source': function(request, response) {
+		$.ajax({
+			url: '{:U("GoodsCategory/autocomplete")}' +'/filter_name/'+  encodeURIComponent(request),
+			dataType: 'json',			
+			success: function(json) {
+				response($.map(json, function(item) {
+					return {
+						label: item['name'],
+						value: item['category_id']
+					}
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+		$('input[name=\'category\']').val('');
+		
+		$('#goods-category' + item['value']).remove();
+		
+		$('#goods-category').append('<div id="goods-category' + item['value'] + '"><i class="icon-ban-circle"></i> ' + item['label'] + '<input type="hidden" name="goods_category[]" value="' + item['value'] + '" /></div>');	
+	}
+});	
+$('#goods-category').delegate('.icon-ban-circle', 'click', function() {
+	$(this).parent().remove();
+});	
+	
+	var image_row = '<?php echo $image_row; ?>';
+
+	function addImage() {
+		html  = '<tr id="gallery-image-row' + image_row + '">';
+		html += '  <td class="text-left"><a href="#" id="thumb-image' + image_row + '"data-toggle="image" type="gallery" num="'+image_row+'" class="img-thumbnail"><img osctype="gallery_image'+image_row+'" src="__ROOT__/Common/image/no_image_100x100.jpg" alt="" title="" /><input osctype="gallery_image_input'+image_row+'" type="hidden" name="goods_image[' + image_row + '][image]" value="" id="input-image' + image_row + '" /></td>';
+		html += '  <td class="text-right"><input type="text" name="goods_image[' + image_row + '][sort_order]" value="'+image_row+'" class="form-control" /></td>';
+		html += '  <td class="text-left"><button type="button" onclick="$(\'#gallery-image-row' + image_row  + '\').remove();" data-toggle="tooltip" class="btn btn-danger"><i class="icon-trash"></i></button></td>';
+		html += '</tr>';
+		
+		$('#images tbody').append(html);
+		
+		image_row++;
+	}
+
+	var discount_row ={$discount_row|default='0'};
+
+	function addDiscount() {
+		html  = '<tr id="discount-row' + discount_row + '">'; 
+		html += '  <td class="text-left"><input type="text" name="goods_discount[' + discount_row + '][quantity]" value="" class="form-control" /></td>';
+		html += '  <td class="text-left"><input type="text" name="goods_discount[' + discount_row + '][price]" value="" class="form-control" /></td>';
+		html += '  <td class="text-left"><button type="button" onclick="$(\'#discount-row' + discount_row  + '\').remove();" data-toggle="tooltip" class="btn btn-danger"><i class="icon-trash"></i></button></td>';
+		html += '</tr>';
+		
+		$('#discount tbody').append(html);
+		
+		discount_row++;
+	}
+	
+$(function(){
+	
+	<present name="Think.get.id">
+			Oscshop.setValue("status", {$goods.status|default=1});		
+			Oscshop.setValue("subtract",{$goods.subtract|default=1});		
+			Oscshop.setValue("shipping",{$goods.shipping|default=1});
+	</present>
+	
+	
+	// tooltips on hover button-upload
+	$('[data-toggle=\'tooltip\']').tooltip({container: 'body', html: true});
+
+	// Makes tooltips work on ajax generated content
+	$(document).ajaxStop(function() {
+		$('[data-toggle=\'tooltip\']').tooltip({container: 'body'});
+	});	
+	
+	$(document).delegate('input[name=\'shipping\']', 'click', function(e) {
+		var index = $(this).val()-1;
+		$('#shipping_temp').children().hide();
+		$('#shipping_temp').children().eq(index).show();
+	})
+	
+	
+	//关闭弹出层
+	$('#dialog').on('click','.ks-ext-close',function(){	
+	    $("#dialog").css('display','none');
+	    $('.ks-ext-mask').css('display','none');
+	    return false;
+	});
+	//关闭弹出层
+	$('#dialog').on('click','.J_Cancel',function(){	
+	    $("#dialog").css('display','none');
+	    $('.ks-ext-mask').css('display','none');
+	    return false;
+	});
+	//shipping_btn $('#dialog').on('click')
+	
+	$(document).delegate('.shipping_btn', 'click', function(e) {
+		var transport_id = $(this).attr('rel');
+		var relname = $(this).attr('relname');
+		$('#transport_id').val(transport_id);
+		$('#transport_name').html(relname);
+		
+	  	$("#dialog").css('display','none');
+	    $('.ks-ext-mask').css('display','none');
+	    return false;
+	})
+	
+	$(document).delegate('#cateclass select', 'change', function(e) {
+	e.preventDefault();
+	var thisobj =$(this);
+	var pid =thisobj.val();
+	thisobj.nextAll().remove();
+	var cur_rel =parseInt( thisobj.attr('rel'))+1;
+	if(pid ==0)
+		return ;
+	
+	$.ajax({
+		url:"{:U(Goods/get_json_category_tree)}",
+		type:'get',
+		data:{pid:pid,is_ajax:1},
+		dataType:'json',
+		success:function(result){
+			
+			if(result.code == 1)
+			{
+				var after_html = '<select name="class_'+cur_rel+'" class="checkbox-inline" rel="'+cur_rel+'">';
+				
+				after_html += '<option value="0">请选择类目</option>';
+				for(var i in result.list)
+				{
+					after_html += '<option value="'+result.list[i].id+'">'+result.list[i].name+'</option>'
+				}
+				after_html += '</select>';
+				thisobj.after(after_html)
+			}
+		}
+	})
+	
+	
+	
+});
+	$(document).delegate('#shipping_chose', 'click', function(e) {
+		
+		$.ajax({
+			url: '{:U("Transport/getTransportList")}',
+			dataType: 'json',			
+			success: function(result) {
+				if(result.code == 1)
+				{
+					var shipping_html = '<table id="simple-table" class="table table-striped table-bordered table-hover"><thead><tr><th>运费模板ID</th><th>运费模板名称</th><th></th></tr></thead><tbody>';
+					for(var i in result.list){
+						shipping_html += '<tr><td>'+result.list[i].id+'</td>';
+						shipping_html += '<td>'+result.list[i].title+'</td>';
+						shipping_html += '<td><div class="btn-group shipping_btn" relname="'+result.list[i].title+'" rel="'+result.list[i].id+'"><button class="btn btn-xs btn-success"><i class="ace-icon fa icon-check bigger-120"></i></button></div></td></tr>';
+					}
+					shipping_html += '</tbody></table>';
+					
+					$('#ks_shipping').html(shipping_html);
+					$("#dialog").css({'position' : 'fixed','display' : 'block', 'z-index' : '9999'});
+				} else{
+					alert('请先添加运费模板');
+				}
+			}
+		});
+		
+		
+	})
+	
+	$(document).delegate('a[data-toggle=\'image\']', 'click', function(e) {
+		e.preventDefault();
+		
+		var index=$(this).attr('num');
+		var type=$(this).attr('type');
+		//alert(index);
+		
+		var element = this;
+		
+		if(index==undefined){
+			$(element).popover({
+				html: true,
+				placement: 'right',
+				trigger: 'manual',
+				content: function() {
+					return '<button type="button" id="thumb-image"  class="btn btn-primary"><i class="icon-edit"></i></button> <button type="button" id="button-clear" class="btn btn-danger"><i class="icon-trash"></i></button>';
+				}
+			});
+		}else{
+			$(element).popover({
+				html: true,
+				placement: 'right',
+				trigger: 'manual',
+				content: function() {
+					return '<button type="button" n="'+index+'" t="'+type+'"  class="btn btn-primary button-image"><i class="icon-edit"></i></button> <button type="button" id="button-clear" class="btn btn-danger"><i class="icon-trash"></i></button>';
+				}
+			});
+		}
+		
+
+		
+		$(element).popover('toggle');	
+		
+		//商品图片
+		$('#thumb-image').on('click', function() {
+			
+			//alert('333');
+			
+			$('#modal-image').remove();
+			
+			$('#form-upload').remove();
+			
+			$('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input osctype="btn_upload_image" type="file" name="file" /></form>');
+	
+			$('#form-upload input[name=\'file\']').trigger('click');
+			
+			$(element).popover('hide');
+			
+			$('[osctype="btn_upload_image"]').fileupload({
+				
+	        	dataType: 'json',
+	            url: "{:U('Image/upload_image',array('dir'=>'product'))}",
+	            add: function(e, data) {
+	                $parent = $('#thumb');
+	                $input = $parent.find('[osctype="image_input"]');
+	                $img = $parent.find('[osctype="image"]');
+	                data.formData = {old_goods_image:$input.val()};
+	                $img.attr('src', "__IMG__/loading.gif");
+	                data.submit();
+	            },
+	            done: function (e,data) {
+					
+	            	var image=data.result;
+	            	
+	            	
+	                $parent = $('#thumb');
+	                $input = $parent.find('[osctype="image_input"]');
+	                $img = $parent.find('[osctype="image"]');
+	                if(image) {
+	                   // $img.prev('i').hide();
+	                    $img.attr('src', '__ROOT__/'+image.image_thumb);
+	                    $img.show();
+	                    $input.val(image.image);
+	                } else {
+	                    alert('上传失败');
+	                }
+	            }
+   		 });
+		});
+
+			
+		//商品相册
+		$('.button-image').on('click', function() {
+			$('#modal-image').remove();
+			
+			$('#form-upload').remove();
+			
+			var i=$(this).attr('n');
+			var type=$(this).attr('t');
+						
+			$('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input osctype="btn_upload_image" type="file" name="file" /></form>');
+	
+			$('#form-upload input[name=\'file\']').trigger('click');
+			
+			$(element).popover('hide');
+			
+			$('[osctype="btn_upload_image"]').fileupload({
+				
+	        	dataType: 'json',
+	            url: "{:U('Image/upload_image/dir')}"+'/'+type,
+	            add: function(e, data) {
+	                $parent = $('#image-row'+i);
+	                $input = $parent.find('[osctype="'+type+'_image_input'+i+'"]');
+	                $img = $parent.find('[osctype="'+type+'_image'+i+'"]');
+	                var old_name='old_'+type+'_image';
+	                data.formData = {old_name:$input.val()};
+	                $img.attr('src', "__IMG__/loading.gif");
+	                data.submit();
+	            },
+	            done: function (e,data) {
+					
+	            	var image=data.result;	            	
+	            	
+	                $parent = $('#'+type+'-image-row'+i);
+	                $input = $parent.find('[osctype="'+type+'_image_input'+i+'"]');
+	                $img = $parent.find('[osctype="'+type+'_image'+i+'"]');
+	                if(image) {
+	                   // $img.prev('i').hide();
+	                    $img.attr('src', '__ROOT__/'+image.image_thumb);
+	                    $img.show();
+	                    $input.val(image.image);
+	                } else {
+	                    alert('上传失败');
+	                }
+	            }
+   		 });
+			
+		});
+		
+
+	
+		$('#button-clear').on('click', function() {
+			$(element).find('img').attr('src', $(element).find('img').attr('data-placeholder'));
+			
+			$(element).parent().find('input').attr('value', '');
+	
+			$(element).popover('hide');
+		});
+	});
+});
+	$('#option a:first').tab('show');
+</script>
+</block>

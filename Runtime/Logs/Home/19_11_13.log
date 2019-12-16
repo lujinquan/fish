@@ -1,0 +1,90 @@
+[ 2019-11-13T01:35:04+08:00 ] 223.166.222.105 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=d6a147f0bc5332a2a8f3b459ade9e445&controller=goods.get_goods_detail&token=&id=undefined&community_id=undefined
+ERR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'undefined' in 'where clause'
+
+[ 2019-11-13T01:35:04+08:00 ] 223.166.222.105 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=ac2d6330cf80cc18a4364f8bcafc539c&controller=goods.load_buy_recordlist&goods_id=undefined&pageNum=1
+ERR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'undefined' in 'where clause'
+
+[ 2019-11-13T02:00:58+08:00 ] 101.91.60.74 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=d6a147f0bc5332a2a8f3b459ade9e445&controller=goods.get_goods_detail&token=&id=undefined&community_id=undefined
+ERR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'undefined' in 'where clause'
+
+[ 2019-11-13T02:00:58+08:00 ] 223.166.222.105 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=ac2d6330cf80cc18a4364f8bcafc539c&controller=goods.load_buy_recordlist&goods_id=undefined&pageNum=1
+ERR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'undefined' in 'where clause'
+
+[ 2019-11-13T10:38:23+08:00 ] 123.191.52.107 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=user&&m=lionfish_comshop&sign=9b0e2cccd5cfa869678407b1a03a137d
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-13T11:30:24+08:00 ] 223.104.175.88 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=user&&m=lionfish_comshop&sign=bfbf6ba8ec15407cd301663d7618af21
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-13T12:04:50+08:00 ] 175.164.122.24 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=d951d269494f9c4e5b616548ff3d3f4d&controller=index.addhistory_community&community_id=17&token=fa94210584a6a5bc3a632a58edc13c25
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-13T12:09:33+08:00 ] 175.167.146.28 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=3ef95e89ed90c95d5af5bd31a5ea7c15&controller=index.addhistory_community&community_id=18&token=696dc5a06332c864aac8d43b6e6d51b3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-13T12:11:32+08:00 ] 175.167.154.88 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=a78ce162653e5a96b665c0042875fa48&controller=index.addhistory_community&community_id=18&token=9ed69965a0208935f774a73613fde957
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-13T12:32:24+08:00 ] 175.167.154.88 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=c1a4730ee68d85ef16236f22237f6605&controller=index.addhistory_community&community_id=17&token=9ed69965a0208935f774a73613fde957
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-13T12:36:32+08:00 ] 223.104.235.207 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=user&&m=lionfish_comshop&sign=56f1a7586cd0f6a294ee0c4dbaa070f7
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-13T13:00:08+08:00 ] 112.39.93.190 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=user&&m=lionfish_comshop&sign=aa94bb0a8b495975b07549654f1ddf1d
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-13T13:33:43+08:00 ] 103.63.154.117 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=bd13801d980e129f40a2d04925098d1e&controller=index.addhistory_community&community_id=3&token=540a6a7a2bace9adeef0db44d6f20f5e
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-13T14:23:48+08:00 ] 223.104.235.98 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=user&&m=lionfish_comshop&sign=feea1ee649f790eef1c591f2be19b9ff
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-13T14:28:11+08:00 ] 175.167.130.125 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=user&&m=lionfish_comshop&sign=043ffb1f434ca6b0fe9e1ba8268a15cf
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-13T14:42:55+08:00 ] 223.104.175.210 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=user&&m=lionfish_comshop&sign=941eb56d9a6aa8dc3002315a2918772b
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-13T15:13:53+08:00 ] 101.91.60.25 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=d6a147f0bc5332a2a8f3b459ade9e445&controller=goods.get_goods_detail&token=&id=undefined&community_id=undefined
+ERR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'undefined' in 'where clause'
+
+[ 2019-11-13T15:13:53+08:00 ] 101.91.60.74 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=ac2d6330cf80cc18a4364f8bcafc539c&controller=goods.load_buy_recordlist&goods_id=undefined&pageNum=1
+ERR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'undefined' in 'where clause'
+
+[ 2019-11-13T15:24:43+08:00 ] 59.152.39.185 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=242049eb13af8c675ca5415c72bf629c&controller=index.load_gps_community&token=1a05613e650d23107861ea6274f07dbb&inputValue=%E9%87%91%E5%9C%B0%E5%90%8D%E4%BA%AC&pageNum=1&longitude=&latitude=
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*PI()/180-lat*PI()/180)/2),2)+COS(*PI()/180)*COS(lat*PI()/180)*POW(SIN((*PI()/18' at line 1
+
+[ 2019-11-13T15:24:52+08:00 ] 59.152.39.185 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=242049eb13af8c675ca5415c72bf629c&controller=index.load_gps_community&token=1a05613e650d23107861ea6274f07dbb&inputValue=%E9%87%91%E5%9C%B0%E5%90%8D%E4%BA%AC&pageNum=1&longitude=&latitude=
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*PI()/180-lat*PI()/180)/2),2)+COS(*PI()/180)*COS(lat*PI()/180)*POW(SIN((*PI()/18' at line 1
+
+[ 2019-11-13T15:28:23+08:00 ] 59.152.39.185 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=c7c8526d3b0469cbb5b501be63c5cf0c&controller=index.addhistory_community&community_id=20&token=1a05613e650d23107861ea6274f07dbb
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-13T15:44:54+08:00 ] 223.104.235.68 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=user&&m=lionfish_comshop&sign=e2924eedb6fddb37ad48ab687fe7f7a2
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-13T15:45:12+08:00 ] 223.104.175.96 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=user&&m=lionfish_comshop&sign=f3c213cd229d91c20683efff2ed12592
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-13T20:12:24+08:00 ] 175.164.99.211 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=9031c132d1b903ffa7e1b09bfac7bcb7&controller=index.addhistory_community&community_id=17&token=9c421a986ce32af228177586394f791e
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-13T20:45:31+08:00 ] 223.166.222.105 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=d6a147f0bc5332a2a8f3b459ade9e445&controller=goods.get_goods_detail&token=&id=undefined&community_id=undefined
+ERR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'undefined' in 'where clause'
+
+[ 2019-11-13T20:45:31+08:00 ] 101.91.60.74 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=ac2d6330cf80cc18a4364f8bcafc539c&controller=goods.load_buy_recordlist&goods_id=undefined&pageNum=1
+ERR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'undefined' in 'where clause'
+
+[ 2019-11-13T20:58:19+08:00 ] 175.164.99.211 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=user&&m=lionfish_comshop&sign=be81d440712e3b2a2e8907c2d347c609
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-13T21:38:22+08:00 ] 223.166.222.110 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=d6a147f0bc5332a2a8f3b459ade9e445&controller=goods.get_goods_detail&token=&id=undefined&community_id=undefined
+ERR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'undefined' in 'where clause'
+
+[ 2019-11-13T21:38:22+08:00 ] 223.166.222.106 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=ac2d6330cf80cc18a4364f8bcafc539c&controller=goods.load_buy_recordlist&goods_id=undefined&pageNum=1
+ERR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'undefined' in 'where clause'
+
+[ 2019-11-13T21:38:25+08:00 ] 175.164.99.211 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=d1a9bc170bd9207231d399961a7c51dd&controller=index.addhistory_community&community_id=21&token=939bad727d2e3ff5b1620154583ad8a9
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+

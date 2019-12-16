@@ -1,0 +1,9 @@
+[ 2019-12-16T16:06:11+08:00 ] 219.140.80.82 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=user&&m=lionfish_comshop&sign=8ef595ef48610502d9a8907c7cee6c02
+ERR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'undefined' in 'where clause'
+
+[ 2019-12-16T16:25:40+08:00 ] 219.140.80.82 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=754e86d4c46078692ce808c190fd4744&controller=index.load_gps_community&token=45e3ed931f7fbae9d1c066f67e1db03f&pageNum=1&longitude=114.31599&latitude=30.55386&city_id=1804
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'distance <= 30000 order by distance asc limit 0,10' at line 1
+
+[ 2019-12-16T16:29:58+08:00 ] 219.140.80.82 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=754e86d4c46078692ce808c190fd4744&controller=index.load_gps_community&token=45e3ed931f7fbae9d1c066f67e1db03f&pageNum=1&longitude=114.31599&latitude=30.55386&city_id=1804
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'distance <= 30000 order by distance asc limit 0,10' at line 1
+

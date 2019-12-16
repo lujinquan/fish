@@ -1,0 +1,163 @@
+<extend name="Public:base" />
+<block name="content">
+<div class="page-header">
+		<h1>
+			{$breadcrumb2}
+			<small>
+				<i class="icon-double-angle-right"></i>
+				{$crumbs}
+			</small>
+		</h1>
+	</div>
+<div class="row">
+	<div class="col-xs-12">	
+		<form class="form-horizontal" id="validation-form"  method="post" action='{$action}'>
+			
+			<notempty name="Think.get.id">
+			<input name="id" type="hidden" value="{$Think.get.id}" />
+			</notempty>
+			
+
+			
+			<div class="form-group">
+				<label class="col-sm-1 control-label no-padding-left"> * 名称 </label>
+				<div class="col-sm-11">
+					<div class="clearfix">
+					<input name="pick_name" id="pick_name" class="col-xs-10 col-sm-5"  value="{$d.pick_name|default=''}" type="text">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-1 control-label no-padding-left"> * 电话 </label>
+				<div class="col-sm-11">
+					<div class="clearfix">
+					<input name="telephone" id="telephone" class="col-xs-10 col-sm-5"  value="{$d.telephone|default=''}" type="text">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-1 control-label no-padding-left"> * 门店详细地址 </label>
+				<div class="col-sm-11">
+					<div class="clearfix">
+					<input name="pick_pos" id="pick_pos" class="col-xs-10 col-sm-5"  value="{$d.pick_pos|default=''}" type="text">
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-sm-1 control-label no-padding-left"> * 地图位置 </label>
+				<div class="col-sm-10">
+					<div id="l-map"></div>
+					<div id="r-result" style="margin-top:8px;">
+					请输入地点:&nbsp;&nbsp;<input type="text" id="suggestId" size="20" value="" style="width:150px;" />
+					</div>
+					<div id="searchResultPanel"  style="border:1px solid #C0C0C0;width:150px; height:auto; display:none;"></div>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-sm-1 control-label no-padding-left"> </label>	
+				<div class="col-sm-11">
+					<input type="hidden" name="lng" id="lng" value="{$d.lng}" />
+					<input type="hidden" name="lat" id="lat" value="{$d.lat}" />
+					<input name="send" id="submit" type="submit" value="提交" class="btn btn-primary" />
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<style>
+#l-map{height:300px;width:100%;}
+#r-result{width:100%;}
+</style>
+</block>
+<block name="javascript">
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=DC28bd66db60c272578c79beb570bf6d"></script>
+<script>
+// 百度地图API功能
+	function G(id) {
+		return document.getElementById(id);
+	}
+	
+	var map = new BMap.Map("l-map");
+	<?php if( empty($d['lng']) && empty($d['lat'])) { ?>
+	map.centerAndZoom("北京",12);     
+	<?php }else{ ?> 
+	map.centerAndZoom(new BMap.Point(<?php echo $d['lng']; ?>, <?php echo $d['lat'];?>),12); 
+	map.addOverlay(new BMap.Marker(new BMap.Point(<?php echo $d['lng']; ?>, <?php echo $d['lat'];?>)));    //添加标注	
+	<?php } ?>
+	
+	
+	              // 初始化地图,设置城市和地图级别。
+	map.addEventListener("click", showInfo);
+	map.enableScrollWheelZoom(true);
+	var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+		{"input" : "suggestId"
+		,"location" : map
+	});
+
+	ac.addEventListener("onhighlight", function(e) {  //鼠标放在下拉列表上的事件
+	var str = "";
+		var _value = e.fromitem.value;
+		var value = "";
+		if (e.fromitem.index > -1) {
+			value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+		}    
+		str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+		
+		value = "";
+		if (e.toitem.index > -1) {
+			_value = e.toitem.value;
+			value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+		}    
+		str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+		G("searchResultPanel").innerHTML = str;
+	});
+
+	var myValue;
+	ac.addEventListener("onconfirm", function(e) {    //鼠标点击下拉列表后的事件
+	var _value = e.item.value;
+		myValue = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+		G("searchResultPanel").innerHTML ="onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+		
+		setPlace();
+	});
+	
+	function showInfo(e)
+	{
+		map.clearOverlays();
+		var pp = e.point;    //获取点击的坐标
+		map.centerAndZoom(pp, 18);
+		map.addOverlay(new BMap.Marker(pp));    //添加标注
+		$('#lng').val(pp.lng);
+		$('#lat').val(pp.lat);
+	}
+	function setPlace(){
+		map.clearOverlays();    //清除地图上所有覆盖物
+		function myFun(){
+			var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+			map.centerAndZoom(pp, 18);
+			map.addOverlay(new BMap.Marker(pp));    //添加标注
+			$('#lng').val(pp.lng);
+			$('#lat').val(pp.lat);
+		}
+		var local = new BMap.LocalSearch(map, { //智能搜索
+		  onSearchComplete: myFun
+		});
+		
+		local.search(myValue);
+	}
+	$(function(){
+		$('#submit').click(function(){
+			var lng = $('#lng').val();
+			var lat = $('lat').val();
+			if(lng =='' || lat == '')
+			{
+				alert('请选择自提点坐标');
+				return false;
+			}
+		})
+	})
+	
+</script>							
+</block>

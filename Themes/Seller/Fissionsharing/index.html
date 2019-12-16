@@ -1,0 +1,344 @@
+<extend name="Public:base" />
+<block name="content">
+<link rel="stylesheet" href="__CSS__/dialog.css" />	
+<style>
+.search-row {
+    margin-bottom: 10px;
+}
+#mult_option_new{
+	width: 98%;
+    height: 270px;
+    overflow-y: scroll;
+}
+</style>
+
+<div class="row">
+	<div class="col-xs-12 search-row">
+		<div class="">
+			<ul class="nav nav-tabs">
+				<li class="active" ><a href="{:U('Fissionsharing/index')}">裂变分享订单记录</a></li>
+				<li class="" ><a href="{:U('Fissionsharing/commissapply')}">佣金提现申请</a></li>
+				<li class="" ><a href="{:U('Fissionsharing/config')}">裂变分享配置</a></li>
+            </ul>
+		</div>
+	</div>
+</div>													
+<table class="table table-striped table-bordered table-hover search-form">
+	<thead>
+		<th class="col-xs-4"><input name="name" type="text" placeholder="分享人会员名" value="{:I('name')}" /></th>
+		<th class="col-xs-4">
+			<a class="btn btn-primary" href="javascript:;" id="search" url="{:U('Fissionsharing/index')}">查询</a>
+		</th>
+	</thead>
+</table>
+													
+<div class="row">
+	<div class="col-xs-12">	
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered table-hover">
+				<thead>
+					<tr>	
+						<th>分享人会员名</th>
+						<th>商品名称</th>
+						<th>订单id</th>
+						<th>购买人会员名</th>
+						<th>分享层级</th>
+						<th>佣金状态</th>
+						<th>佣金状态</th> 			
+					</tr>
+				</thead>
+				<tbody>
+						<volist name="list" id="v" empty="$empty">
+						<tr>
+							<td>
+								<img src="{$v.avatar}" style="width:50px;height:50px;" />
+								{$v.uname}
+							</td>
+							<td>
+								{$v.goods_name}
+							</td>
+							<td>
+								<a href="{:U('order/show_order' ,  array('id' =>$v['order_id']))}" target="_blank">{$v.order_id}</a>
+							</td>
+							<th>
+								{$v.buy_name}
+							</th>
+							<td>
+								{$v.level}
+							</td>
+							<td>
+								<?php if($v['state'] == 1){ ?>
+								已获佣金：<span class="red">{$v.money}</span>
+								<?php }else{ ?>
+								预估佣金：{$v.money}
+								<?php } ?>
+							</td>
+							<td>
+
+								<?php if($v['state'] == 0){ ?>
+									<span class="badge badge-warning">订单已支付，等待确认收货</span>
+								<?php }else if($v['state'] == 1){ ?>
+									 <span class="label label-success">订单已完成</span>
+								<?php  }else if($v['state'] ==2 ){ ?>
+									<span class="badge badge-info">订单退款，佣金已退还</span>
+								<?php  }else if($v['state'] ==3 ){ ?>
+									<span class="badge badge-info">订单未支付</span>
+								<?php } ?>
+								</td>
+						</tr>
+						</volist>	
+						
+						<tr>
+							<td colspan="20" class="page">{$page}</td>
+						</tr>
+				</tbody>
+				
+			</table>
+		</div>
+	</div>
+</div>
+
+	<div class="ks-ext-mask" style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 999; display:none"></div>
+	<div id="dialog" class="dialog" style="z-index: 9999; display:none;top:80px;">
+	    <div class="ks-contentbox">
+	      <div class="title"><span>编辑积分商品</span><a class="ks-ext-close" href="javascript:void(0)">X</a></div>
+	     	
+	        <div class="J_DefaultMessage">
+			</div>
+	       	 <div class="bottom">
+	        	 <a href="javascript:void(0);" class="J_SubmitPL ncsc-btn ncsc-btn-green">确认</a> 
+	        	 <a href="javascript:void(0);" class="J_Cancel ncsc-btn">取消</a> </div>
+      
+   		</div>
+    </div>
+
+		
+</block>
+
+<block name="javascript">
+<script src="__PUBLIC__/js/moment/moment.js"></script>
+<script src="__PUBLIC__/js/moment/locale/zh-cn.js"></script> 
+
+<script src="__PUBLIC__/js/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script>
+<link rel="stylesheet" href="__PUBLIC__/js/bootstrap-timepicker/css/bootstrap-timepicker.css" />
+
+<script src="__PUBLIC__/fileupload/jquery.ui.widget.js"></script>
+<script src="__PUBLIC__/fileupload/jquery.fileupload.js"></script>
+	
+	<script>
+	var pin_goods_id =  '';
+	
+	function load_begin()
+	{
+		$('#begin_time').datetimepicker({
+		 format: 'YYYY/MM/DD H:mm:ss',//use this option to display seconds
+		 icons: {
+			time: 'btn btn-lg icon-time',
+			date: 'btn btn-lg icon-calendar',
+			up: 'fa icon-chevron-up',
+			down: 'fa icon-chevron-down',
+			previous: 'fa icon-chevron-left',
+			next: 'fa icon-chevron-right',
+			today: 'fa icon-arrows ',
+			clear: 'fa icon-trash',
+			close: 'fa icon-times'
+		 }
+		}).next().on(ace.click_event, function(){
+			$(this).prev().focus();
+		});
+		
+		$('#end_time').datetimepicker({
+			 format: 'YYYY/MM/DD H:mm:ss',//use this option to display seconds
+			 icons: {
+				time: 'btn btn-lg icon-time',
+				date: 'btn btn-lg icon-calendar',
+				up: 'fa icon-chevron-up',
+				down: 'fa icon-chevron-down',
+				previous: 'fa icon-chevron-left',
+				next: 'fa icon-chevron-right',
+				today: 'fa icon-arrows ',
+				clear: 'fa icon-trash',
+				close: 'fa icon-times'
+			 }
+			}).next().on(ace.click_event, function(){
+				$(this).prev().focus();
+			});
+	}
+		$(function(){
+			$('.del_pin').click(function(){
+				var s_url = $(this).attr('rel_url');
+				
+				$.ajax({
+					url:s_url,
+					type:'get',
+					dataType:'json',
+					success:function(ret){
+						alert('删除成功');
+						location.href = location.href;
+						return false;
+					}
+				})
+			})
+			
+			$("#search").click(function () {
+				var url = $(this).attr('url');
+				var query = $('.search-form').find('input,select').serialize();
+				query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g, '');
+				query = query.replace(/^&/g, '');
+				if (url.indexOf('?') > 0) {
+					url += '&' + query;
+				} else {
+					url += '?' + query;
+				}
+				window.location.href = url;
+			});
+			
+			
+			
+			$('.edit_pin').click(function(){
+				var s_url = $(this).attr('rel_url');
+				
+				$.ajax({
+					url:s_url,
+					type:'get',
+					dataType:'json',
+					success:function(ret){
+						$('.J_DefaultMessage').html(ret.html);
+						$("#dialog").css({'position' : 'fixed','display' : 'block', 'z-index' : '9999'});
+						
+						load_begin();
+						//$('.tags').append(ret.html);	
+					}
+				})
+			})
+			$('.J_SubmitPL').click(function(e){    	
+    	
+		    	
+				var begin_time = $('#begin_time').val();				
+				var end_time = $('#end_time').val();	
+				
+				var pin_price = $('input[name="pin_price"]').val();
+				var pin_count = $('input[name="pin_count"]').val();
+				var goods_id = $('input[name="goods_id"]').val();
+				var pin_hour = $('input[name="pin_hour"]').val();
+				
+				
+				$("#dialog").css('display','none');
+				$('.ks-ext-mask').css('display','none');
+				
+				
+				var commiss_one_pin_disc = $('input[name="commiss_one_pin_disc"]').val();
+				var commiss_two_pin_disc = $('input[name="commiss_two_pin_disc"]').val();
+				var commiss_three_pin_disc = $('input[name="commiss_three_pin_disc"]').val();
+				var commiss_three_pin_disc4 = $('input[name="commiss_three_pin_disc4"]').val();
+				
+				
+				if(commiss_one_pin_disc == undefined)
+				{
+					commiss_one_pin_disc = 0;
+				}
+				if(commiss_two_pin_disc == undefined)
+				{
+					commiss_two_pin_disc = 0;
+				}
+				if(commiss_three_pin_disc == undefined)
+				{
+					commiss_three_pin_disc = 0;
+				}
+				if(commiss_three_pin_disc4 == undefined)
+				{
+					commiss_three_pin_disc4 = 0;
+				}
+				var commiss_str = '';
+				commiss_str += commiss_one_pin_disc+'_';
+				commiss_str += commiss_two_pin_disc+'_';
+				commiss_str += commiss_three_pin_disc+'_';
+				commiss_str += commiss_three_pin_disc4+'_';
+				
+				
+				
+				var type = 'normal';
+				
+				var mult_option_zuhe_arr = [];
+				var mult_option_zuhe_str = '';
+				$('.mult_option_zuhe').each(function(e){
+					mult_option_zuhe_arr.push($(this).attr('name')+':'+$(this).val());
+				})
+				mult_option_zuhe_str = mult_option_zuhe_arr.join('@@');
+				
+				var mult_option_price_arr = [];
+				var mult_option_price_str = '';
+				$('.mult_option_zuhe_price').each(function(){
+					mult_option_price_arr.push($(this).attr('name')+':'+$(this).val());
+				})
+				mult_option_price_str = mult_option_price_arr.join('@@');
+				
+				var mult_option_pin_price_arr = [];
+				var mult_option_pin_price_str = '';
+				
+				$('.mult_option_pin_price').each(function(){
+					mult_option_pin_price_arr.push($(this).attr('name')+':'+$(this).val());
+				})
+				mult_option_pin_price_str = mult_option_pin_price_arr.join('@@');
+				
+				var goods_name = $('#goods_name_vl').html();
+				
+				
+				var arr = new Array();
+				
+				var option_pin_price = mult_option_pin_price_str;
+				var option_price = mult_option_price_str;
+				var option_quanty = mult_option_zuhe_str;
+				
+				var goods_str = goods_id+','+pin_price+','+pin_count+','+option_pin_price+','+option_price+','+option_quanty+','+type+','+begin_time+','+end_time+','+pin_hour;
+				goods_str += ","+commiss_str;
+				
+				arr.push(goods_str);
+				
+				/**
+				var begin_time = $('#begin_time').val();				
+				var end_time = $('#end_time').val();	
+				**/
+				
+				var data_obj = {};
+				data_obj.goods_ids_arr = arr;
+				
+				
+				$.ajax({
+					url:"{:U('Integralmall/modify_pin')}",
+					type:'post',
+					data:data_obj,
+					dataType:'json',
+					success:function(ret){
+						if(ret.code == 1)
+						{
+							alert('修改积分商品信息成功');
+							location.href = location.href;
+							return false;
+						} else {
+							alert(ret.msg);
+							return false;
+						}
+					}
+				})	
+				
+			})
+			
+	
+			
+			
+			//关闭弹出层
+			$('#dialog').on('click','.ks-ext-close',function(){	
+			    $("#dialog").css('display','none');
+			    $('.ks-ext-mask').css('display','none');
+			    return false;
+			});
+			//关闭弹出层
+			$('#dialog').on('click','.J_Cancel',function(){	
+			    $("#dialog").css('display','none');
+			    $('.ks-ext-mask').css('display','none');
+			    return false;
+			});
+		})
+	</script>
+</block>

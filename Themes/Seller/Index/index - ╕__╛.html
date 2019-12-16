@@ -1,0 +1,370 @@
+<extend name="Public:base" />
+<block name="content">
+<link rel="stylesheet" href="__CSS__/index.css" />	
+<style>
+    .flex-items {
+        display: flex;
+    }
+
+        .flex-items .flex-item {
+            flex: 1;
+        }
+
+    .todayboxs {
+        margin: 24px 0;
+    }
+
+        .todayboxs .flex-item {
+            background-color: #fff;
+            width: 100%;
+            height: 104px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            margin-right: 24px;
+            color: #333;
+            box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.05);
+        }
+
+            .todayboxs .flex-item:last-child {
+                margin-right: 0;
+            }
+
+        .todayboxs .icon {
+            width: 56px;
+            margin-right: 16px;
+        }
+
+        .todayboxs .num {
+            font-size: 24px;
+        }
+
+        .todayboxs .title {
+            color: #747474;
+        }
+
+    .row-panel {
+        margin-bottom: 24px;
+        display: flex;
+    }
+
+        .row-panel .row-panel-7 {
+            width: 50%;
+            flex-shrink: 1;
+        }
+
+        .row-panel .row-panel-5 {
+            width: 50%;
+            margin-left: 24px;
+            flex-shrink: 0;
+        }
+
+    .mypanel {
+        position: relative;
+        background-color: #fff;
+        padding: 0 20px;
+        box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.05);
+    }
+
+        .mypanel .mypanel-heading {
+            font-size: 15px;
+            font-weight: 600;
+            border-bottom: 1px solid #f0f0f0;
+            height: 48px;
+            line-height: 48px;
+        }
+
+    .tasks .flex-item {
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-right: 20px;
+        border-bottom: 1px solid #f0f0f0;
+        color: #747474;
+    }
+
+        .tasks .flex-item:last-child {
+            margin-right: 0;
+        }
+
+    .tasks .num {
+        font-size: 15px;
+        color: #9e9e9e;
+        font-weight: 600;
+    }
+
+        .tasks .num.hasnum {
+            color: #436be6;
+        }
+
+    .chat-box {
+        width: 100%;
+        height: 192px;
+    }
+
+    .tasks-panel .tasks:last-child .flex-item {
+        border-bottom: none;
+    }
+
+    .quick-panel .mypanel-body, .total-panel .mypanel-body {
+        padding: 20px 0;
+    }
+
+    .quick-nav .flex-item, .total-mes .flex-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        height: 68px;
+        margin-bottom: 20px;
+        margin-right: 20px;
+        color: #747474;
+    }
+
+    .total-mes .flex-item {
+        margin-bottom: 20px;
+        height: 68px;
+    }
+
+        .quick-nav .flex-item:last-child, .total-mes .flex-item:last-child {
+            margin-right: 0;
+        }
+
+    .total-mes .num {
+        height: 48px;
+        line-height: 48px;
+        font-size: 15px;
+        color: #333;
+        font-weight: 600;
+    }
+
+    .quick-nav .flex-item:hover {
+        color: #436be6;
+    }
+
+    .quick-nav .iconfont {
+        height: 48px;
+        line-height: 48px;
+        font-size: 24px;
+        display: block;
+        transition: all 0.3s;
+    }
+
+    .quick-nav .flex-item:hover i {
+        font-size: 48px;
+    }
+</style>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- PAGE CONTENT BEGINS -->
+			<div class="alert alert-block alert-success">
+				<button type="button" class="close" data-dismiss="alert">
+					<i class="icon-remove"></i>
+				</button>
+				<i class="icon-ok green"></i>
+				欢迎使用
+				<strong class="green">
+					{$version}
+					<?php if($isnew){ ?>
+					<small>(最新版本)</small>
+					<?php } else { ?>
+					<small>( 可更新至最新版本:{$newsubversion} )</small>
+					<?php } ?>
+				</strong>.	<br/>
+				<div style="margin:20px 0px;">
+					<p>
+						<font color="red">升级前一定要备份程序和数据库。非默认版安装、已经修改过程序的不支持覆盖升级。
+						</font>
+					</p>
+				</div>
+				<div style="margin: 20px 0px;">
+					<?php if( !empty($version_meta) ){ ?>
+						<?php foreach($version_meta as $key => $meta){ ?>
+						<p>版本号：<strong style="font-size:16px;">{$key}</strong>,文件目录：{$meta['name']}  
+						<a href="{$admin_domain}/seller.php?s=/Upgrade/down_version_file/type/{$type}/version/{$key}/host/{$host}" target="_blank">下载</a></p>
+						<p>更新内容：{$meta['desc']}</p>
+						<br/>
+						<?php } ?>
+					<?php }else{ ?>
+					<p>当前已是最新版本</p>				
+					<?php } ?>		
+				</div>
+			</div>
+		<!-- PAGE CONTENT ENDS -->
+	</div>
+	<div class="col-xs-12">	
+		   <div class="flex-items todayboxs">
+				<a class="flex-item" href="https://shiziyu.liofis.com/web/index.php?c=site&amp;a=entry&amp;m=lionfish_comshop&amp;do=admin&amp;controller=user">
+					<img class="icon" src="/Common/images/Block-1.png">
+					<div class="text">
+						<div class="num today_member_count">14</div>
+						<div class="title">今日新增会员</div>
+					</div>
+				</a>
+				<a class="flex-item" href="https://shiziyu.liofis.com/web/index.php?c=site&amp;a=entry&amp;m=lionfish_comshop&amp;do=admin&amp;controller=order">
+					<img class="icon" src="/Common/images/Block-3.png">
+					<div class="text">
+					<div class="num today_pay_order_count">8</div>
+					<div class="title">今日付款订单数</div>
+					</div>
+				</a>
+				<a class="flex-item" href="https://shiziyu.liofis.com/web/index.php?c=site&amp;a=entry&amp;m=lionfish_comshop&amp;do=admin&amp;controller=order"> 
+					<img class="icon" src="/Common/images/Block-2.png">
+					<div class="text">
+					<div class="num today_pay_money"><em>￥</em>0.6200</div>
+					<div class="title">今日付款金额</div>
+				</div>
+				</a>
+			</div>
+			<div class="row-panel">
+				<div class="row-panel-7">
+					<div class="mypanel tasks-panel">
+						<div class="mypanel-heading">待处理事务</div>
+						<div class="mypanel-body">
+							<div class="flex-items tasks">
+								<div class="flex-item">
+									<div>商品库存报警</div>
+									<a class="num hasnum goods_stock_notice_count" href="https://shiziyu.liofis.com/web/index.php?c=site&amp;a=entry&amp;m=lionfish_comshop&amp;do=admin&amp;controller=goods.goodslist&amp;type=stock_notice">2</a>
+								</div>
+								<div class="flex-item"> 
+									<div>待付款订单</div>
+									<a class="num wait_pay_order_count" href="https://shiziyu.liofis.com/web/index.php?c=site&amp;a=entry&amp;m=lionfish_comshop&amp;do=admin&amp;controller=order.order&amp;order_status_id=3">0</a>
+								</div>
+								<div class="flex-item">
+									<div>备货中订单</div>
+									<a class="num hasnum wait_order_count" href="https://shiziyu.liofis.com/web/index.php?c=site&amp;a=entry&amp;m=lionfish_comshop&amp;do=admin&amp;controller=order.order&amp;order_status_id=1">4</a>
+								</div>
+							</div>
+							<div class="flex-items tasks">
+								<div class="flex-item">
+									<div>待处理退款</div>
+									<a class="num hasnum after_sale_order_count" href="https://shiziyu.liofis.com/web/index.php?c=site&amp;a=entry&amp;m=lionfish_comshop&amp;do=admin&amp;controller=order.orderaftersales">2</a>
+								</div> 
+								<div class="flex-item">
+									<div>待评价订单</div>
+									<a class="num wai_comment_order_count" href="https://shiziyu.liofis.com/web/index.php?c=site&amp;a=entry&amp;m=lionfish_comshop&amp;do=admin&amp;controller=order.order&amp;order_status_id=6">1</a>
+								</div>
+								<div class="flex-item">
+									<div>待审核评价</div>
+									<a class="num hasnum wait_shen_order_comment_count" href="https://shiziyu.liofis.com/web/index.php?c=site&amp;a=entry&amp;m=lionfish_comshop&amp;do=admin&amp;controller=order.ordercomment">1</a>
+								</div>
+							</div>
+							<div class="flex-items tasks">
+								<div class="flex-item">
+									<div>仓库中商品</div>
+									<a class="num hasnum stock_goods_count" href="https://shiziyu.liofis.com/web/index.php?c=site&amp;a=entry&amp;m=lionfish_comshop&amp;do=admin&amp;controller=goods.goodslist&amp;type=warehouse">0</a>
+								</div> 
+								<div class="flex-item">
+									<div>待处理退货</div> 
+									<a class="num after_sale_order_count" href="https://shiziyu.liofis.com/web/index.php?c=site&amp;a=entry&amp;m=lionfish_comshop&amp;do=admin&amp;controller=order.orderaftersales">2</a>
+								</div>
+								<div class="flex-item">
+									<div>团长提现</div>
+									<a class="num tixian_count" href="https://shiziyu.liofis.com/web/index.php?c=site&amp;a=entry&amp;m=lionfish_comshop&amp;do=admin&amp;controller=communityhead.distribulist">0</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row-panel-5">
+					<div class="mypanel">
+						<div class="mypanel-heading">交易统计</div>
+						<div class="mypanel-body">
+							<div class="ibox-loading" id="echarts-line-chart-loading" style="display: none;"></div>
+							<div class="chat-box" id="main" _echarts_instance_="ec_1544147250596" style="-webkit-tap-highlight-color: transparent; user-select: none; position: relative; background-color: rgba(0, 0, 0, 0); cursor: default;"><div style="position: relative; overflow: hidden; width: 540px; height: 192px;"><div data-zr-dom-id="bg" class="zr-element" style="position: absolute; left: 0px; top: 0px; width: 693px; height: 192px; user-select: none;"></div><canvas width="540" height="192" data-zr-dom-id="0" class="zr-element" style="position: absolute; left: 0px; top: 0px; width: 540px; height: 192px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></canvas><canvas width="540" height="192" data-zr-dom-id="1" class="zr-element" style="position: absolute; left: 0px; top: 0px; width: 540px; height: 192px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></canvas><canvas width="540" height="192" data-zr-dom-id="_zrender_hover_" class="zr-element" style="position: absolute; left: 0px; top: 0px; width: 540px; height: 192px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></canvas></div></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row-panel">
+				<div class="row-panel-7">
+					<div class="mypanel total-panel">
+						<div class="mypanel-heading">商城信息统计</div>
+						<div class="mypanel-body">
+							<div class="flex-items total-mes">
+								<div class="flex-item">
+									<div class="num member_count">335</div>
+									<div>会员总数</div>
+								</div>
+								<div class="flex-item">
+									<div class="num goods_count">5</div>
+									<div>商品总数</div>
+								</div>
+								<div class="flex-item">
+									<div class="num community_head_count">30</div>
+									<div>团长总数</div>
+								</div>
+							</div>
+							<div class="flex-items total-mes">
+								<div class="flex-item">
+									<div class="num seven_order_count">130</div>
+									<div>近七天订单数</div>
+								</div>
+								<div class="flex-item">
+									<div class="num seven_pay_money">3.6800</div>
+									<div>近7天销售额（元）</div>
+								</div>
+								<div class="flex-item">
+									<div class="num seven_refund_money">0.0500</div>
+									<div>近7天退款金额（元）</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row-panel-5">
+					<div class="mypanel quick-panel">
+						<div class="mypanel-heading">快捷入口</div>
+						<div class="mypanel-body">
+							<div class="flex-items quick-nav">
+								<a href="https://shiziyu.liofis.com/web/index.php?c=site&amp;a=entry&amp;m=lionfish_comshop&amp;do=admin&amp;controller=goods.addgoods" class="flex-item">
+									<i class="iconfont icon-p"></i> 
+									<div>发布商品</div>
+								</a>
+								<a href="https://shiziyu.liofis.com/web/index.php?c=site&amp;a=entry&amp;m=lionfish_comshop&amp;do=admin&amp;controller=order" class="flex-item">
+									<i class="iconfont icon--clipboard"></i>
+									<div>订单列表</div>
+								</a>
+								<a href="https://shiziyu.liofis.com/web/index.php?c=site&amp;a=entry&amp;m=lionfish_comshop&amp;do=admin&amp;controller=user" class="flex-item">
+									<i class="iconfont icon--users"></i>
+									<div>会员管理</div> 
+								</a>
+								<a href="https://shiziyu.liofis.com/web/index.php?c=site&amp;a=entry&amp;m=lionfish_comshop&amp;do=admin&amp;controller=communityhead" class="flex-item">
+									<i class="iconfont icon--tree"></i>
+									<div>团长管理</div>
+								</a>
+								<a href="https://shiziyu.liofis.com/web/index.php?c=site&amp;a=entry&amp;m=lionfish_comshop&amp;do=admin&amp;controller=supply" class="flex-item">
+									<i class="iconfont icon--truck"></i> 
+									<div>供应商管理</div>
+								</a>
+							</div>
+							<div class="flex-items quick-nav">
+								<a href="https://shiziyu.liofis.com/web/index.php?c=site&amp;a=entry&amp;m=lionfish_comshop&amp;do=admin&amp;controller=communityhead.distribulist" class="flex-item">
+									<i class="iconfont icon-p5"></i>
+									<div>提现申请</div>
+								</a>
+								<a href="https://shiziyu.liofis.com/web/index.php?c=site&amp;a=entry&amp;m=lionfish_comshop&amp;do=admin&amp;controller=communityhead.distributionpostal" class="flex-item">
+									<i class="iconfont icon--coin-yen"></i>
+									<div>提现设置</div>
+								</a>
+								<a href="https://shiziyu.liofis.com/web/index.php?c=site&amp;a=entry&amp;m=lionfish_comshop&amp;do=admin&amp;controller=user.userjia" class="flex-item">
+									<i class="iconfont icon-p6"></i>
+									<div>机器人管理</div> 
+								</a>
+								<a href="https://shiziyu.liofis.com/web/index.php?c=site&amp;a=entry&amp;m=lionfish_comshop&amp;do=admin&amp;controller=order.orderaftersales" class="flex-item">
+									<i class="iconfont icon--stats-bars1"></i>
+									<div>售后处理</div>
+								</a>
+								<a href="https://shiziyu.liofis.com/web/index.php?c=site&amp;a=entry&amp;m=lionfish_comshop&amp;do=admin&amp;controller=config.index" class="flex-item">
+									<i class="iconfont icon-p7"></i>
+									<div>站点设置</div>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	</div>
+</div>
+</block>

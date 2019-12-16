@@ -1,0 +1,21 @@
+[ 2019-11-11T10:22:16+08:00 ] 223.166.222.110 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=ac2d6330cf80cc18a4364f8bcafc539c&controller=goods.load_buy_recordlist&goods_id=undefined&pageNum=1
+ERR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'undefined' in 'where clause'
+
+[ 2019-11-11T10:22:16+08:00 ] 223.166.222.103 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=d6a147f0bc5332a2a8f3b459ade9e445&controller=goods.get_goods_detail&token=&id=undefined&community_id=undefined
+ERR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'undefined' in 'where clause'
+
+[ 2019-11-11T17:31:49+08:00 ] 175.167.146.1 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=8f724983eb9e37ffb79e199cd51e9c50&controller=index.addhistory_community&community_id=12&token=243af959e6147245afd0a681adc05c08
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-11T19:11:03+08:00 ] 182.200.181.156 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=user&&m=lionfish_comshop&sign=26635fec4b770361c2cb4d6b489a9030
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-11T21:45:25+08:00 ] 182.200.183.105 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=user&&m=lionfish_comshop&sign=32a7319b722fdf54074804a2f20e46e3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-11-11T22:11:22+08:00 ] 223.166.222.105 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=ac2d6330cf80cc18a4364f8bcafc539c&controller=goods.load_buy_recordlist&goods_id=undefined&pageNum=1
+ERR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'undefined' in 'where clause'
+
+[ 2019-11-11T22:11:22+08:00 ] 223.166.222.105 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=d6a147f0bc5332a2a8f3b459ade9e445&controller=goods.get_goods_detail&token=&id=undefined&community_id=undefined
+ERR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'undefined' in 'where clause'
+

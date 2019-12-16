@@ -1,0 +1,88 @@
+<extend name="HomePublic:base" />
+
+<block name="content">
+<style>
+.search-media{
+	    display: block;
+    padding:10px  4px 0px 10px;
+    margin-bottom: 20px;
+    line-height: 1.42857143;
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    -webkit-transition: border 0.2s ease-in-out;
+    -o-transition: border 0.2s ease-in-out;
+    transition: border 0.2s ease-in-out;
+	
+}
+.media-heading a{color:#333; font-weight:bold;}
+.media-body p{color:#999;}
+</style>
+<div class="row">
+	
+	<?php foreach($plugin_list as $plugin){  ?>														
+	<div class="col-xs-6 col-sm-4 col-md-3">
+		<div class="media search-media ">
+			<div class="media-left">
+				<a href="{:U('Pin/index')}">
+					<img class="media-object" src="__PUBLIC__/<?php echo $plugin['logo']; ?>"  style="width: 40px; height: 40px;">
+				</a>
+			</div>
+			<div class="media-body">
+				<div>
+					<h4 class="media-heading">
+						<a href="<?php echo U($plugin['plugin_uname'].'/index'); ?>" class="black"><?php echo $plugin['plugin_name']; ?></a>
+					</h4>
+				</div>
+				<p><?php echo $plugin['plugin_desc']; ?></p>
+			</div>
+		</div>
+	</div>
+	<?php } ?>
+	
+	
+</div>
+													
+													
+
+		
+</block>
+<block name="slider2">
+<div id="sidebar2" class="" style="width:auto;float:left;display:none;">
+										<ul class="nav nav-list">
+											
+
+											<li>
+												<a href="#">
+													
+													<span class=""> Gallery </span>
+												</a>
+											</li>
+											<li>
+												<a href="#">
+													
+													<span class=""> Gallery </span>
+												</a>
+											</li>
+											<li>
+												<a href="#">
+													
+													<span class=""> Gallery </span>
+												</a>
+											</li>
+											<li>
+												<a href="#">
+													
+													<span class=""> Gallery </span>
+												</a>
+											</li>
+
+											
+										</ul><!-- /.nav-list -->
+
+										
+									</div><!-- .sidebar -->
+</block>
+<block name="javascript">
+
+</block>

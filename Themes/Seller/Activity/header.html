@@ -1,0 +1,17 @@
+<div class="row">
+	<div class="col-xs-12 search-row">
+		<div class="">
+			<ul class="nav nav-tabs">
+			<li <?php if($get_status == 1){ ?>class="active" <?php } ?>><a href="{:U('Activity/subject')}">主题活动</a></li>
+			<li style="display:none;" <?php if($get_status == 2){ ?>class="active" <?php } ?>><a href="{:U('Activity/lottery')}">申请抽奖活动</a></li>          
+			<li style="display:none;" <?php if($get_status == 4){ ?>class="active" <?php } ?>><a href="{:U('Activity/superspike')}" >超值大牌</a></li>    
+			<li <?php if($get_status == 5){ ?>class="active" <?php } ?>><a href="{:U('Activity/spike')}" >限时秒杀</a></li>  
+			<li <?php if($get_status == 8){ ?>class="active" <?php } ?>><a href="{:U('Activity/bargain')}" >砍价活动</a></li>  
+			<!--
+			<li <?php if($get_status == 6){ ?>class="active" <?php } ?>><a href="{:U('Activity/subject', array('type' => 'niyuan'))}" >9.9活动</a></li>
+			<li <?php if($get_status == 7){ ?>class="active" <?php } ?>><a href="{:U('Activity/subject', array('type' => 'oneyuan'))}" >1元购活动</a></li>
+		-->
+		  </ul>
+		</div>
+	</div>
+</div>

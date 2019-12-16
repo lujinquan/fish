@@ -1,0 +1,323 @@
+<extend name="Public:base" />
+<block name="content">
+<style>
+#mult_option_new{
+	width: 98%;
+    height: 260px;
+    overflow-y: scroll;
+}
+</style>
+	<link rel="stylesheet" href="__CSS__/dialog.css" />	
+	<div class="page-header">
+		<h1>
+			{$breadcrumb2}
+		</h1>
+	</div>
+	
+
+	<ul class="nav nav-tabs">
+		<li class="active" ><a href="{:U('Pin/index')}">全部拼团商品</a></li>
+		<li <?php if($state == -1){ ?>class="active" <?php } ?>><a href="{:U('Pin/pinlist')}">全部拼团</a></li>
+		<li <?php if($state == 1){ ?>class="active" <?php } ?>><a href="{:U('Pin/pinlist', array('state' => 1))}">拼团成功</a></li>              
+		<li <?php if($state == 2){ ?>class="active" <?php } ?>><a href="{:U('Pin/pinlist', array('state' => 2))}" >拼团失败</a></li>      
+		<li <?php if($state == 3){ ?>class="active" <?php } ?>><a href="{:U('Pin/pinlist', array('state' => 0))}" >拼团中</a></li>
+	</ul>
+	<div class="tab-content">
+		
+		<div class="row">
+			<div class="col-xs-12"> 
+				<div class="panel panel-info">
+					<div class="panel-heading">添加拼团商品</div>
+						<div class="panel-body">
+							<div class="col-xs-12 search-row"> 
+								<div class="col-sm-3">
+									<span class="form-label">商品名称：</span>
+									<input type="text" id="goods_name" name="goods_name" value="">
+								</div>
+								
+								<div class="col-sm-3">
+									<span class="form-label">开始时间:&nbsp;</span>
+									<input type="text" name="date_added_begin" value="" id="begin_time" class="datetimepicker data_input">
+									
+								</div>
+								<div class="col-sm-3">
+											
+									<span class="form-label">结束时间:</span>
+									<input type="text" name="date_added_end" value="" id="end_time" class="datetimepicker data_input">
+									
+								</div>
+								
+								<div class="col-sm-3"> 
+									<button name="subtype" id="search" value="search" class="btn btn-white btn-search"> <i class="icon-search"></i> 检 索 </button>
+									
+									<button name="subtype" id="baom" value="search" class="btn btn-white btn-search"> 
+									<i class="icon-ok"></i> 提交 </button>
+								</div> 
+							</div> 
+							<div class="col-xs-12 search-row"> 
+								<div class="tags" style="border:none;width:100%;">
+								</div>
+							</div> 
+					  </div>
+				</div>
+			 </div>
+			 <div class="col-xs-12" id="goods_result"> 
+			 
+			 </div>
+			 
+			 
+		</div>
+	
+	</div>
+	
+	
+	<div class="ks-ext-mask" style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 999; display:none"></div>
+	<div id="dialog" class="dialog" style="z-index: 9999; display:none;top:110px;">
+	    <div class="ks-contentbox">
+	      <div class="title"><span>拼团商品</span><a class="ks-ext-close" href="javascript:void(0)">X</a></div>
+	     	
+	        <div class="J_DefaultMessage"></div>
+	       	 <div class="bottom">
+	        	 <a href="javascript:void(0);" class="J_SubmitPL ncsc-btn ncsc-btn-green">确认</a> 
+	        	 <a href="javascript:void(0);" class="J_Cancel ncsc-btn">取消</a> </div>
+	      
+	   		</div>
+	  </div>
+  
+  
+</block>
+<block name="javascript">
+<script src="__PUBLIC__/js/moment/moment.js"></script>
+<script src="__PUBLIC__/js/moment/locale/zh-cn.js"></script> 
+
+<script src="__PUBLIC__/js/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script>
+<link rel="stylesheet" href="__PUBLIC__/js/bootstrap-timepicker/css/bootstrap-timepicker.css" />
+
+<script src="__PUBLIC__/fileupload/jquery.ui.widget.js"></script>
+<script src="__PUBLIC__/fileupload/jquery.fileupload.js"></script>
+<script>
+var sub_url ="{:U('Pin/sub_pin')}";
+
+$(function(){
+	search_goods();
+	
+	
+	$('#begin_time').datetimepicker({
+		 format: 'YYYY/MM/DD H:mm:ss',//use this option to display seconds
+		 icons: {
+			time: 'btn btn-lg icon-time',
+			date: 'btn btn-lg icon-calendar',
+			up: 'fa icon-chevron-up',
+			down: 'fa icon-chevron-down',
+			previous: 'fa icon-chevron-left',
+			next: 'fa icon-chevron-right',
+			today: 'fa icon-arrows ',
+			clear: 'fa icon-trash',
+			close: 'fa icon-times'
+		 }
+		}).next().on(ace.click_event, function(){
+			$(this).prev().focus();
+		});
+		
+		$('#end_time').datetimepicker({
+			 format: 'YYYY/MM/DD H:mm:ss',//use this option to display seconds
+			 icons: {
+				time: 'btn btn-lg icon-time',
+				date: 'btn btn-lg icon-calendar',
+				up: 'fa icon-chevron-up',
+				down: 'fa icon-chevron-down',
+				previous: 'fa icon-chevron-left',
+				next: 'fa icon-chevron-right',
+				today: 'fa icon-arrows ',
+				clear: 'fa icon-trash',
+				close: 'fa icon-times'
+			 }
+			}).next().on(ace.click_event, function(){
+				$(this).prev().focus();
+			});
+			
+	$('#search').click(function(){
+		search_goods();
+	});
+	$('#baom').click(function(){
+		var arr = new Array();
+		$('.tag').each(function(){
+			
+			var goods_id = $(this).attr('rel_goods_id');
+			var pin_price = $(this).attr('rel_pin_price');
+			
+			var pin_count = $(this).attr('rel_pin_count');
+			
+			var rel_pin_hour = $(this).attr('rel_pin_hour');
+			var rel_type = $(this).attr('rel_type');
+			
+			var option_pin_price = $(this).attr('rel_mult_option_pin_price_str');
+			var option_price = $(this).attr('rel_mult_option_price_str');
+			var option_quanty = $(this).attr('rel_mult_option_quanty_str');
+			
+			var goods_str = goods_id+','+pin_price+','+pin_count+','+option_pin_price+','+option_price+','+option_quanty;
+			goods_str += ','+rel_pin_hour+','+rel_type;
+			arr.push(goods_str);
+		})
+		if(arr.length == 0)
+		{
+			alert('请选择需要参加拼团的商品');
+			return false;
+		}
+		
+		var begin_time  = $('#begin_time').val();
+		var end_time = $('#end_time').val();
+		
+		if(begin_time == '')
+		{
+			alert('请选择拼团开始时间');
+			return false;
+		}
+		if(end_time == '')
+		{
+			alert('请选择拼团结束时间');
+			return false;
+		}
+		
+		var data_obj = {};
+		data_obj.goods_ids_arr = arr;
+		data_obj.begin_time = begin_time;
+		data_obj.end_time = end_time;
+		
+		
+		$.ajax({
+			url:sub_url,
+			type:'post',
+			data:data_obj,
+			dataType:'json',
+			success:function(ret){
+				if(ret.code == 1)
+				{
+					alert('添加拼团成功');
+					location.href = "{:U('pin/index')}";
+					return false;
+				} else {
+					alert(ret.msg);
+					return false;
+				}
+			}
+		})
+		
+	})
+	$('.close').live('click',function(){
+		$(this).parent().remove();
+	})
+	$('.cgoods_id').live('click',function(){
+		var rel_id = $(this).val();
+		var goods_name = $(this).attr('rel_name');
+		
+		if($(this).is(':checked')) { 
+			if($('.tag'+rel_id).length ==0)
+			{
+				
+				var rel_html = '<span class="tag tag'+rel_id+'" rel_goods_id="'+rel_id+'">'+goods_name+'<button type="button" class="close">×</button></span>';
+				
+				$.ajax({
+					url:"{:U('Goods/get_ajax_search_goods_info', array('is_hide' =>1))}",
+					type:'get',
+					data:{goods_id:rel_id},
+					dataType:'json',
+					success:function(ret){
+						$('.J_DefaultMessage').html(ret.html);
+						$("#dialog").css({'position' : 'fixed','display' : 'block', 'z-index' : '9999'});
+						//$('.tags').append(ret.html);	
+					}
+				})
+				
+				//$('.tags').append(rel_html);
+			}
+		}else {
+			$('.tag'+rel_id).remove();
+		}
+	})
+	
+	$('.J_SubmitPL').click(function(e){    	
+    	
+    	
+		var pin_price = $('input[name="pin_price"]').val();
+		var pin_count = $('input[name="pin_count"]').val();
+		var pin_hour = $('input[name="pin_hour"]').val();
+		var type = $('select[name="type"]').val();
+		
+		if( parseInt(pin_count) == 0 )
+		{
+			alert('拼团人数不能为空');
+			return false;
+		}
+		$("#dialog").css('display','none');
+		$('.ks-ext-mask').css('display','none');
+		
+		var goods_id = $('input[name="goods_id"]').val();
+		
+		var mult_option_zuhe_arr = [];
+		var mult_option_zuhe_str = '';
+		$('.mult_option_zuhe').each(function(e){
+			mult_option_zuhe_arr.push($(this).attr('name')+':'+$(this).val());
+		})
+		mult_option_zuhe_str = mult_option_zuhe_arr.join('@@');
+		
+		var mult_option_price_arr = [];
+		var mult_option_price_str = '';
+		$('.mult_option_zuhe_price').each(function(){
+			mult_option_price_arr.push($(this).attr('name')+':'+$(this).val());
+		})
+		mult_option_price_str = mult_option_price_arr.join('@@');
+		
+		var mult_option_pin_price_arr = [];
+		var mult_option_pin_price_str = '';
+		
+		$('.mult_option_pin_price').each(function(){
+			mult_option_pin_price_arr.push($(this).attr('name')+':'+$(this).val());
+		})
+		mult_option_pin_price_str = mult_option_pin_price_arr.join('@@');
+		
+		var goods_name = $('#goods_name_vl').html();
+		
+		var rel_html = '<span class="tag tag'+goods_id+'"  rel_mult_option_pin_price_str="'+mult_option_pin_price_str+'" rel_mult_option_price_str="'+mult_option_price_str+'" rel_mult_option_quanty_str="'+mult_option_zuhe_str+'" rel_pin_count="'+pin_count+'" rel_type="'+type+'"  rel_pin_hour="'+pin_hour+'" rel_pin_price="'+pin_price+'" rel_goods_id="'+goods_id+'">'+goods_name+'<button type="button" class="close">×</button></span>';
+		$('.tags').append(rel_html);	
+		
+	})
+	
+})
+
+function search_goods()
+{
+	var goods_name = $('#goods_name').val();
+	$.ajax({
+		url:"{:U('Goods/goods_search')}",
+		type:'post',
+		data:{goods_name:goods_name},
+		dataType:'json',
+		success:function(ret){
+			$('#goods_result').html(ret.html);
+		}
+	})
+}
+</script>
+<script>
+$(function(){	
+	
+	<present name="Think.get.id">
+			Oscshop.setValue("a_status", {$data.a_status|default=1});		
+	</present>
+	//关闭弹出层
+	$('#dialog').on('click','.ks-ext-close',function(){	
+	    $("#dialog").css('display','none');
+	    $('.ks-ext-mask').css('display','none');
+	    return false;
+	});
+	//关闭弹出层
+	$('#dialog').on('click','.J_Cancel',function(){	
+	    $("#dialog").css('display','none');
+	    $('.ks-ext-mask').css('display','none');
+	    return false;
+	});
+		
+});
+</script>							
+</block>

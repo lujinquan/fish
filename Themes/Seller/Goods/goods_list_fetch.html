@@ -1,0 +1,28 @@
+<table class="table table-binfoed">
+	<tr>
+		<th>商品ID</th>
+		<th>商品名称</th>
+		<th>商品图片</th>
+		<th>商品价格</th>
+		<th>商品数量</th>
+	</tr>
+	<?php if(!empty($goods_list)){ ?>
+	<?php foreach($goods_list as $goods){ ?>	
+	<tr>
+		<td><input type="checkbox" class="cgoods_id" rel_name="<?php echo $goods['name']; ?>"  name="goods_id[]" value="<?php echo $goods['goods_id']; ?>" /></td>
+		<td><?php if($goods['type'] == 'normal'){ ?><span style="color:red;">【普通商品】</span><?php }else if($goods['type'] == 'pintuan'){  ?><span style="color:red;">【拼团】</span><?php } ?>:&nbsp;<?php echo $goods['name']; ?></td>
+		<td>
+			<img src="<?php echo resize($goods['image'], 100, 100); ?>" />
+		</td>
+		<td>
+			<?php echo $goods['price']; ?>元
+		</td>
+		<td>
+			<?php echo $goods['quantity']; ?>
+		</td>
+	</tr>
+	<?php } ?>
+	<?php }else { ?>
+	<tr><td>未搜索到您需要的商品。换个名称试试</td></tr>
+	<?php } ?>
+</table>

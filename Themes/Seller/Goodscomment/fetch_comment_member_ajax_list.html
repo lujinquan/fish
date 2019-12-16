@@ -1,0 +1,28 @@
+<?php if($page == 1){ ?>
+<table class="table table-binfoed">
+	<tbody id="member_body_ajax">
+		<tr>
+			<th>ID</th>
+			<th>会员名称</th>
+			<th>头像</th>
+		</tr>
+		<?php foreach($jia_list as $val){ ?> 
+		<tr>
+			<td><input type="checkbox" class="cgoods_id" rel_name="<?php echo $val['uname']; ?>" name="jia_id[]" value="<?php echo $val['member_id']; ?>"></td>
+			<td><?php echo $val['uname']; ?></td>
+			<td><img src="<?php echo $val['avatar']; ?>" style="width:40px;height:40px;" /></td>
+		</tr>
+		<?php } ?>
+	</tbody>
+</table>
+<?php }else{ ?>
+<?php foreach($jia_list as $val){ ?> 
+		<tr>
+			<td><input type="checkbox" class="cgoods_id" rel_name="<?php echo $val['uname']; ?>" name="jia_id[]" value="<?php echo $val['member_id']; ?>"></td>
+			<td><?php echo $val['uname']; ?></td>
+			<td><img src="<?php echo $val['avatar']; ?>" style="width:40px;height:40px;" /></td>
+		</tr>
+		<?php } ?>
+<?php } ?>
+
+				

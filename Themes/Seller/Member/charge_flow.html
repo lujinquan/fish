@@ -1,0 +1,206 @@
+<extend name="Public:base" />
+
+<block name="content">
+<link rel="stylesheet" href="__CSS__/dialog.css" />	
+<div class="page-header">
+	
+</div>		
+	
+<table class="table table-striped table-bordered table-hover search-form">
+	<thead>
+		<th class="col-xs-2">
+			<select name="state" class="form-control">
+				<option value="0" <?php if($state == 0){ ?> selected<?php } ?>>全部</option>
+				<option value="3" <?php if($state == 3){ ?> selected<?php } ?>>余额付款</option>
+				<option value="6" <?php if($state == 6){ ?> selected<?php } ?>>每日签到</option>
+				<!--
+				<option value="1" <?php if($state == 1){ ?> selected<?php } ?>>余额充值</option>
+				
+				<option value="4" <?php if($state == 4){ ?> selected<?php } ?>>退款到余额</option>
+				<option value="5" <?php if($state == 5){ ?> selected<?php } ?>>平台充值</option>
+				-->
+			</select>
+		</th>
+		<th>
+			<input type="hidden" name="id" value="{$member_id}" />
+			<a class="btn btn-primary" href="javascript:;" id="search" url="{:U('Member/charge_flow')}">查询</a>
+			
+			<button style="display:none;" type="submit" name="subtype" id="export" url="{:U('Member/export')}" class="btn btn-white btn-exp"> <i class="icon-cloud-upload"></i> 导 出 </button> 
+			
+		</th>
+	</thead>
+</table>	
+	
+<div class="row">
+	<div class="col-xs-12">	
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered table-hover">
+				<thead>
+					<tr>											
+						<th>ID</th>
+						<th>金额</th>
+						
+						<th>交易类型</th>  
+						<th>交易时间</th>
+						
+									
+					</tr>
+				</thead>
+				<tbody>
+						<volist name="list" id="m" empty="$empty">
+						<tr>							
+							<td>{$m.id}</td>
+							<td>{$m.money}</td>
+							
+							<td>
+								<?php
+									switch($m['state'])
+									{
+										case 1:
+											echo '余额充值';
+										break;
+										case 3:
+											echo '余额付款(订单号：'.$m['trans_id'].')';
+										break;
+										case 4:
+											echo '订单退款到余额(订单号：'.$m['trans_id'].')';
+											break;
+										case 5:
+											echo '平台充值';
+										break;
+										case 6:
+											echo '每日签到&nbsp;'.$m['tip'];
+										break;
+									}
+								?>
+							</td>
+							<td>
+								<?php echo date('Y-m-d H:i:s', $m['charge_time']); ?>
+							</td>
+							
+						</tr>
+						</volist>	
+						
+						<tr>
+							<td colspan="20" class="page">{$page}</td>
+						</tr>
+				</tbody>
+				
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="ks-ext-mask" style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 999; display:none"></div>
+<div id="dialog" class="dialog" style="width:400px; z-index: 9999; display:none;top:80px;">
+	<div class="ks-contentbox">
+	  <div class="title"><span>会员充值</span><a class="ks-ext-close" href="javascript:void(0)">X</a></div>
+		
+		<div class="J_DefaultMessage">
+			<div style="margin:10px 10px;">
+				<input class="form-control charge_money" type="text" placeholder="充值金额" value="" name="charge_money">
+			</div>
+		</div>
+		 <div class="bottom">
+			 <a href="javascript:void(0);" class="J_SubmitPL ncsc-btn ncsc-btn-green">确认</a> 
+			 <a href="javascript:void(0);" class="J_Cancel ncsc-btn">取消</a> </div>
+  
+	</div>
+</div>
+	
+</block>
+<block name="javascript">
+<script>
+var charge_url = '';
+$(function(){
+	$("#export").click(function(){
+		 var url = $(this).attr('url');
+        var query = $('.search-form').find('input,select').serialize();
+        query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g, '');
+        query = query.replace(/^&/g, '');
+        if (url.indexOf('?') > 0) {
+            url += '&' + query;
+        } else {
+            url += '?' + query;
+        }
+        window.open(url);
+	})
+	
+	$('.charge_member').click(function(){
+		charge_url = $(this).attr('rel_url');
+		//$('.J_DefaultMessage').html(ret.html);
+		$("#dialog").css({'position' : 'fixed','display' : 'block', 'z-index' : '9999'});
+		
+	})
+	
+	$('.J_SubmitPL').click(function(e){    	
+    	
+		$("#dialog").css('display','none');
+		$('.ks-ext-mask').css('display','none');
+		
+		var charge_money = parseFloat( $('.charge_money').val() );
+		console.log(charge_money);
+		if(charge_money == 0 ||  isNaN(charge_money) )
+		{
+			alert('充值金额不能为空');
+			return false;
+		}
+		
+		
+		var data_obj = {};
+		data_obj.charge_money = charge_money;
+		
+		
+		$.ajax({
+			url:charge_url,
+			type:'post',
+			data:data_obj,
+			dataType:'json',
+			success:function(ret){
+				if(ret.code == 0)
+				{
+					alert('充值成功');
+					location.href = location.href;
+					return false;
+				} else {
+					alert(ret.msg);
+					return false;
+				}
+			}
+		})	
+		
+	})
+	
+
+	
+	
+	//关闭弹出层
+	$('#dialog').on('click','.ks-ext-close',function(){	
+		$("#dialog").css('display','none');
+		$('.ks-ext-mask').css('display','none');
+		return false;
+	});
+	//关闭弹出层
+	$('#dialog').on('click','.J_Cancel',function(){	
+		$("#dialog").css('display','none');
+		$('.ks-ext-mask').css('display','none');
+		return false;
+	});
+	
+	$("#search").click(function () {
+        var url = $(this).attr('url');
+        var query = $('.search-form').find('input,select').serialize();
+        query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g, '');
+        query = query.replace(/^&/g, '');
+        if (url.indexOf('?') > 0) {
+            url += '&' + query;
+        } else {
+            url += '?' + query;
+        }
+        window.location.href = url;
+    });
+	
+	
+});		
+</script>
+</block>

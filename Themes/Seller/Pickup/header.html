@@ -1,0 +1,14 @@
+<div class="col-xs-12 search-row">
+	<div class="panel-body">
+		<ul class="nav nav-tabs">
+			<li <?php if($type == -1 && $order_status_id == 0){ ?>class="active" <?php } ?>><a href="{:U('Pickup/manage')}">自提订单</a></li>
+			<li <?php if($type == -1 && $order_status_id == 4){ ?>class="active" <?php } ?>><a href="{:U('Pickup/manage', array('order_status_id' =>4))}">待提货订单</a></li>
+			<li <?php if($type == -1 && $order_status_id == 6){ ?>class="active" <?php } ?>><a href="{:U('Pickup/manage', array('order_status_id' =>6))}">已提货待评价订单</a></li>
+			<li <?php if($type == -1 && $order_status_id == 11){ ?>class="active" <?php } ?>><a href="{:U('Pickup/manage', array('order_status_id' =>11))}">已完成自提订单</a></li>
+			<li <?php if($type == 0){ ?>class="active" <?php } ?>><a href="{:U('Pickup/index')}">自提点管理</a></li>
+			<li <?php if($type == 2){ ?>class="active" <?php } ?>><a href="{:U('Pickup/member')}">核销人员管理</a></li>
+			<li <?php if($type == 1){ ?>class="active" <?php } ?>><a href="{:U('Pickup/hexiao')}">核销提货单</a></li>       
+		
+	  </ul>
+	</div>
+</div>

@@ -1,0 +1,910 @@
+<extend name="Public:kefubase" />
+<block name="content">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/chat.css" />
+<script src="__PUBLIC__/js/jquery/jquery-2.0.3.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/webuploader.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/blt.js"></script>
+	
+	
+<style>
+.chat02_title_btn{position:relative;}
+.webuploader-pick{width:25px;height:25px;}
+.message .frt{float:right;}
+.mar8{margin-right:8px;}
+.chat03_content ul img {
+    width: 20px;
+    height: 20px;
+}
+.chat03_content{
+    height: 550px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+.chat-time-label {
+    display: table;
+    text-align: center;
+    background-color: #d2d2d2;
+    color: #fff;
+    border-radius: 2px;
+    font-size: 11px;
+    line-height: 12px;
+    margin: 5px auto 10px;
+    padding: 3px 10px;
+}
+.role-customer{    position: relative;
+    width: 100%;
+    padding: 5px 0;
+    float: right;
+}
+.chat-goods-bubble{
+	position: relative;
+    float: right;
+    width: 280px;
+    background-repeat: no-repeat;
+    padding: 4px 10px 0;
+    font-size: 12px;
+    margin: 0 0px 0 0;
+    color: #333;
+}
+.goods-box{
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+	border: 1px solid #4bc045;
+    padding: 10px;
+    border-radius: 5px;
+}
+.goods-box img{
+    width: 50px;
+    height: 50px;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    margin-right: 10px;
+}
+.goods-detail{width: 240px;}
+.bubble-goods-name{
+	word-break: break-all;
+    word-wrap: break-word;
+    -webkit-box-orient: vertical;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    color: #333;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-height: 18px;
+}
+.group-info{
+	position: absolute;
+    left: 70px;
+    bottom: 0px;
+    font-size: 0;
+}
+.price{
+	color: #fe243d;
+    font-size: 15px;
+}
+.customer-num{
+	color: #666;
+    font-size: 10px;
+}
+input[type="file"]{opacity: 0;}
+</style>
+
+<audio id="bgMusic">
+    <source = src="__PUBLIC__/js/classic.mp3" type="audio/mp3">
+</audio>
+
+<div class="row">
+	<div class="col-xs-12">	
+<script id="template1" type="text/x-jquery-tmpl">
+<div class="message clearfix" id="${id}">
+	{{if sent!=''}}
+		<div class="chat-time-label">${sent}</div>
+	{{/if}}
+		
+	<div class="user-logo">
+		<img src="${avatar}" width="30">
+	</div>
+	<div class="wrap-text"><h5 class="clearfix">${user_name}</h5>
+		<div>{{html content}}</div>
+	</div>
+	<div style="clear:both;"></div>
+</div>
+</script>
+<script id="template2" type="text/x-jquery-tmpl">
+<div class="message clearfix" id="${id}">
+	{{if sent!=''}}
+		<div class="chat-time-label">${sent}</div>
+	{{/if}}
+	<div class="user-logo frt">
+		<img src="${avatar}" width="30">
+	</div>
+	<div class="wrap-text frt mar8" style="width:auto;">
+		<h5 class="clearfix">${user_name}</h5>
+		<div>{{html content}}</div>
+	</div>
+	
+	
+	<div style="clear:both;"></div>
+</div>
+</script>
+<script id="template3" type="text/x-jquery-tmpl">
+<li id="user_${id}" class="" data-name="${name}">
+	<label {{if choosed==1}}class="online"{{/if}}></label>
+	<a href="javascript:;"> 
+		<img src="${img}">
+	</a>
+	<a href="javascript:;" class="chat03_name">${name}</a>
+</li>
+</script>
+<script id="template4" type="text/x-jquery-tmpl">
+<div class="panel_box"  id="${id}" style="display:none;"> 
+	<div class="chat01_title">
+		<ul class="talkTo">
+			<li><a href="javascript:;">${name}</a></li></ul>
+		<a class="close_btn" href="javascript:;"></a>
+	</div>
+	<div rel="more_${id}" rel_page="0" class="load_more_msg">查看更多消息</div>
+	<div class="chat01_content">
+		
+	</div>
+</div>
+</script>
+
+<style>
+.load_more_msg{line-height:40px;text-align:center;font-size:12px;cursor:pointer;}
+.chat03_content ul li.cur_panel{background-color: #F99247;}
+.chat03_content ul li.new_msg{background: rgb(226, 167, 146);-webkit-animation: twinkling 1s 3 ease-in-out; }
+@-webkit-keyframes twinkling{    /*透明度由0到1*/
+    0%{
+       opacity:0.2; /*透明度为0*/
+
+     }
+    100%{
+       opacity:1; /*透明度为1*/
+    }
+  }  
+</style>
+
+    <div class="content">
+        <div class="chatBox">
+			<div class="chatRight" style="float:left;">
+                <div class="chat03">
+                    <div class="chat03_title">
+                        <label class="chat03_title_t">
+                            成员列表</label>
+                    </div>
+                    <div class="chat03_content" id="chat03_content">
+                        <ul>
+                            
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="chatLeft" style="float:right;border-left: 1px #bebebe solid;">
+                <div class="chat01" id="panel_box">
+					<div class="panel_box" id="panel_nobody"> 
+						<div class="chat01_title" >
+							<ul class="talkTo">
+								<li><a href="javascript:;">无</a></li></ul>
+							<a class="close_btn" href="javascript:;"></a>
+						</div>
+						<div class="chat01_content" id="">
+						</div>
+					</div>
+                </div>
+                <div class="chat02">
+                    <div class="chat02_title">
+						<div style="position:relative;width:20px;height:25px;">
+							<a class="chat02_title_btn ctb02 xo-weixin-blt-upload" style="position:absolute;width:40px;height:21px;z-index:9999;"  data-url="{:U('Image/upload_binaryFile')}" id="xo-weixin-blt-upload-btn-0" 
+								href="javascript:;" title="选择文件">
+							</a>
+						</div>
+                    </div>
+                    <div class="chat02_content">
+                        <textarea id="textarea"></textarea>
+                    </div>
+                    <div class="chat02_bar">
+                        <ul>
+                           <li style="right: 5px; top: 5px;">
+							<a href="javascript:;" id="replay_msg">
+                                <img src="__PUBLIC__/img/send_btn.jpg">
+							</a>
+							</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="clear: both;">
+            </div>
+        </div>
+    </div>
+<div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';">
+<p></p>
+<p></p>
+</div>
+	</div>
+</div>
+</block>
+<block name="javascript">
+
+<script type="text/javascript" src="__PUBLIC__/js/jquery.tmpl.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/swfobject.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/web_socket.js"></script>
+
+<script>
+$(function () {
+    var uploder_url = $('.xo-weixin-blt-upload').data('url');
+    //创建上传
+    var uploader_0 = WebUploader.create({
+        // 选完文件后，是否自动上传
+        auto: true,
+        // 文件接收服务端
+        server: uploder_url,
+        // 选择文件的按钮
+        pick: {
+            id : '#xo-weixin-blt-upload-btn-0',
+            multiple : false
+        },
+        sendAsBinary: true,
+        // 不压缩图片
+        resize: false,
+        // 只允许选择的文件
+        accept: {
+            title: '添加附件',
+            extensions: 'jpg,jpeg,png',
+            mimeTypes: 'image/jpg,image/jpeg,image/png'
+        },
+        fileNumLimit: 1,
+        fileSingleSizeLimit: 10240000  //文件大小10M
+    });
+    // 文件上传中
+    uploader_0.on('uploadProgress', function (file, percentage) {
+        $('#xo-weixin-blt-upload-btn-0').removeClass('upload-success');
+        $('#xo-weixin-blt-upload-btn-0').removeClass('upload-error');
+        $('#xo-weixin-blt-upload-btn-0').addClass('upload-progress');
+       // $('#xo-weixin-blt-upload-btn-0 .webuploader-pick').html(parseInt(percentage * 100) + '%');
+    });
+    // 文件上传成功
+    uploader_0.on('uploadSuccess', function (file, response) {
+        $('#xo-weixin-blt-upload-btn-0').removeClass('upload-progress');
+        $('#xo-weixin-blt-upload-btn-0').removeClass('upload-error');
+        $('#xo-weixin-blt-upload-btn-0').addClass('upload-success');
+        uploader_0.makeThumb(file, function (error, src) {
+            if (error) {
+                //$('#xo-weixin-blt-upload-btn-0 .webuploader-pick').html('成功');
+				console.log('成功');
+                return;
+            }
+			
+			var text = '<a href="'+response.filePath+ '/'+response.fileName +'" target="_blank"><img src="'+response.filePath+ '/'+response.fileName +'" style="width: 152px;"  /></a>';
+			
+			var s_uid = $('.cur_panel').attr('id');//user_2
+			if(send_to_userid == '')
+			{
+				alert('请选择发送的会员');
+				return false;
+			}
+			var s_content = text;
+			
+			if(s_content == '')
+			{
+				alert('发送内容不能为空');
+				return false;
+			}
+			var myDate = new Date();
+			var year = myDate.getFullYear();
+			var month = myDate.getMonth()+1;  
+			var day = myDate.getDate(); 
+			var hour = myDate.getHours();  
+			var minute = myDate.getMinutes();  
+			var second = myDate.getSeconds();
+			
+			var cur_time = year+'-'+month+"-"+day+" "+hour+':'+minute+':'+second;
+				
+			var link = { id:s_id,sent:cur_time,content: text,user_name:"<?php echo $seller_info['s_true_name']; ?>",avatar:"<?php echo $seller_info['s_logo']; ?>"  };
+			$('#template1').tmpl(link).appendTo('#panel_'+s_uid+' .chat01_content');
+			
+			var tp_image = response.filePath+ '/'+response.fileName;
+			say_toclientimage(tp_image,tp_image);
+			//say_toclient(text);  
+			
+			$('#textarea').val('');
+			document.getElementById(s_id).scrollIntoView();
+			s_id++;
+			
+			//$('#template0').tmpl(link).appendTo('#chat-detail-list');
+			//$('#message-input').val(''); 
+			
+			//$('#extra-panel').hide();
+			//$('#send-button').hide();
+			//$('#extra-button').show();
+			
+			//onsaytoseller(link);
+			//rela_wind();
+           
+        }, 180, 180);
+        uploader_0.reset();
+        $('input#attachment-0').val(response.filePath + '/' + response.fileName);
+    });
+    // 文件上传失败
+    uploader_0.on('uploadError', function (file) {
+        //$('#xo-weixin-blt-upload-btn-0 .webuploader-pick').html('失败');
+    });
+    
+    
+});
+</script>
+
+
+<script type="text/javascript">
+
+
+if (typeof console == "undefined") {    this.console = { log: function (msg) {  } };}
+// 如果浏览器不支持websocket，会使用这个flash自动模拟websocket协议，此过程对开发者透明
+WEB_SOCKET_SWF_LOCATION = "__PUBLIC__/swf/WebSocketMain.swf";
+// 开启flash的websocket debug
+WEB_SOCKET_DEBUG = true;
+var ws, name, client_list={};
+var domain = document.domain;
+
+// 连接服务端
+function connect() {
+   // 创建websocket
+   ws = new WebSocket("wss://mall.shiziyu888.com/wss");
+   // 当socket连接打开时，输入用户名
+   ws.onopen = onopen;
+   // 当有消息时根据消息类型显示不同信息
+   ws.onmessage = onmessage; 
+   ws.onclose = function() {
+	  console.log("连接关闭，定时重连");
+	  connect();
+   };
+   ws.onerror = function() {
+	  console.log("出现错误");
+   };
+}
+
+// 连接建立时发送登录信息
+function onopen()
+{
+	//document.domain
+	// 登录
+	
+	var seller_data = '{"type":"seller_login","avatar":"<?php echo $seller_info['s_logo']; ?>","tfhours_new_sg":"<?php echo $tfhours_new_sg; ?>","wait_msg":"<?php echo $kefu_wait_msg; ?>","room_id":"<?php echo is_seller_login(); ?>","domain":"'+domain+'","uid":"<?php echo is_seller_login(); ?>"}';
+	console.log("登录卖家成功:"+seller_data);
+	ws.send(seller_data);
+
+}
+
+// 服务端发来消息时
+function onmessage(e)
+{
+	
+	var data = eval("("+e.data+")");
+	switch(data['type']){
+		// 服务端ping客户端
+		case 'ping':
+			ws.send('{"type":"pong"}');
+			break;
+			//array('type'=>'resv_blog','blog_id'=>$blog_id);
+		case 'client_sayto_seller':
+			var message = data['message'];
+			//console.log('get_mes');
+			
+			if($('#chat03_content').length >0 )
+			{
+				$('.badge-success').html(0);
+				new_client_msg(data);
+			} else{
+				var cur_mes_count = $('.badge-success').html();
+				$('.badge-success').html( parseInt(cur_mes_count)+1 );
+			}
+		break;
+		case 'seller_contact_list':
+			 seller_contact_list_msg(data);
+		break;
+		case 'seller_unread_list':
+			 seller_unread_list_msg(data);
+		break;
+		case 'sellermsg_page':
+			 clientlist_msg(data);
+		break;
+	}
+}
+
+$(function(){
+	connect();
+})
+</script>
+<script>
+jQuery.fn.extend({
+  /**
+   * ctrl+enter提交表单
+   * @param {Function} fn 操作后执行的函数
+   * @param {Object} thisObj 指针作用域
+   */
+  ctrlSubmit:function(fn,thisObj){
+    var obj = thisObj || this;
+    var stat = false;
+    return this.each(function(){
+      $(this).keyup(function(event){
+        //只按下ctrl情况，等待enter键的按下
+
+        if(event.keyCode == 13 ){
+          fn.call(obj,event);
+        } 
+      });
+    });
+  } 
+});
+</script>
+<script>
+var s_id = 1;
+var send_to_userid = '';
+
+
+function say_toclientimage(image,thumb_image)
+{
+	var s_uid = $('.cur_panel').attr('id');//user_2
+	
+	//content_type = text  image    orign_image   image
+	var seller_data = '{ "type":"seller_sayto_client","image":"'+thumb_image+'","orign_image":"'+image+'","content_type":"image","logo":"<?php echo $seller_info['s_logo']; ?>","user_name":"<?php echo $seller_info['s_true_name']; ?>","content":"","uid":"'+s_uid+'"} ';
+	
+	ws.send(seller_data);
+}
+
+
+function say_toclient(content)
+{
+	var s_uid = $('.cur_panel').attr('id');//user_2
+	
+	//content_type = text  image  goods
+	var seller_data = '{ "type":"seller_sayto_client","content_type":"text","logo":"<?php echo $seller_info['s_logo']; ?>","user_name":"<?php echo $seller_info['s_true_name']; ?>","content":"'+encodeURIComponent(content)+'","uid":"'+s_uid+'"} ';
+	
+	ws.send(seller_data);
+}
+
+function seller_contact_list_msg(data)
+{
+
+	var msg_data = data.data;
+	for(var i in msg_data)
+	{
+		var member_obj = msg_data[i];
+		
+		
+		if( $('#user_' + member_obj['uid']).length > 0)
+		{
+			$('#user_'+member_obj['uid']).addClass('new_msg');
+			//panel_user_2
+		}else {
+			//panel_user_2
+			var user_info = [{id:member_obj['uid'],img:member_obj['avatar'],name:member_obj['user_name'],choosed:member_obj['is_online']}];
+			$('#template3').tmpl(user_info).appendTo('#chat03_content ul');
+			
+			var s_obj = {id:'panel_user_'+member_obj['uid'],name:member_obj['user_name']};
+			$('#template4').tmpl(s_obj).appendTo('#panel_box');	
+		}
+	
+		for(var j in member_obj.msg_list)
+		{
+			var msg_json = member_obj.msg_list[j];
+			
+			var msg_tmp = JSON.parse(msg_json);
+		
+			msg_tmp.message = decodeURIComponent(msg_tmp.message);
+		
+			if(msg_tmp.type == 'client_sayto_seller')
+			{
+				var link = { id:s_id,sent:msg_tmp.sent,content: msg_tmp.message, avatar: msg_tmp.avatar,user_name:msg_tmp.user_name};
+				
+				if(msg_tmp.content_type =='image')
+				{
+					var new_content = '';
+					new_content += '<a href="'+msg_tmp.image+'" target="_blank">';
+					new_content += '<img src="'+msg_tmp.image+'" style="width: 152px;"></a>';
+					link.content = new_content;
+					
+				}else if(msg_tmp.content_type =='goods')
+				{
+					var new_content = '';
+					new_content += '<div class="chat-goods-bubble" style="">';
+					new_content += '	<div class="goods-box">	';		
+					new_content += '		<img src="'+msg_tmp.goods_image+'">';
+					new_content += '		<div class="goods-detail">';	
+					new_content += '			<p class="bubble-goods-name">'+msg_tmp.goods_name+'</p>';	
+					new_content += '			<div class="group-info">';		
+					new_content += '				<a class="price">￥'+msg_tmp.goods_price+'</a>';
+					new_content += '				<i class="customer-num"></i>';
+					new_content += '			</div>';
+					new_content += '		</div>';
+					new_content += '	</div>';
+					new_content += '</div>';
+					link.content = new_content;
+				}	
+				
+				$('#panel_user_'+member_obj['uid']+' .chat01_content').prepend($('#template2').tmpl(link));
+				
+				//$("#chat-detail-list").prepend($('#template0').tmpl(link));
+			} else{
+				
+				var link = { id:s_id,sent:msg_tmp.sent,content: msg_tmp.message,user_name:msg_tmp.user_name,avatar:msg_tmp.avatar  };
+				
+				if(msg_tmp.content_type =='image')
+				{
+					var new_content = '';
+					new_content += '<a href="'+msg_tmp.image+'" target="_blank">';
+					new_content += '<img src="'+msg_tmp.image+'" style="width: 152px;"></a>';
+					link.content = new_content;
+					
+				}else if(msg_tmp.content_type =='goods')
+				{
+					var new_content = '';
+					new_content += '<div class="chat-goods-bubble" style="">';
+					new_content += '	<div class="goods-box">	';		
+					new_content += '		<img src="'+msg_tmp.goods_image+'">';
+					new_content += '		<div class="goods-detail">';	
+					new_content += '			<p class="bubble-goods-name">'+msg_tmp.goods_name+'</p>';	
+					new_content += '			<div class="group-info">';		
+					new_content += '				<a class="price">￥'+msg_tmp.goods_price+'</a>';
+					new_content += '				<i class="customer-num"></i>';
+					new_content += '			</div>';
+					new_content += '		</div>';
+					new_content += '	</div>';
+					new_content += '</div>';
+					link.content = new_content;
+				}
+				
+				$('#panel_user_'+member_obj['uid']+' .chat01_content').prepend($('#template1').tmpl(link));
+			}
+			s_id++;
+		}
+		
+		document.getElementById(1).scrollIntoView();
+	}
+}
+
+function seller_unread_list_msg(data)
+{
+
+	var msg_data = data.data;
+	console.log('seller_unread_list_msg:'+msg_data.length);
+	for(var i in msg_data)
+	{
+		var member_obj = msg_data[i];
+		
+		
+		if( $('#user_' + member_obj['uid']).length > 0)
+		{
+			$('#user_'+member_obj['uid']).addClass('new_msg');
+			//panel_user_2
+		}else {
+			//panel_user_2
+			var user_info = [{id:member_obj['uid'],img:member_obj['avatar'],name:member_obj['user_name'],choosed:member_obj['is_online']}];
+			$('#template3').tmpl(user_info).appendTo('#chat03_content ul');
+			
+			var s_obj = {id:'panel_user_'+member_obj['uid'],name:member_obj['user_name']};
+			$('#template4').tmpl(s_obj).appendTo('#panel_box');	
+		}
+	
+		for(var j in member_obj.msg_list)
+		{
+			var msg_json = member_obj.msg_list[j];
+			
+			var msg_tmp = JSON.parse(msg_json);
+		
+			msg_tmp.message = decodeURIComponent(msg_tmp.message);
+		
+			if(msg_tmp.type == 'client_sayto_seller')
+			{
+				var link = { id:s_id,sent:msg_tmp.sent,content: msg_tmp.message, avatar: msg_tmp.avatar,user_name:msg_tmp.user_name};
+				
+				if(msg_tmp.content_type =='image')
+				{
+					var new_content = '';
+					new_content += '<a href="'+msg_tmp.image+'" target="_blank">';
+					new_content += '<img src="'+msg_tmp.image+'" style="width: 152px;"></a>';
+					link.content = new_content;
+					
+				}else if(msg_tmp.content_type =='goods')
+				{
+					var new_content = '';
+					new_content += '<div class="chat-goods-bubble" style="">';
+					new_content += '	<div class="goods-box">	';		
+					new_content += '		<img src="'+msg_tmp.goods_image+'">';
+					new_content += '		<div class="goods-detail">';	
+					new_content += '			<p class="bubble-goods-name">'+msg_tmp.goods_name+'</p>';	
+					new_content += '			<div class="group-info">';		
+					new_content += '				<a class="price">￥'+msg_tmp.goods_price+'</a>';
+					new_content += '				<i class="customer-num"></i>';
+					new_content += '			</div>';
+					new_content += '		</div>';
+					new_content += '	</div>';
+					new_content += '</div>';
+					link.content = new_content;
+				}
+			
+				$('#panel_user_'+member_obj['uid']+' .chat01_content').prepend($('#template2').tmpl(link));
+				
+				//$("#chat-detail-list").prepend($('#template0').tmpl(link));
+			} else{
+				
+				var link = { id:s_id,sent:msg_tmp.sent,content: msg_tmp.message,user_name:msg_tmp.user_name,avatar:msg_tmp.avatar  };
+				
+				if(msg_tmp.content_type =='image')
+				{
+					var new_content = '';
+					new_content += '<a href="'+msg_tmp.image+'" target="_blank">';
+					new_content += '<img src="'+msg_tmp.image+'" style="width: 152px;"></a>';
+					link.content = new_content;
+					
+				}else if(msg_tmp.content_type =='goods')
+				{
+					var new_content = '';
+					new_content += '<div class="chat-goods-bubble" style="">';
+					new_content += '	<div class="goods-box">	';		
+					new_content += '		<img src="'+msg_tmp.goods_image+'">';
+					new_content += '		<div class="goods-detail">';	
+					new_content += '			<p class="bubble-goods-name">'+msg_tmp.goods_name+'</p>';	
+					new_content += '			<div class="group-info">';		
+					new_content += '				<a class="price">￥'+msg_tmp.goods_price+'</a>';
+					new_content += '				<i class="customer-num"></i>';
+					new_content += '			</div>';
+					new_content += '		</div>';
+					new_content += '	</div>';
+					new_content += '</div>';
+					link.content = new_content;
+				}
+			
+				$('#panel_user_'+member_obj['uid']+' .chat01_content').prepend($('#template1').tmpl(link));
+			}
+			s_id++;
+		}
+		
+		document.getElementById(1).scrollIntoView();
+	}
+	
+}
+function clientlist_msg(data)
+{
+	cur_page = data.page;
+	var msg_data = data.data;
+	var uid = data.uid;
+	for(var i in msg_data)
+	{
+		var msg_tmp = JSON.parse(msg_data[i]);
+		//$('#template1').tmpl(link).appendTo('#chat-detail-list');
+		
+		msg_tmp.message = decodeURIComponent(msg_tmp.message);
+		
+		if(msg_tmp.type == 'client_sayto_seller')
+		{
+			var link = { id:s_id,sent:msg_tmp.sent,content: msg_tmp.message, avatar: msg_tmp.avatar,user_name:msg_tmp.user_name};
+			
+			if(msg_tmp.content_type =='image')
+			{
+				var new_content = '';
+				new_content += '<a href="'+msg_tmp.image+'" target="_blank">';
+				new_content += '<img src="'+msg_tmp.image+'" style="width: 152px;"></a>';
+				link.content = new_content;
+				
+			}else if(msg_tmp.content_type =='goods')
+			{
+				var new_content = '';
+				new_content += '<div class="chat-goods-bubble" style="">';
+				new_content += '	<div class="goods-box">	';		
+				new_content += '		<img src="'+msg_tmp.goods_image+'">';
+				new_content += '		<div class="goods-detail">';	
+				new_content += '			<p class="bubble-goods-name">'+msg_tmp.goods_name+'</p>';	
+				new_content += '			<div class="group-info">';		
+				new_content += '				<a class="price">￥'+msg_tmp.goods_price+'</a>';
+				new_content += '				<i class="customer-num"></i>';
+				new_content += '			</div>';
+				new_content += '		</div>';
+				new_content += '	</div>';
+				new_content += '</div>';
+				link.content = new_content;
+			}
+			
+			$('#panel_user_'+uid+' .chat01_content').prepend($('#template2').tmpl(link));
+			
+			//$("#chat-detail-list").prepend($('#template0').tmpl(link));
+		} else{
+			
+			var link = { id:s_id,sent:msg_tmp.sent,content: msg_tmp.message,user_name:msg_tmp.user_name,avatar:msg_tmp.avatar  };
+			
+			if(msg_tmp.content_type =='image')
+			{
+				var new_content = '';
+				new_content += '<a href="'+msg_tmp.image+'" target="_blank">';
+				new_content += '<img src="'+msg_tmp.image+'" style="width: 152px;"></a>';
+				link.content = new_content;
+				
+			}else if(msg_tmp.content_type =='goods')
+			{
+				var new_content = '';
+				new_content += '<div class="chat-goods-bubble" style="">';
+				new_content += '	<div class="goods-box">	';		
+				new_content += '		<img src="'+msg_tmp.goods_image+'">';
+				new_content += '		<div class="goods-detail">';	
+				new_content += '			<p class="bubble-goods-name">'+msg_tmp.goods_name+'</p>';	
+				new_content += '			<div class="group-info">';		
+				new_content += '				<a class="price">￥'+msg_tmp.goods_price+'</a>';
+				new_content += '				<i class="customer-num"></i>';
+				new_content += '			</div>';
+				new_content += '		</div>';
+				new_content += '	</div>';
+				new_content += '</div>';
+				link.content = new_content;
+			}
+			$('#panel_user_'+uid+' .chat01_content').prepend($('#template1').tmpl(link));
+		}
+		s_id++;
+	}
+}
+
+function new_client_msg(data)
+{
+	//new_client_msg(data); avatar
+	//array( 'avatar' =>$avatar, 'message' => nl2br(htmlspecialchars($message_data['content'])), ); from
+	
+	if( $('#user_' + data['from']).length > 0)
+	{
+		$('#user_'+data['from']).addClass('new_msg');
+		//panel_user_2
+	}else {
+		//panel_user_2
+		var user_info = [{id:data['from'],img:data['avatar'],name:data['user_name'],choosed:0}];
+		$('#template3').tmpl(user_info).appendTo('#chat03_content ul');
+		
+		var s_obj = {id:'panel_user_'+data['from'],name:data['user_name']};
+		$('#template4').tmpl(s_obj).appendTo('#panel_box');	
+	}
+	
+	var link = { id:s_id,sent:data['sent'],content: decodeURIComponent(data['message']), avatar: data['avatar'],user_name:data['user_name']};
+	
+	
+	if(data['content_type'] =='image')
+	{
+		var new_content = '';
+		new_content += '<a href="'+data['image']+'" target="_blank">';
+		new_content += '<img src="'+data['image']+'" style="width: 152px;"></a>';
+		link.content = new_content;
+		
+	}else if(data['content_type'] =='goods')
+	{
+		var new_content = '';
+		new_content += '<div class="chat-goods-bubble" style="">';
+		new_content += '	<div class="goods-box">	';		
+		new_content += '		<img src="'+data['goods_image']+'">';
+		new_content += '		<div class="goods-detail">';	
+		new_content += '			<p class="bubble-goods-name">'+data['goods_name']+'</p>';	
+		new_content += '			<div class="group-info">';		
+		new_content += '				<a class="price">￥'+data['goods_price']+'</a>';
+		new_content += '				<i class="customer-num"></i>';
+		new_content += '			</div>';
+		new_content += '		</div>';
+		new_content += '	</div>';
+		new_content += '</div>';
+		link.content = new_content;
+	}
+	
+	
+	$('#template2').tmpl(link).appendTo('#panel_user_'+data['from']+' .chat01_content');
+	document.getElementById(s_id).scrollIntoView();
+	s_id++;
+	
+	var audio = document.getElementById("bgMusic");
+ 
+	//播放(继续播放)
+	audio.play();
+	audio.currentTime = 0;
+	audio.play();
+	//暂停
+	//audio.pause();
+	 
+	
+}
+    
+$(function(){
+
+	//$('#template3').tmpl(user_info).appendTo('#chat03_content ul');
+	$('.load_more_msg').live('click',function(){
+		//more_panel_user_1  load_more_msg
+		var panel_user = $(this).attr('rel');
+		var rel_page = $(this).attr('rel_page');
+		//type:get_seller_page uid  room_id  page
+		console.log(panel_user);
+		
+		
+		var seller_data = '{ "type":"get_seller_page","uid_str":"'+panel_user+'","page":"'+rel_page+'"} ';
+		$(this).attr('rel_page', parseInt(rel_page)+1 );
+		
+		ws.send(seller_data);
+		//console.log("发送给客户端的数据:"+seller_data);
+		
+	})
+	
+	$("#textarea").ctrlSubmit(function(event){
+		send_replay_msg();
+	});
+
+
+	$('#replay_msg').click(function(){
+		send_replay_msg();
+	})
+	$('#chat03_content li').live('click',function(){
+		var panel_id = $(this).attr('id');
+		var user_name = $(this).attr('data-name');
+		
+		/**
+		if($('#panel_'+panel_id).length == 0)
+		{
+			var s_obj = {id:'panel_'+panel_id,name:user_name};
+			$('#template4').tmpl(s_obj).appendTo('#panel_box');
+		}
+		**/
+		send_to_userid = panel_id;
+		$('#'+panel_id).removeClass('new_msg');
+		$('#'+panel_id).removeClass('choosed');
+		//$('#'+panel_id).addClass('new_msg');
+		console.log(55);
+		
+		$('#'+panel_id).addClass('cur_panel').siblings().removeClass('cur_panel');
+		$('#panel_'+panel_id).show().siblings().hide();
+		
+	})
+	
+	
+	$('.close_btn').live('click',function(){
+		send_to_userid = '';
+		$('#panel_nobody').show().siblings().hide();
+	})
+	
+})
+function send_replay_msg()
+{
+	var s_uid = $('.cur_panel').attr('id');//user_2
+	if(send_to_userid == '')
+	{
+		alert('请选择发送的会员');
+		return false;
+	}
+	var s_content = $('#textarea').val();
+	
+	if(s_content == '')
+	{
+		alert('发送内容不能为空');
+		return false;
+	}
+	var myDate = new Date();
+	var year = myDate.getFullYear();
+	var month = myDate.getMonth()+1;  
+	var day = myDate.getDate(); 
+	var hour = myDate.getHours();  
+	var minute = myDate.getMinutes();  
+	var second = myDate.getSeconds();
+	
+	var cur_time = year+'-'+month+"-"+day+" "+hour+':'+minute+':'+second;
+		
+	var link = { id:s_id,sent:cur_time,content: s_content,user_name:"<?php echo $seller_info['s_true_name']; ?>",avatar:"<?php echo $seller_info['s_logo']; ?>"  };
+	$('#template1').tmpl(link).appendTo('#panel_'+s_uid+' .chat01_content');
+	
+	say_toclient(s_content);
+	
+	$('#textarea').val('');
+	document.getElementById(s_id).scrollIntoView();
+	s_id++;
+}
+</script>
+</block>

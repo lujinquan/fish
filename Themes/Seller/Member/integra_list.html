@@ -1,0 +1,229 @@
+<extend name="Public:base" />
+
+<block name="content">
+<link rel="stylesheet" href="__CSS__/dialog.css" />	
+<div class="page-header">
+	
+</div>		
+	
+<table class="table table-striped table-bordered table-hover search-form">
+	<thead>
+		<th>
+			<span class="badge badge-info">{$member_info.uname}</span>
+		&nbsp;&nbsp;
+			当前积分：<span class="badge badge-pink">{$member_info['score']}</span>
+			<button type="button" id="charge_button" class="btn btn-white btn-yellow btn-sm">充值</button>
+		</th>
+	</thead>
+</table>	
+	
+<div class="row">
+	<div class="col-xs-12">	
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered table-hover">
+				<thead>
+					<tr>											
+						<th>增加/扣除</th>
+						<th>积分</th>
+						<th>类型</th>
+						<th>订单id</th>	
+						<th>状态</th>
+						<th>说明</th>
+						<th>时间</th>							
+					</tr>
+				</thead>
+				<tbody>
+						<volist name="list" id="m" empty="$empty">
+						<tr>							
+							<td>
+								<?php 
+									if($m['in_out'] == 'in'){
+								?>
+									<span class="badge badge-info">增加</span>
+								<?php }else if($m['in_out'] == 'out'){
+								?>
+									<span class="badge badge-danger">扣除</span>
+								<?php } ?>
+							</td>
+							<td>
+								{$m.score}
+							</td>
+							<td>
+								<?php 
+									switch($m['type'])
+									{
+										case 'goodsbuy':
+											echo '<span class="badge badge-info">商品购买奖励积分</span>';
+										break;
+										case 'refundorder':
+											echo '<span class="badge badge-danger">订单退款</span>';
+										break;
+										case 'system_add':
+											echo '<span class="badge badge-success">后台充值</span>';
+										break;
+										case 'system_del':
+											echo '<span class="badge badge-warning">后台扣除</span>';
+										break;
+										case 'orderbuy':
+											echo '<span class="badge badge-warning">积分兑换商品</span>';
+										break;
+									}
+								?>
+							</td>
+							<td>
+								<?php if(!empty($m['order_id'])){ 
+								?>
+								<a href="{:U('Order/show_order', array('id' => $m['order_id']))}" class="btn btn-white btn-purple btn-sm" target="_blank">查看订单</a>
+								<?php
+								}else{ 
+								?>
+								--
+								<?php } ?>
+							</td>
+							<td>
+								<?php if($m['state'] ==0){ ?>
+									待赠送
+								<?php }else{?>
+									已完成
+								<?php } ?>
+							</td>
+							<td>
+								{$m.remark}
+							</td>
+							<td>
+								<?php echo date('Y-m-d H:i:s' , $m['addtime']); ?>
+							</td>
+						</tr>
+						</volist>	
+						
+						<tr>
+							<td colspan="20" class="page">{$page}</td>
+						</tr>
+				</tbody>
+				
+			</table>
+		</div>
+	</div>
+</div>
+<div id="dialog" class="dialog" style="z-index: 9999; display:none;top:80px;">
+	<div class="ks-contentbox">
+	  <div class="title"><span>积分充值</span><a class="ks-ext-close" href="javascript:void(0)">X</a></div>
+		
+		<div class="J_DefaultMessage">
+			<div style="margin:10px;">
+				<div>
+					<p class="smaller-90 lighter red">请输入数值： 50，充值50。-50，扣除50</p>
+				</div>
+				<div class="ace-spinner middle touch-spinner" style="width:200px;">
+					<div class="input-group">
+						<div class="spinbox-buttons input-group-btn" style="display:none;">					
+							<button type="button" class="btn spinbox-down btn-sm btn-danger">						
+							<i class="icon-only  ace-icon ace-icon fa icon-minus bigger-110"></i>					
+							</button>				
+						</div>
+						<input type="text" id="spinner3" value="{$member_info.score}" class="spinbox-input form-control text-center">
+						<div class="spinbox-buttons input-group-btn" style="display:none;">					
+							<button type="button" class="btn spinbox-up btn-sm btn-success">						
+								<i class="icon-only  ace-icon ace-icon fa icon-plus bigger-110"></i>					
+							</button>				
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		 <div class="bottom">
+			 <a href="javascript:void(0);" class="J_SubmitPL ncsc-btn ncsc-btn-green">确认</a> 
+			 <a href="javascript:void(0);" class="J_Cancel ncsc-btn">取消</a> </div>
+  
+	</div>
+</div>
+</block>
+<block name="javascript">
+<script>
+var member_id = "{$member_info.member_id}";
+$(function(){
+	//$('#spinner3').ace_spinner({value:0,min:-100,max:100,step:10, on_sides: true, icon_up:'ace-icon fa fa-plus bigger-110', icon_down:'ace-icon fa fa-minus bigger-110', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+	$('.spinbox-down').click(function(){
+		var cur_num = parseInt( $('#spinner3').val() );
+		cur_num -= 10;
+		if(cur_num <=0)
+		{
+			cur_num =0 ;
+		}
+		$('#spinner3').val(cur_num);
+	})
+	$('.spinbox-up').click(function(){
+		var cur_num = parseInt( $('#spinner3').val() );
+		cur_num += 10;
+		$('#spinner3').val(cur_num);
+	})
+	$('#charge_button').click(function(){
+		$("#dialog").css({'position' : 'fixed','display' : 'block', 'z-index' : '9999'});			
+	})
+	//关闭弹出层
+	$('#dialog').on('click','.ks-ext-close',function(){	
+		$("#dialog").css('display','none');
+		$('.ks-ext-mask').css('display','none');
+		return false;
+	});
+	//关闭弹出层
+	$('#dialog').on('click','.J_Cancel',function(){	
+		$("#dialog").css('display','none');
+		$('.ks-ext-mask').css('display','none');
+		return false;
+	});
+	$('.J_SubmitPL').click(function(){
+		var s_score = $('#spinner3').val();
+		var s_data = {};
+		s_data.member_id = member_id;
+		s_data.score = s_score;
+		$.ajax({
+			url:"{:U('Member/charge_score')}",
+			type:'post',
+			data:s_data,
+			dataType:"json",
+			success:function(ret){
+				if(ret.code == 0)
+				{
+					$("#dialog").css('display','none');
+					$('.ks-ext-mask').css('display','none');
+					alert('充值成功');
+					location.href = location.href;
+				}else{
+					$("#dialog").css('display','none');
+					$('.ks-ext-mask').css('display','none');
+					alert('充值失败');
+				}
+			}
+		})
+	})
+	$("#export").click(function(){
+		 var url = $(this).attr('url');
+        var query = $('.search-form').find('input,select').serialize();
+        query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g, '');
+        query = query.replace(/^&/g, '');
+        if (url.indexOf('?') > 0) {
+            url += '&' + query;
+        } else {
+            url += '?' + query;
+        }
+        window.open(url);
+	})
+	
+	$("#search").click(function () {
+        var url = $(this).attr('url');
+        var query = $('.search-form').find('input,select').serialize();
+        query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g, '');
+        query = query.replace(/^&/g, '');
+        if (url.indexOf('?') > 0) {
+            url += '&' + query;
+        } else {
+            url += '?' + query;
+        }
+        window.location.href = url;
+    });
+	
+	
+});		
+</script>
+</block>

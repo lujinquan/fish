@@ -1,0 +1,10 @@
+[ 2019-10-25T13:46:12+08:00 ] 175.167.130.106 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=user&&m=lionfish_comshop&sign=e0201dceaf1c242301da0a61fbd71986
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-10-25T19:21:41+08:00 ] 101.91.60.25 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=1a38b6f908ab8a9c8e35af1168e676d3&controller=order.orderlist&token=&page=1&order_status=-1
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'and o.type != "ignore"   
+	                    order by o.date_added desc limit' at line 4
+
+[ 2019-10-25T23:44:04+08:00 ] 101.104.249.76 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=0adee321dc142264bc7b3a40f7271645&controller=index.load_gps_community&token=&pageNum=1&longitude=123.31190375434028&latitude=41.76586669921875&city_id=1804
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'distance <= 3000 order by distance asc limit 0,10' at line 1
+
