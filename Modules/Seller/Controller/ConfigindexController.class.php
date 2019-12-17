@@ -410,7 +410,9 @@ class ConfigindexController extends CommonController{
 			if(trim($data['app_rootca_pem'])) $param['app_rootca_pem'] = trim($data['app_rootca_pem']);
 			
 			D('Seller/Config')->update($param);
-			
+			// 更新缓存 Author Lucas 2019-12-17
+            D('Seller/Config')->get_all_config(true);
+
 			show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
 		}
 		$data = D('Seller/Config')->get_all_config();
@@ -431,6 +433,9 @@ class ConfigindexController extends CommonController{
             $data['index_notice_horn_image'] = save_media($data['index_notice_horn_image']);
             
             D('Seller/Config')->update($data);
+
+            // 更新缓存 Author Lucas 2019-12-17
+            D('Seller/Config')->get_all_config(true);
             
             show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
         }
@@ -454,6 +459,9 @@ class ConfigindexController extends CommonController{
             
              
             D('Seller/Config')->update($data);
+            
+            // 更新缓存 Author Lucas 2019-12-17
+            D('Seller/Config')->get_all_config(true);
             
             show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
         }

@@ -290,6 +290,9 @@ class ExpressController extends CommonController{
 			
 			
 			D('Seller/Config')->update($data);
+
+			// 更新缓存 Author Lucas 2019-12-17
+			D('Seller/Config')->get_all_config(true);
 			
 			if(empty($data['delivery_diy_sort']) || !isset($data['delivery_diy_sort'])) 
 				$data['delivery_diy_sort'] = '0,1,2';
