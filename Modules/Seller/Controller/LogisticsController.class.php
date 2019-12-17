@@ -22,6 +22,8 @@ class LogisticsController extends CommonController{
 			
 			D('Seller/Config')->update($data);
 			
+			// 更新缓存 Author Lucas 2019-12-17
+			D('Seller/Config')->get_all_config(true);
 			
 			show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
 		}
