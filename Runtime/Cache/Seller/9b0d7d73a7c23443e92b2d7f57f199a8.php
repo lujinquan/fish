@@ -1,0 +1,25 @@
+<?php if (!defined('THINK_PATH')) exit();?><form class="form-horizontal form-validate" action="<?php echo U('order/oprefund_do');?>" method="post" enctype="multipart/form-data">
+	<input type='hidden' name='id' value='<?php echo ($id); ?>' />
+
+	<div class="modal-dialog">
+           <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">退款金额</h4>
+				 
+            </div>
+            <div class="modal-body" style = "padding: 10px;" >
+			        <?php $total = $item['total']+$item['shipping_fare']-$item['voucher_credit']-$item['fullreduction_money']; $score_for_money = $item['score_for_money']; $free_tongji = $total - $score_for_money; if($free_tongji < 0){ $free_tongji = 0; } ?>
+					<?php if( !empty( $score_for_money ) && $score_for_money > 0 ){ ?>
+					<p style="line-height:26px;font-size:13px;">积分抵扣：￥<?php echo ($score_for_money); ?></p>
+					<?php } ?>
+					<p style="line-height:26px;font-size:13px;">最多退款：￥<?php echo ($free_tongji); ?></p>		
+                    <div style="height:8px;"></div>
+					<input type="text" name="refund_money" placeholder="退款金额" value="<?php echo round($free_tongji ,2);?>" class="form-control" />
+		   </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="submit">提交</button>
+                <button data-dismiss="modal" class="btn btn-default" type="button">取消</button>
+            </div>
+        </div>
+</form>

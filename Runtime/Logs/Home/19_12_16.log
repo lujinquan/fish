@@ -7,3 +7,18 @@ ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error i
 [ 2019-12-16T16:29:58+08:00 ] 219.140.80.82 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=754e86d4c46078692ce808c190fd4744&controller=index.load_gps_community&token=45e3ed931f7fbae9d1c066f67e1db03f&pageNum=1&longitude=114.31599&latitude=30.55386&city_id=1804
 ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'distance <= 30000 order by distance asc limit 0,10' at line 1
 
+[ 2019-12-16T18:21:18+08:00 ] 219.140.80.82 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=2b6d24f795f2289254a4b101836c517a&controller=index.load_gps_community&token=dc3f9a694ab5abdb0b7108f10b10b9d9&pageNum=1&longitude=114.31599&latitude=30.55386&city_id=1250
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'distance <= 30000 order by distance asc limit 0,10' at line 1
+
+[ 2019-12-16T18:23:13+08:00 ] 219.140.80.82 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=526960682fb19b63d50b08e1d2d7f807&controller=index.load_gps_community&token=53c0f587a8250fc82fdd47fe3e8c0066&pageNum=1&longitude=114.31599&latitude=30.55386&city_id=1250
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'distance <= 30000 order by distance asc limit 0,10' at line 1
+
+[ 2019-12-16T18:29:36+08:00 ] 219.140.80.82 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=10b9f4ae1782a6f9d9045e9f2d710e59&controller=index.addhistory_community&community_id=35&token=f8fcf04161f24250ecd517e347f46f2c
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-12-16T18:42:59+08:00 ] 219.140.80.82 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=808c2e6c870cc722b2eebf7a33e7714e&controller=index.addhistory_community&community_id=35&token=ba888ce1f55199755f36746a7b7c57ee
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
+[ 2019-12-16T18:49:31+08:00 ] 219.140.80.82 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=user&&m=lionfish_comshop&sign=f48525c0b9c07b5531d34eebc9e9b396
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') ORDER BY id desc LIMIT 1' at line 1
+
