@@ -22,6 +22,9 @@ class SystemController extends \Think\Controller {
 	
 	public function upgrade_check()
 	{
+		// 暂停关闭检查版本功能
+		echo 'v1.0.0';
+		die();
 	
 		//get_config_by_name($name)
 		
