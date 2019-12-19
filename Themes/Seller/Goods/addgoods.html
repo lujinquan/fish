@@ -995,6 +995,8 @@
 												<input type="radio" lay-filter="is_mb_level_buy" value="1" name="is_mb_level_buy" class="is_mb_level_buy" <?php if(!isset($item['is_mb_level_buy']) || $item['is_mb_level_buy']==1){ ?>checked<?php } ?> title="参与" /> 
 											
 												<input type="radio" lay-filter="is_mb_level_buy" value="0" name="is_mb_level_buy" class="is_mb_level_buy" <?php if($item['is_mb_level_buy']==0){ ?>checked<?php } ?> title="不参与" /> 
+
+												<input type="radio" lay-filter="is_mb_level_buy" value="2" name="is_mb_level_buy" class="is_mb_level_buy" <?php if($item['is_mb_level_buy']==2){ ?>checked<?php } ?> title="自定义" />
 											
 												<span class="help-block">如果不参与会员折扣，则不打折</span>
 										</div>
@@ -1148,7 +1150,7 @@ layui.use(['jquery', 'layer','form'], function(){
 	});
 	var is_mb_level_buy = $("input[name='is_mb_level_buy']:checked").val();
 	console.log('是否参与会员折扣：' , is_mb_level_buy);
-	if(is_mb_level_buy == 1){
+	if(is_mb_level_buy == 2){
 		$('.j-member-discount').show();
 	}else{
 		$('.j-member-discount').hide();
@@ -1156,7 +1158,7 @@ layui.use(['jquery', 'layer','form'], function(){
 	form.on('radio(is_mb_level_buy)', function(data){
 		var is_mb_level_buy1 = $("input[name='is_mb_level_buy']:checked").val();
 		console.log('是否参与会员折扣：' , is_mb_level_buy1);
-		if(is_mb_level_buy1 == 1){
+		if(is_mb_level_buy1 == 2){
 			$('.j-member-discount').show();
 		}else{
 			$('.j-member-discount').hide();

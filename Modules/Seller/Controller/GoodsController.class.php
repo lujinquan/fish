@@ -865,7 +865,7 @@ class GoodsController extends CommonController{
 			$member_level_arr = M('lionfish_comshop_member_level')->select();
 			foreach ($member_level_arr as $k0 => $v0) {
 				$discount_row = M('lionfish_comshop_goods_discount_member')->where( array('goods_id' => $id,'member_level' => $v0['level']) )->find();
-				$member_level_discount = $_GPC['is_mb_level_buy']?$_GPC['member_level_'.$v0['level']]:100;
+				$member_level_discount = ($_GPC['is_mb_level_buy'] == 2)?$_GPC['member_level_'.$v0['level']]:100;
 				if($discount_row){
 					 M('lionfish_comshop_goods_discount_member')->where( array('goods_id' => $id,'member_level' => $v0['level']) )->save(['discount'=>$member_level_discount]);
 				}else{
@@ -2970,7 +2970,7 @@ class GoodsController extends CommonController{
 			$member_level_arr = M('lionfish_comshop_member_level')->select();
 			foreach ($member_level_arr as $k0 => $v0) {
 				$discount_row = M('lionfish_comshop_goods_discount_member')->where( array('goods_id' => $id,'member_level' => $v0['level']) )->find();
-				$member_level_discount = $_GPC['is_mb_level_buy']?$_GPC['member_level_'.$v0['level']]:100;
+				$member_level_discount = ($_GPC['is_mb_level_buy'] == 2)?$_GPC['member_level_'.$v0['level']]:100;
 				if($discount_row){
 					 M('lionfish_comshop_goods_discount_member')->where( array('goods_id' => $id,'member_level' => $v0['level']) )->save(['discount'=>$member_level_discount]);
 				}else{
