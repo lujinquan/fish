@@ -1,3 +1,0 @@
-<?php
-//000000000000a:4:{s:45:"wepro_openid_4c1b210102fc73b76910580e4e712f52";N;s:51:"wepro_expires_time_4c1b210102fc73b76910580e4e712f52";i:1571850807;s:50:"wepro_session_key_4c1b210102fc73b76910580e4e712f52";N;s:46:"wepro_unionid_4c1b210102fc73b76910580e4e712f52";N;}
-?>

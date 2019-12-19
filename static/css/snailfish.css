@@ -23,6 +23,12 @@
 .snailfishicon-setup:before{
 	content: "\e64d";
 }
+.snailfishicon-perm:before{
+	content: "\ea9f";
+}
+.snailfishicon-attachment:before{
+	content: "\e618";
+}
 .snailfishicon-goods:before{
 	content: "\e678";
 }

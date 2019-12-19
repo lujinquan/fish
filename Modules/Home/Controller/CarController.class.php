@@ -4160,7 +4160,11 @@ public function sub_order()
 		
 	}
 	
-	
+	/**
+	 * 小程序订单支付 
+	 * Author Lucas 2019-12-18 10:36
+	 * @return [type] [description]
+	 */
 	public function wxpay()
 	{
 		$gpc = I('request.');
@@ -4169,6 +4173,7 @@ public function sub_order()
 		$order_id = $gpc['order_id'];
 		
 		
+
 		$weprogram_token = M('lionfish_comshop_weprogram_token')->field('member_id')->where( array('token' => $token) )->find();
 		
 		
@@ -4207,7 +4212,8 @@ public function sub_order()
 			die();
 		}
 		
-		
+		// echo json_encode(['flag'=>'测试一下']);
+		// die();
 		
 		//检测商品是否下架 begin
 		$sql = "select name,quantity,rela_goodsoption_valueid,goods_id from ".C('DB_PREFIX')."lionfish_comshop_order_goods  

@@ -926,7 +926,7 @@ class OrderController extends CommonController {
 	{
 		$gpc = I('request.');
 		$_GPC = $gpc;
-		
+
 		$is_tuanz  = isset($gpc['is_tuanz']) ? $gpc['is_tuanz'] :0;
 		$token = $gpc['token'];
 		
@@ -1108,14 +1108,14 @@ class OrderController extends CommonController {
 	                    order by o.date_added desc limit {$offset},{$size}";
 	 
 	    $list =  M()->query($sql);
-	   
+   
 	    $open_auto_delete = D('Home/Front')->get_config_by_name('open_auto_delete');
 	   
 	    $cancle_hour = D('Home/Front')->get_config_by_name('auto_cancle_order_time');
 		$cancle_hour_time = time() - 3600 * $cancle_hour;
 		
 	   
-	   $url = D('Home/Front')->get_config_by_name('shop_domain');
+	    $url = D('Home/Front')->get_config_by_name('shop_domain');
 	    //createTime
 	    foreach($list as $key => $val)
 	    {
@@ -1327,8 +1327,7 @@ class OrderController extends CommonController {
 	{
 		$gpc = I('request.');
 		
-		
-		
+
 		$order_data = $gpc['order_data'];
 		$token = $gpc['token'];
 		
