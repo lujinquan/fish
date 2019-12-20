@@ -423,6 +423,8 @@ class UserController extends CommonController {
 	
 	public function user_index_shareqrcode()
 	{
+		// $community_config_qrcode_json = D('Home/Front')->get_config_by_name('community_config_qrcode_65');
+		// dump(unserialize(htmlspecialchars_decode($community_config_qrcode_json)));exit;
 		$_GPC = I('request.');
 		
 		$token =  $_GPC['token'];
@@ -443,8 +445,9 @@ class UserController extends CommonController {
 		
 		$community_config_qrcode_json = D('Home/Front')->get_config_by_name('community_config_qrcode_'.$community_id );
 		
-		$community_config_qrcode_arr = unserialize($community_config_qrcode_json);
-		
+		//--------- 分享 Start ------ Author Lucas by 2019-12-19 18:03-------------
+		$community_config_qrcode_arr = unserialize(htmlspecialchars_decode($community_config_qrcode_json));
+
 		$load_new = false;
 		if( empty($community_config_qrcode_arr) )
 		{
@@ -455,7 +458,7 @@ class UserController extends CommonController {
 				$load_new = true;
 			}
 		}
-		
+	//dump($community_config_qrcode_arr);dump($load_new);exit;	
 		if( $load_new )
 		{
 			$goods_model = D('Home/Pingoods');

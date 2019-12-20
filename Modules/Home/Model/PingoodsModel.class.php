@@ -453,7 +453,7 @@ class PingoodsModel {
 		$thumb_goods_img = $wepro_qrcode;
 		
 		$wepro_qrcode = str_replace('Uploads/image/','',$wepro_qrcode);
-		
+	
 		$thumb_goods_img = resize($wepro_qrcode,180,180);
 		
 		list($thumb_goods_img_w, $thumb_goods_img_h, $thumb_goods_img_type) = getimagesize(ROOT_PATH.$thumb_goods_img);
@@ -1143,7 +1143,8 @@ class PingoodsModel {
 		
 	
 		$weqrcode = $jssdk->getAllWeQrcode('lionfish_comshop/pages/index/index',$community_id .'_'. $member_id,true,$qrcode_arr);
-		
+//--------- 调试二维码为什么没有生成的原因，报错41030，微信平台解释是小程序未上线导致 Start ------ Author Lucas by 2019-12-19 17:48-------------
+//dump($community_id);dump($member_id);dump($qrcode_arr);dump($weqrcode);exit;
 		
 		//line_color
 		

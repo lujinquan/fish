@@ -293,7 +293,7 @@ class OrderController extends CommonController {
 				$order_goods['price'] = round($order_goods['oldprice'],2);
 			}
 			$order_goods['real_total'] = round($order_goods['quantity'] * $order_goods['price'],2);
-			
+//dump($order_goods);exit;			
 			/**
 					$goods_images = file_image_thumb_resize($vv['goods_images'],400);
 					if(is_array($goods_images))
