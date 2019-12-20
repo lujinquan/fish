@@ -1753,13 +1753,15 @@ class PingoodsModel {
 	        $result['name'] = $goods_option_name;
 	        
 			if($member_id >0)
-			{				
+			{		
+
 				$member_info = M('lionfish_comshop_member')->field('level_id')->where( array('member_id' => $member_id ) )->find();
 				
 				if( $member_info['level_id'] > 0)
 				{
 					
 					$member_level_info = M('lionfish_comshop_member_level')->where( array('id' => $member_info['level_id'] ) )->find();
+
 				}
 			}
 	        
@@ -1780,6 +1782,20 @@ class PingoodsModel {
 						$val['pinprice'] = round( ($val['pinprice'] *  $member_level_info['discount']) /100 ,2);
 					}
 				}
+
+				//--------- 读取商品针对会员自定义折扣 Start ------ Author Lucas by 2019-12-20 10:58-------------
+				if($member_id >0 && $goods_common['is_mb_level_buy'] == 2)
+				{
+
+					if( $member_info['level_id'] > 0)
+					{
+						$member_level_info = M('lionfish_comshop_goods_discount_member')->where( array('member_level' => $member_info['level_id'],'goods_id' => $goods_id ) )->find();
+
+						$val['levelprice'] = round( ($val['marketprice'] *  $member_level_info['discount']) /100 ,2);
+						$val['pinprice'] = round( ($val['pinprice'] *  $member_level_info['discount']) /100 ,2);
+					}
+				}
+				//--------- 读取商品针对会员自定义折扣 End ----------------------------------------------------------
 		
 	        	$tmp_arr = array();
 	        	$tmp_arr['spec'] = 	$val['title'];
