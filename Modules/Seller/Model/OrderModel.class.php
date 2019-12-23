@@ -410,7 +410,7 @@ class OrderModel{
 			}
 			
 			
-		}else{
+		}else{ 
 			$sql = 'SELECT count(o.order_id) as count FROM ' . C('DB_PREFIX'). 'lionfish_comshop_order as o  '.$sqlcondition.' where ' .  $condition ;
 		
 			$total_arr = M()->query( $sql );
@@ -474,6 +474,11 @@ class OrderModel{
 				array('title' => '商品规格', 'field' => 'goods_optiontitle', 'width' => 12),
 				array('title' => '商品数量', 'field' => 'quantity', 'width' => 12),
 				array('title' => '商品单价', 'field' => 'goods_price1', 'width' => 12),
+
+				//--------- 导出订单 Start ------ Author Lucas by 2019-12-23 15:45-------------
+				array('title' => '流水号', 'field' => 'transaction_id', 'width' => 12),
+				//--------- 导出订单 End ------------------------------------------------------
+
 				//array('title' => '商品单价(折扣后)', 'field' => 'goods_price2', 'width' => 12),
 				//array('title' => '商品价格(折扣前)', 'field' => 'goods_rprice1', 'width' => 12),
 				array('title' => '商品价格', 'field' => 'goods_rprice2', 'width' => 12),
@@ -517,20 +522,21 @@ class OrderModel{
 			$exportlist = array();
 			
 			
-		
+	
 			if (!(empty($total))) {
 					
 					//begin 
 					set_time_limit(0);
-					 
+				 
 					$fileName = date('YmdHis', time());
+
 					header('Content-Type: application/vnd.ms-execl');
 					header('Content-Disposition: attachment;filename="订单数据' . $fileName . '.csv"');
 
 					$begin = microtime(true);
-					
+		
 					$fp = fopen('php://output', 'a');
-					
+
 					$step = 100;
 					$nums = 10000;
 					
@@ -540,14 +546,14 @@ class OrderModel{
 					$title  = array();
 					
 					foreach($columns as $key => $item) {
-						$title[$item['field']] = iconv('UTF-8', 'GBK', $item['title']);
+						$title[$item['field']] = iconv('UTF-8', 'GBK', $item['title']);	
 					}
 
 					fputcsv($fp, $title);
 					
 					//$page = ceil($total / 500);
 			
-					
+
 					$sqlcondition .= ' left join ' .C('DB_PREFIX') . 'lionfish_comshop_order_goods ogc on ogc.order_id = o.order_id ';
 					
 					
@@ -636,7 +642,11 @@ class OrderModel{
 								$tmp_exval['address_city'] = $city_info['name'];
 								$tmp_exval['address_area'] = $area_info['name'];
 								$tmp_exval['goods_goodssn'] = $val['model'];
-								
+
+								//--------- 导出订单 Start ------ Author Lucas by 2019-12-23 15:45-------------
+								$tmp_exval['transaction_id'] = "\t".$val['transaction_id'];
+								//--------- 导出订单 End ------------------------------------------------------
+								//dump($tmp_exval['transaction_id']);exit;
 								
 								$tmp_exval['address_address'] = $val['shipping_address'];
 								
@@ -768,10 +778,10 @@ class OrderModel{
 								foreach($columns as $key => $item) {
 									$row_arr[$item['field']] = iconv('UTF-8', 'GBK', $tmp_exval[$item['field']]);
 								}
-								
+								//dump($row_arr);exit;
 								fputcsv($fp, $row_arr);
 							}
-							
+							//exit;
 							ob_flush();
 							flush();
 							

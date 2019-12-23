@@ -453,7 +453,7 @@ class PingoodsModel {
 		$thumb_goods_img = $wepro_qrcode;
 		
 		$wepro_qrcode = str_replace('Uploads/image/','',$wepro_qrcode);
-		
+	
 		$thumb_goods_img = resize($wepro_qrcode,180,180);
 		
 		list($thumb_goods_img_w, $thumb_goods_img_h, $thumb_goods_img_type) = getimagesize(ROOT_PATH.$thumb_goods_img);

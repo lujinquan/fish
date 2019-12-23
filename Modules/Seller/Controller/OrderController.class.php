@@ -44,7 +44,7 @@ class OrderController extends CommonController{
 		
 		$_GET['type'] = 'normal';
 		
-		
+
 		$need_data = D('Seller/Order')->load_order_list();
 		
 		$cur_controller = 'order/index';
@@ -79,7 +79,7 @@ class OrderController extends CommonController{
 		$this->order_status_id = $order_status_id;
 		$this->is_community = I('request.is_community', 0);
 		$this->headid = I('request.headid', 0);
-		
+
 		$open_feier_print = D('Home/Front')->get_config_by_name('open_feier_print');
 		
 		if( empty($open_feier_print) )
@@ -129,7 +129,7 @@ class OrderController extends CommonController{
 			}
 	
 		}
-		
+	//dump($_GPC['is_fenxiao']);dump($_GPC['commiss_member_id']);dump($is_community);exit;
 		$this->is_can_look_headinfo = $is_can_look_headinfo;
 		$this->is_can_nowrfund_order = $is_can_nowrfund_order;
 		$this->is_can_confirm_delivery = $is_can_confirm_delivery;
@@ -551,6 +551,18 @@ class OrderController extends CommonController{
 	public function opsend_tuanz()
 	{
 	
+		$opdata = $this->check_order_data();
+		extract($opdata);
+		
+		D('Seller/Order')->do_send_tuanz($item['order_id']);
+		
+		show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
+	}
+
+	//配送团长
+	public function opsend_tuanz_all()
+	{
+		dump(1);exit;
 		$opdata = $this->check_order_data();
 		extract($opdata);
 		
