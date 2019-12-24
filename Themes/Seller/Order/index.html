@@ -245,7 +245,7 @@
 						<button class="layui-btn layui-btn-sm" data-export="0" type="submit"> 搜索</button>
 						<button type="submit" name="export" data-export="1" value="1" class="layui-btn layui-btn-sm">导出</button>
 						<?php if($order_status_id=='3'){ ?>
-						<button type="button" class="batchprocess" data-confirm="确认批批量确认付款吗？" data-href="{:U('order/opsend_all',array('order_status'=>3))}" name="batchprocess" value="1" class="layui-btn layui-btn-sm">批量确认付款</button>
+						<button type="button" data-confirm="确认批批量确认付款吗？" data-href="{:U('order/opsend_all',array('order_status'=>3))}" name="batchprocess" value="1" class="layui-btn layui-btn-sm batchprocess">批量确认付款</button>
 						<?php }elseif($order_status_id=='1'){ ?>
 						<button type="button" data-confirm="确认批量配送吗？" data-href="{:U('order/opsend_tuanz_all',array('order_status'=>1))}" name="batchprocess" value="14" class="layui-btn layui-btn-sm batchprocess">批量配送</button>
 						<?php }elseif($order_status_id=='14'){ ?>
