@@ -154,11 +154,12 @@ class OrderController extends CommonController{
 		$this->id = $item['order_id'];
 		include $this->display();
 	}
-	private function check_order_data()
+
+	private function check_order_data($id = '')
 	{
 		
 	
-		$id = I('request.id',0);
+		$id = $id?$id:I('request.id',0);
 		
 		$item = M('lionfish_comshop_order')->where( array('order_id' => $id) )->find();
 		
@@ -207,7 +208,6 @@ class OrderController extends CommonController{
 			show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
 		}
 
-
 		$sendgoods = array();
 		$bundles = array();
 
@@ -242,9 +242,6 @@ class OrderController extends CommonController{
 			$street = $_GPC['street'];
 			$changead = intval($_GPC['changead']);
 			$address = trim($_GPC['address']);
-
-			
-			
 			
 			if (!(empty($id))) {
 				if (empty($realname)) {
@@ -325,6 +322,40 @@ class OrderController extends CommonController{
 		
 		
 		show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
+	}
+
+	/**
+	 * 批量确认送达团长
+	 * @return [type] [description]
+	 */
+	public function opsend_tuanz_over_all()
+	{
+		$ids =  I('request.ids');
+
+		foreach ($ids as $id) {
+
+			$opdata = $this->check_order_data($id);
+			extract($opdata);
+			//express_tuanz_time D('Home/Frontorder')->send_order_operate($order_info['order_id']);
+			
+			D('Seller/Order')->do_tuanz_over($item['order_id']);
+			//D('Seller/Frontorder')->send_order_operate($item['order_id']);
+			
+			$history_data = array();
+			$history_data['order_id'] = $item['order_id'];
+			$history_data['order_status_id'] = 4;
+			$history_data['notify'] = 0;
+			$history_data['comment'] = '后台手动操作发货到团长';
+			$history_data['date_added'] = time();
+			
+			M('lionfish_comshop_order_history')->add( $history_data );
+			
+			D('Home/Frontorder')->send_order_operate($item['order_id']);
+			
+			
+			show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
+		}
+		
 	}
 	
 	public function opprint()
@@ -559,16 +590,23 @@ class OrderController extends CommonController{
 		show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
 	}
 
-	//配送团长
+	/**
+	 * 批量配送团长
+	 * @return [type] [description]
+	 */
 	public function opsend_tuanz_all()
 	{
-		dump(1);exit;
-		$opdata = $this->check_order_data();
-		extract($opdata);
+		$ids =  I('request.ids');
+
+		foreach ($ids as $id) {
+			$opdata = $this->check_order_data($id);
+			extract($opdata);
+			
+			D('Seller/Order')->do_send_tuanz($item['order_id']);
+			
+			show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
+		}
 		
-		D('Seller/Order')->do_send_tuanz($item['order_id']);
-		
-		show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
 	}
 	
 	public function opsend()
@@ -663,6 +701,70 @@ class OrderController extends CommonController{
 		$this->id = $item['order_id'];
 		
 		$this->display();
+	}
+
+	public function opsend_all()
+	{
+		$ids =  I('request.ids');
+
+		if (IS_POST) {
+			
+			foreach ($ids as $id) {
+
+				$opdata = $this->check_order_data($id);
+				extract($opdata);
+
+				if (empty($item['address_id'])) {
+					show_json(0,  array('message' => '无收货地址，无法发货！'));
+				}
+
+				if ($item['order_status_id'] == 3) {
+					show_json(0, array('message' => '订单未付款，无法发货！'));
+				}
+
+				if (!(empty($_GPC['shipping_no'])) && empty($_GPC['shipping_no'])) {
+					show_json(0, array('message' => '请输入快递单号！')  );
+				}
+				
+				if ( empty($_GPC['express']) ) {
+					show_json(0, array('message' => '请选择快递公司！'));
+				}
+				
+				if (!(empty($item['transid']))) {
+
+				}
+
+				$express_info = D('Seller/Express')->get_express_info($_GPC['express']);
+				
+				$time = time();
+				$data = array(
+					'shipping_method' => trim($_GPC['express']), 
+					'shipping_no' => trim($_GPC['shipping_no']), 
+					'dispatchname' => $express_info['name'], 
+					'express_time' => $time
+				);
+				
+				$data['order_status_id'] = 4;
+				
+				M('lionfish_comshop_order')->where( array('order_id' => $item['order_id']) )->save( $data );
+			
+				$history_data = array();
+				$history_data['order_id'] = $item['order_id'];
+				$history_data['order_status_id'] = 4;
+				$history_data['notify'] = 0;
+				$history_data['comment'] = '订单发货 ID: ' . $item['order_id'] . ' 订单号: ' . $item['order_num_alias'] . ' <br/>快递公司: ' . $express_info['name'] . ' 快递单号: ' . $_GPC['shipping_no'];
+				$history_data['date_added'] = time();
+				
+				M('lionfish_comshop_order_history')->add($history_data);
+					
+				D('Home/Frontorder')->send_order_operate($item['order_id']);
+					
+				show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
+			}
+
+		}
+
+
 	}
 	
 	// 11  已完成
@@ -927,6 +1029,30 @@ class OrderController extends CommonController{
 		
 		
 		show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
+	}
+
+	/**
+	 * 批量收货
+	 * @return [type] [description]
+	 */
+	public function opreceive_all()
+	{
+		$ids =  I('request.ids');
+
+		foreach ($ids as $id) {
+			$opdata = $this->check_order_data($id);
+			extract($opdata);
+			
+			//pdo_update('lionfish_comshop_order', array('order_status_id' => 6, 'receive_time' => time()), array('order_id' => $item['order_id'], 'uniacid' => $_W['uniacid']));
+			
+			D('Seller/Order')->receive_order($item['order_id']);
+			
+			M('lionfish_comshop_order_history')->where( array('order_id' => $item['order_id'],'order_status_id' => 6) )->save( array( 'comment' => '后台操作，确认收货') );
+			
+			
+			show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
+		}
+
 	}
 	
 	 public function orderaftersales()

@@ -245,13 +245,13 @@
 						<button class="layui-btn layui-btn-sm" data-export="0" type="submit"> 搜索</button>
 						<button type="submit" name="export" data-export="1" value="1" class="layui-btn layui-btn-sm">导出</button>
 						<?php if($order_status_id=='3'){ ?>
-						<button type="button" class="batchprocess" data-href="{:U('order/opsend_all',array('order_status'=>3))}" name="batchprocess" value="1" class="layui-btn layui-btn-sm">批量发货</button>
+						<button type="button" class="batchprocess" data-confirm="确认批批量确认付款吗？" data-href="{:U('order/opsend_all',array('order_status'=>3))}" name="batchprocess" value="1" class="layui-btn layui-btn-sm">批量确认付款</button>
 						<?php }elseif($order_status_id=='1'){ ?>
-						<button type="button" class="batchprocess" data-href="{:U('order/opsend_tuanz_all',array('order_status'=>1))}" name="batchprocess" value="14" class="layui-btn layui-btn-sm">批量配送</button>
+						<button type="button" class="batchprocess" data-confirm="确认批量配送吗？" data-href="{:U('order/opsend_tuanz_all',array('order_status'=>1))}" name="batchprocess" value="14" class="layui-btn layui-btn-sm">批量配送</button>
 						<?php }elseif($order_status_id=='14'){ ?>
-						<button type="button" class="batchprocess" data-href="{:U('order/opreceive_all',array('order_status'=>14))}" name="batchprocess" value="6" class="layui-btn layui-btn-sm">批量收货</button>
+						<button type="button" class="batchprocess" data-confirm="确认批量送达团长吗？" data-href="{:U('order/opsend_tuanz_over_all',array('order_status'=>14))}" name="batchprocess" value="6" class="layui-btn layui-btn-sm">批量送达团长</button>
 						<?php }elseif($order_status_id=='4'){ ?>
-						<button type="button" class="batchprocess" data-href="{:U('order/opreceive',array('order_status'=>4))}" name="batchprocess" value="11" class="layui-btn layui-btn-sm">批量确认收货</button>
+						<button type="button" class="batchprocess" data-confirm="批量确认收货吗？" data-href="{:U('order/opreceive_all',array('order_status'=>4))}" name="batchprocess" value="11" class="layui-btn layui-btn-sm">批量收货</button>
 						<?php } ?>				
 					</div>
 				  </div>
