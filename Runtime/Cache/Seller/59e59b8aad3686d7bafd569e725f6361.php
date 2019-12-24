@@ -238,11 +238,19 @@
 					</div>
 					 <input type="hidden" name="export" id="export" value="0">
 					
-					<div class="layui-input-inline">
+					<div class="layui-input-inline" style="width: 260px;">
 						<button class="layui-btn layui-btn-sm" data-export="0" type="submit"> 搜索</button>
 						<button type="submit" name="export" data-export="1" value="1" class="layui-btn layui-btn-sm">导出</button>
+						<?php if($order_status_id=='3'){ ?>
+						<button type="button" class="batchprocess" data-confirm="确认批批量确认付款吗？" data-href="<?php echo U('order/opsend_all',array('order_status'=>3));?>" name="batchprocess" value="1" class="layui-btn layui-btn-sm">批量确认付款</button>
+						<?php }elseif($order_status_id=='1'){ ?>
+						<button type="button" data-confirm="确认批量配送吗？" data-href="<?php echo U('order/opsend_tuanz_all',array('order_status'=>1));?>" name="batchprocess" value="14" class="layui-btn layui-btn-sm batchprocess">批量配送</button>
+						<?php }elseif($order_status_id=='14'){ ?>
+						<button type="button" data-confirm="确认批量送达团长吗？" data-href="<?php echo U('order/opsend_tuanz_over_all',array('order_status'=>14));?>" name="batchprocess" value="6" class="layui-btn layui-btn-sm batchprocess">批量送达团长</button>
+						<?php }elseif($order_status_id=='4'){ ?>
+						<button type="button" data-confirm="批量确认收货吗？" data-href="<?php echo U('order/opreceive_all',array('order_status'=>4));?>" name="batchprocess" value="11" class="layui-btn layui-btn-sm batchprocess">批量收货</button>
+						<?php } ?>				
 					</div>
-               
 				  </div>
 				</div>
 			</form>
@@ -254,6 +262,9 @@
 						<table cellpadding="0" cellspacing="0" border="0">
                             <thead>
                                 <tr>
+                                	<th width="2%" style=" padding-left: 10px;">
+										<input type='checkbox' name="checkall" lay-skin="primary" lay-filter="checkboxall"  />
+									</th>
                                     <th width="3%" class="sign"><div class="tDiv">
 									<label for="all_list" class="checkbox_stars"></label></div></th>
                                     <th width="25%"><div class="tDiv">订单号</div></th>
@@ -270,6 +281,7 @@
 						
 						<table cellpadding="0" cellspacing="0" border="0">
                             <colgroup>
+								<col width="2%">
                                 <col width="28%">
                                 <col width="9%">
                                 <col width="12%">
@@ -364,9 +376,11 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <tr class="">
-                                    <td class="td-product">
-                                    		
+                                <tr>
+                                	<td style="padding-left: 10px;">
+										<input type='checkbox' name="item_checkbox" class="checkone" lay-skin="primary" value="<?php echo ($item['order_id']); ?>"/>
+									</td>
+                                    <td class="td-product">	
 										
 										<?php $i =1; foreach($item['goods'] as $k => $g){ ?>										
 										<div class="tDiv relative tpinfo <?php if($i == count($item['goods'])){ ?>last<?php } ?> ">
@@ -676,41 +690,99 @@ var $;
 layui.use(['jquery', 'layer','form'], function(){ 
   $ = layui.$;
   var form = layui.form;
-  
+
+  //alert(3);
+  // 批量配送
+  	
+  		
+
+    $(".batchprocess").click(function () {
+    	var that = $(this);
+    	var ids_arr = [];
+    	$("input[name=item_checkbox]").each(function() {
+			
+			if( $(this).prop('checked') )
+			{
+				ids_arr.push( $(this).val() );
+			}
+		})
+		
+		//console.log(ids_arr);return false;
+
+		if(ids_arr.length < 1)
+		{
+			layer.msg('请选择要操作的内容');
+			return false;
+		}
+
+        var s_url = that.attr('data-href');
+		layer.confirm(that.attr('data-confirm'), function(index){
+			 $.ajax({
+				url:s_url,
+				type:'post',
+				dataType:'json',
+				data:{ids:ids_arr},
+				success:function(info){
+					$('#ajaxModal').removeClass('in');
+					$('.modal-backdrop').removeClass('in');
+					if(info.status == 0)
+					{
+						layer.msg(info.result.message,{icon: 1,time: 2000});
+					}else if(info.status == 1){
+						var go_url = location.href;
+						if( info.result.hasOwnProperty("url") )
+						{
+							go_url = info.result.url;
+						}
+						
+						layer.msg('操作成功',{time: 1000,
+							end:function(){
+								location.href = info.result.url;
+							}
+						}); 
+					}
+				}
+			})
+		},function(){
+			console.log(232323);
+			$('#ajaxModal').removeClass('in');
+			$('.modal-backdrop').removeClass('in');
+		});
+    });
   
 	$('.deldom').click(function(){
 		var s_url = $(this).attr('data-href');
 		layer.confirm($(this).attr('data-confirm'), function(index){
-					 $.ajax({
-						url:s_url,
-						type:'post',
-						dataType:'json',
-						success:function(info){
-							$('#ajaxModal').removeClass('in');
-							$('.modal-backdrop').removeClass('in');
-							if(info.status == 0)
-							{
-								layer.msg(info.result.message,{icon: 1,time: 2000});
-							}else if(info.status == 1){
-								var go_url = location.href;
-								if( info.result.hasOwnProperty("url") )
-								{
-									go_url = info.result.url;
-								}
-								
-								layer.msg('操作成功',{time: 1000,
-									end:function(){
-										location.href = info.result.url;
-									}
-								}); 
-							}
-						}
-					})
-				},function(){
-					console.log(232323);
+			 $.ajax({
+				url:s_url,
+				type:'post',
+				dataType:'json',
+				success:function(info){
 					$('#ajaxModal').removeClass('in');
 					$('.modal-backdrop').removeClass('in');
-				}); 
+					if(info.status == 0)
+					{
+						layer.msg(info.result.message,{icon: 1,time: 2000});
+					}else if(info.status == 1){
+						var go_url = location.href;
+						if( info.result.hasOwnProperty("url") )
+						{
+							go_url = info.result.url;
+						}
+						
+						layer.msg('操作成功',{time: 1000,
+							end:function(){
+								location.href = info.result.url;
+							}
+						}); 
+					}
+				}
+			})
+		},function(){
+			console.log(232323);
+			$('#ajaxModal').removeClass('in');
+			$('.modal-backdrop').removeClass('in');
+		}); 
 	})
 	
 	$('.btn-operation').click(function(){
@@ -982,6 +1054,7 @@ $(function(){
 				}	
 		})
     });
+    
 	$(document).delegate(".modal-footer .btn-primary","click",function(){
 		var s_data = $('#ajaxModal form').serialize();
 		$.ajax({
