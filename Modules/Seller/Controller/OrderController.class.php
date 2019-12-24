@@ -691,71 +691,6 @@ class OrderController extends CommonController{
 		$this->display();
 	}
 
-	public function opsend_all()
-	{
-		$ids =  I('request.ids');
-
-		if (IS_POST) {
-			
-			foreach ($ids as $id) {
-
-				$opdata = $this->check_order_data($id);
-				extract($opdata);
-
-				if (empty($item['address_id'])) {
-					show_json(0,  array('message' => '无收货地址，无法发货！'));
-				}
-
-				if ($item['order_status_id'] == 3) {
-					show_json(0, array('message' => '订单未付款，无法发货！'));
-				}
-
-				if (!(empty($_GPC['shipping_no'])) && empty($_GPC['shipping_no'])) {
-					show_json(0, array('message' => '请输入快递单号！')  );
-				}
-				
-				if ( empty($_GPC['express']) ) {
-					show_json(0, array('message' => '请选择快递公司！'));
-				}
-				
-				if (!(empty($item['transid']))) {
-
-				}
-
-				$express_info = D('Seller/Express')->get_express_info($_GPC['express']);
-				
-				$time = time();
-				$data = array(
-					'shipping_method' => trim($_GPC['express']), 
-					'shipping_no' => trim($_GPC['shipping_no']), 
-					'dispatchname' => $express_info['name'], 
-					'express_time' => $time
-				);
-				
-				$data['order_status_id'] = 4;
-				
-				M('lionfish_comshop_order')->where( array('order_id' => $item['order_id']) )->save( $data );
-			
-				$history_data = array();
-				$history_data['order_id'] = $item['order_id'];
-				$history_data['order_status_id'] = 4;
-				$history_data['notify'] = 0;
-				$history_data['comment'] = '订单发货 ID: ' . $item['order_id'] . ' 订单号: ' . $item['order_num_alias'] . ' <br/>快递公司: ' . $express_info['name'] . ' 快递单号: ' . $_GPC['shipping_no'];
-				$history_data['date_added'] = time();
-				
-				M('lionfish_comshop_order_history')->add($history_data);
-					
-				D('Home/Frontorder')->send_order_operate($item['order_id']);
-					
-				
-			}
-
-			show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
-
-		}
-
-
-	}
 	
 	// 11  已完成
 	public function opfinish()
@@ -792,6 +727,33 @@ class OrderController extends CommonController{
 		
 		
 		$res_arr = D('Seller/Order')->admin_pay_order($order_id);
+		
+		
+		if( $res_arr['code'] == 0)
+		{
+			show_json(0, array('msg' => $res_arr['msg']) );
+		}else{
+			show_json(1,  array('url' => $_SERVER['HTTP_REFERER']));	
+		}
+	}
+
+	public function oppay_all()
+	{
+		
+		if (defined('ROLE') && ROLE == 'agenter' )
+		{
+			show_json(0, array('msg' => '您无此权限') );
+		}
+		
+		//$order_id = I('request.id');
+		
+		$ids =  I('request.ids');
+//dump($ids);exit;
+		foreach ($ids as $id) {
+			$res_arr = D('Seller/Order')->admin_pay_order($id);
+		}
+		
+		
 		
 		
 		if( $res_arr['code'] == 0)
