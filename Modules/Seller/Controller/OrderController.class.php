@@ -155,22 +155,7 @@ class OrderController extends CommonController{
 		include $this->display();
 	}
 
-	private function check_order_data($id = '')
-	{
-		
 	
-		$id = $id?$id:I('request.id',0);
-		
-		$item = M('lionfish_comshop_order')->where( array('order_id' => $id) )->find();
-		
-		if (empty($item)) {
-			
-				show_json(0, '未找到订单!');
-			
-		}
-
-		return array('id' => $id, 'item' => $item);
-	}
 	
 	public function opsendcancel()
 	{
@@ -324,6 +309,8 @@ class OrderController extends CommonController{
 		show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
 	}
 
+	
+
 	/**
 	 * 批量确认送达团长
 	 * @return [type] [description]
@@ -331,9 +318,9 @@ class OrderController extends CommonController{
 	public function opsend_tuanz_over_all()
 	{
 		$ids =  I('request.ids');
-
+//dump($ids);exit;
 		foreach ($ids as $id) {
-
+//dump($id);
 			$opdata = $this->check_order_data($id);
 			extract($opdata);
 			//express_tuanz_time D('Home/Frontorder')->send_order_operate($order_info['order_id']);
@@ -353,9 +340,10 @@ class OrderController extends CommonController{
 			D('Home/Frontorder')->send_order_operate($item['order_id']);
 			
 			
-			show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
+			
 		}
 		
+		show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
 	}
 	
 	public function opprint()
@@ -604,9 +592,9 @@ class OrderController extends CommonController{
 			
 			D('Seller/Order')->do_send_tuanz($item['order_id']);
 			
-			show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
+			
 		}
-		
+		show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
 	}
 	
 	public function opsend()
@@ -759,8 +747,10 @@ class OrderController extends CommonController{
 					
 				D('Home/Frontorder')->send_order_operate($item['order_id']);
 					
-				show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
+				
 			}
+
+			show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
 
 		}
 
@@ -1031,6 +1021,23 @@ class OrderController extends CommonController{
 		show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
 	}
 
+	private function check_order_data($id = '')
+	{
+		
+	
+		$id = $id?$id:I('request.id',0);
+		
+		$item = M('lionfish_comshop_order')->where( array('order_id' => $id) )->find();
+		//dump($item);
+		if (empty($item)) {
+			
+				show_json(0, '未找到订单!');
+			
+		}
+
+		return array('id' => $id, 'item' => $item);
+	}
+
 	/**
 	 * 批量收货
 	 * @return [type] [description]
@@ -1038,20 +1045,20 @@ class OrderController extends CommonController{
 	public function opreceive_all()
 	{
 		$ids =  I('request.ids');
-
+//dump($ids);exit;
 		foreach ($ids as $id) {
 			$opdata = $this->check_order_data($id);
 			extract($opdata);
 			
-			//pdo_update('lionfish_comshop_order', array('order_status_id' => 6, 'receive_time' => time()), array('order_id' => $item['order_id'], 'uniacid' => $_W['uniacid']));
 			
 			D('Seller/Order')->receive_order($item['order_id']);
 			
 			M('lionfish_comshop_order_history')->where( array('order_id' => $item['order_id'],'order_status_id' => 6) )->save( array( 'comment' => '后台操作，确认收货') );
 			
 			
-			show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
+			
 		}
+		show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
 
 	}
 	
