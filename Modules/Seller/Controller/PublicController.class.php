@@ -25,7 +25,6 @@ class PublicController extends \Think\Controller {
 	    }
         C($config); //添加配置
 		
-		
         if(IS_POST){
     	
 		if(empty($username)){
@@ -36,9 +35,6 @@ class PublicController extends \Think\Controller {
 		
 		//孕育小主
 		$seller=M('Seller')->where( array('s_uname' => $username) )->find();
-		
-		
-		
 		
 		//用户存在且可用|| true
 		if($seller&&$seller['s_status']==1){
