@@ -462,7 +462,9 @@ private $data = array();
 					
 					$member_info = M('lionfish_comshop_member')->field('level_id')->where( array('member_id' => $member_id) )->find();
 					
-					$goods_common = M('lionfish_comshop_good_common')->field('is_mb_level_buy')->where( array('goods_id' => $goods_id ) )->find();
+					$goods_common = M('lionfish_comshop_good_common')->field('is_mb_level_buy,supply_id')->where( array('goods_id' => $goods_id ) )->find();
+
+					$goods_supply = M('lionfish_comshop_supply')->field('shopname')->where( array('id' => $goods_common['supply_id'] ) )->find();
 
 					$goods_query['is_mb_level_buy'] = 0;
 					$goods_query['levelprice'] = 0;
@@ -569,6 +571,7 @@ private $data = array();
 						'seller_logo' => $s_logo,
                         'weight' => $option_weight,
 						'singledel' => $val['singledel'],
+						'shopname' => $goods_supply['shopname']?$goods_supply['shopname']:'平台自营',
 						//$val['singledel']
 						'can_man_jian' => $can_man_jian,
                         'header_disc' => $header_disc,

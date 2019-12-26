@@ -619,9 +619,8 @@ class GoodsController extends CommonController {
 		
         $need_data = array();
 		
-        $sql = "select g.*,gd.content,gd.begin_time,gd.end_time,gd.video,gd.is_take_fullreduction,gd.goods_share_image,gd.share_title,gd.quality,gd.pick_up_type,gd.pick_up_modify,gd.one_limit_count,gd.total_limit_count,gd.seven,gd.repair,gd.labelname,gd.share_title,gd.relative_goods_list,gd.is_show_arrive,gd.diy_arrive_switch,gd.diy_arrive_details     
-				from " . C('DB_PREFIX') . "lionfish_comshop_goods g," . C('DB_PREFIX') . "lionfish_comshop_good_common gd 
-				where g.id=gd.goods_id and g.id=" . $id;
+        $sql = "select g.*,gd.content,gd.begin_time,gd.end_time,gd.video,gd.is_take_fullreduction,gd.goods_share_image,gd.share_title,gd.quality,gd.pick_up_type,gd.pick_up_modify,gd.one_limit_count,gd.total_limit_count,gd.seven,gd.repair,gd.labelname,gd.share_title,gd.relative_goods_list,gd.is_show_arrive,gd.diy_arrive_switch,gd.diy_arrive_details,gs.shopname     
+				from " . C('DB_PREFIX') . "lionfish_comshop_goods g," . C('DB_PREFIX') . "lionfish_comshop_good_common gd left join ".C('DB_PREFIX')."lionfish_comshop_supply as gs" ." on  gd.supply_id=gs.id where g.id=gd.goods_id and g.id=" . $id;
         
 		
 	
@@ -650,6 +649,9 @@ class GoodsController extends CommonController {
 		$goods['full_money'] = $full_money;
 		$goods['full_reducemoney'] = $full_reducemoney;
 		
+		//--------- 获取小程序商品列表供应商 Start ------ Author Lucas by 2019-12-26 16:04-----------------
+		$goods['supplier'] = $goods['shopname']?$goods['shopname']:'平台自营';
+		//--------- 获取小程序商品列表供应商 End ---------------------------------------------------------
 		
 		
 		$goods['is_video'] = 0;
@@ -1178,6 +1180,8 @@ class GoodsController extends CommonController {
 		
 		$need_data['cur_time'] = time();
 		$need_data['pin_id'] = $pin_id;
+
+		//$need_data['shopname'] = $goods['shopname']?$goods['shopname']:'平台自营';
 		
 		$need_data['is_show_arrive'] = $goods['is_show_arrive'];
 		$need_data['diy_arrive_switch'] = $goods['diy_arrive_switch'];

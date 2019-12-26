@@ -942,7 +942,7 @@ class CarController extends CommonController {
 		
 		$goods = $cart->get_all_goodswecar($buy_type, $token, 0, $community_id);
 	
-
+//dump($goods);exit;
 		$seller_goodss = array();
 
 		$seller_goodss_mult = array();
@@ -1018,6 +1018,7 @@ class CarController extends CommonController {
 						$tp_val['isselect'] = false;
 					}
 					
+					$tp_val['shopname'] = $d_goods['shopname'];
 					$tp_val['imgurl'] = $d_goods['image'];
 					$tp_val['edit'] = 'inline';
 					$tp_val['title'] = $d_goods['name'];
@@ -1084,7 +1085,7 @@ class CarController extends CommonController {
 					$store_data['isselect'] = false;
 				}
 				
-				$store_data['shopname'] = $store_info['s_true_name'];
+				$store_data['shopname'] = $store_info['s_true_name']?$store_info['s_true_name']:'平台自营';
 				$store_data['caredit'] = 'inline';
 				$store_data['finish'] = 'none';
 				$store_data['count'] = '0.00';
@@ -1170,6 +1171,7 @@ class CarController extends CommonController {
 				
 				$tp_val['can_buy'] = D('Home/Pingoods')->get_goods_time_can_buy($d_goods['goods_id']);
 				
+				$tp_val['shopname'] = $d_goods['shopname'];
 				$tp_val['goodstype'] = $option_str;
 				$tp_val['goodstypeedit'] = $option_str;
 				$tp_val['goodsnum'] = $d_goods['quantity'];
@@ -1208,7 +1210,7 @@ class CarController extends CommonController {
 				$store_data['isselect'] = false;
 			}
 			
-			$store_data['shopname'] = $store_info['s_true_name'];
+			$store_data['shopname'] = $store_info['s_true_name']?$store_info['s_true_name']:'平台自营';
 			$store_data['caredit'] = 'inline';
 			$store_data['finish'] = 'none';
 			$store_data['count'] = '0.00';
@@ -1274,7 +1276,7 @@ class CarController extends CommonController {
 		$need_data['vipcard_save_money'] = $vipcard_save_money;//vip能节约的金额
 		$need_data['is_open_vipcard_buy'] = $is_open_vipcard_buy;//vip能节约的金额
 		$need_data['modify_vipcard_name'] = $modify_vipcard_name;
-		
+		//dump(1);exit;
 		echo json_encode( $need_data );
 		die();
 		
@@ -1639,7 +1641,7 @@ class CarController extends CommonController {
 	{
 		$gpc = I('request.');
 		
-		
+		//dump($gpc);exit;
 	  $buy_type = isset($gpc['buy_type']) ? $gpc['buy_type'] : 'dan';
 	  
 	  $pintuan_model_buy = D('Home/Front')->get_config_by_name('pintuan_model_buy');
@@ -2066,9 +2068,9 @@ class CarController extends CommonController {
 		
 		$seller_goodss[$store_id] = $val;
 	}
-	
+
 	$trans_free_toal = 0;//运费
-   
+  
 	//delivery_type_ziti  delivery_type_express    delivery_type_tuanz  delivery_tuanz_money
 	
 	$delivery_type_ziti = D('Home/Front')->get_config_by_name('delivery_type_ziti');
@@ -2673,7 +2675,7 @@ class CarController extends CommonController {
 		//$need_data['trans_free_toal'] = 0;
 		//$need_data['is_zero_opentuan'] = 1;
 	}
-	
+	//dump(1);exit;
 	echo json_encode($need_data);
 	die();
 }
