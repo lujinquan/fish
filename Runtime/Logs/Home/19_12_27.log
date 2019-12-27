@@ -1,0 +1,3 @@
+[ 2019-12-27T19:21:55+08:00 ] 117.152.212.143 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=5610a7f21f59a75bb8dcf87a5d6db23f&controller=index.load_gps_community&token=70b2875cfa9318278b3043fec1d6d5b9&pageNum=1&longitude=&latitude=&city_id=0
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*PI()/180-lat*PI()/180)/2),2)+COS(*PI()/180)*COS(lat*PI()/180)*POW(SIN((*PI()/18' at line 1
+
