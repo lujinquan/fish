@@ -16,11 +16,10 @@ use Admin\Model\OrderModel;
 class OrderController extends CommonController{
 	
 	protected function _initialize(){
-		parent::_initialize();
-		
+		parent::_initialize();	
 	}
 	
-     public function index(){
+    public function index(){
      	
 		$time = I('request.time');
 		
@@ -129,7 +128,7 @@ class OrderController extends CommonController{
 			}
 	
 		}
-	//dump($_GPC['is_fenxiao']);dump($_GPC['commiss_member_id']);dump($is_community);exit;
+//dump($_GPC['is_fenxiao']);dump($_GPC['commiss_member_id']);dump($is_community);exit;
 		$this->is_can_look_headinfo = $is_can_look_headinfo;
 		$this->is_can_nowrfund_order = $is_can_nowrfund_order;
 		$this->is_can_confirm_delivery = $is_can_confirm_delivery;
