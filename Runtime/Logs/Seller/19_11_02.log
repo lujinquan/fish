@@ -1,9 +1,0 @@
-[ 2019-11-02T17:25:36+08:00 ] 103.63.154.94 /seller.php?s=/util/query/full/0/ok/1&kw=%E6%96%B0%E4%BA%BA%E4%B8%93%E4%BA%AB&type=url&_=1572686667879
-ERR: Think\Controller:searchUrl方法不存在！
-
-[ 2019-11-02T17:26:58+08:00 ] 103.63.154.94 /seller.php?s=/util/query/full/0/ok/1&kw=%E6%96%B0%E4%BA%BA%E4%B8%93%E4%BA%AB&type=url&_=1572686667880
-ERR: Think\Controller:searchUrl方法不存在！
-
-[ 2019-11-02T17:26:58+08:00 ] 103.63.154.94 /seller.php?s=/util/query/full/0/ok/1&kw=%E6%96%B0%E4%BA%BA%E4%B8%93%E4%BA%AB&type=url&_=1572686667881
-ERR: Think\Controller:searchUrl方法不存在！
-
