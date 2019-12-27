@@ -1,3 +1,0 @@
-[ 2019-10-31T14:15:41+08:00 ] 182.200.213.8 /wxapp.php?i=undefined&t=undefined&v=undefined&from=wxapp&c=entry&a=wxapp&do=index&m=lionfish_comshop&sign=d67f06246266e8e2fa304c4d4bee48df&controller=index.load_gps_community&token=&pageNum=1&longitude=123.3842662217882&latitude=41.79869954427083&city_id=1804
-ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'distance <= 3000 order by distance asc limit 0,10' at line 1
-

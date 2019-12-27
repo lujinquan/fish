@@ -979,17 +979,44 @@
 										<label class="col-sm-2 control-label">是否参与会员折扣</label>
 										<div class="col-sm-9 col-xs-12">
 											
-												<input type="radio"  value="1" name="is_mb_level_buy" <?php if(!isset($item['is_mb_level_buy']) || $item['is_mb_level_buy']==1){ ?>checked<?php } ?> title="参与" /> 
+												<input type="radio" lay-filter="is_mb_level_buy" value="1" name="is_mb_level_buy" class="is_mb_level_buy" <?php if(!isset($item['is_mb_level_buy']) || $item['is_mb_level_buy']==1){ ?>checked<?php } ?> title="参与" /> 
 											
-												<input type="radio"  value="0" name="is_mb_level_buy" <?php if($item['is_mb_level_buy']==0){ ?>checked<?php } ?> title="不参与" /> 
+												<input type="radio" lay-filter="is_mb_level_buy" value="0" name="is_mb_level_buy" class="is_mb_level_buy" <?php if($item['is_mb_level_buy']==0){ ?>checked<?php } ?> title="不参与" /> 
+
+												<input type="radio" lay-filter="is_mb_level_buy" value="2" name="is_mb_level_buy" class="is_mb_level_buy" <?php if($item['is_mb_level_buy']==2){ ?>checked<?php } ?> title="自定义" />
 											
 												<span class="help-block">如果不参与会员折扣，则不打折</span>
-											
 										</div>
 									</div>
-									
+									<!-- --------- 会员等级折扣 Start ------ Author Lucas by 2019-12-19 15:20------------- -->
+									<div style="clear:both;"></div>
+									<?php foreach($goods_discounts as $goods_discount){ ?>
+										<div class="form-group j-member-discount" >
+											<label class="col-sm-2 control-label"><?php echo ($goods_discount['levelname']); ?></label>
+											<div class="col-sm-4 col-xs-12">
+												<div class="input-group">
+													<input type="text" name="member_level_<?php echo ($goods_discount['member_level']); ?>" id="commission1_rate" class="form-control" value="<?php echo ($goods_discount['discount']); ?>" />
+													<div class="input-group-addon">% 折扣（100%为不打折）</div>
+												</div>
+											</div>
+										</div>
+									<?php }; ?>
+									<!-- --------- 会员等级折扣 End ---------------------------------------------------------- -->
+										
+									</div>
 								</div>
-							</div>
+								</div>
+								
+									<div id="commission_div" <?php if(empty($item['hascommission'])){ ?>style="display:none"<?php } ?> >
+
+
+										<div id="commission_0"  <?php if($commission_type!=0){ ?> style="display:none;" <?php } ?>>
+										<div class='alert alert-danger'>
+											如果比例为空，则使用固定规则，如果都为空则无分销佣金，都填写则以比例优先
+										</div>
+										
+										
+			
 							<?php } ?>
 							
 					</div>
@@ -1077,15 +1104,39 @@ layui.use(['jquery', 'layer','form'], function(){
   $ = layui.$;
 	form = layui.form;
   
-  console.log(22);
-  
 	form.on('radio(linktype)', function(data){
 		if (data.value == 2) {
 			$('#typeGroup').show();
 		} else {
 			$('#typeGroup').hide();
 		}
-	});  
+	});
+
+
+	//--------- 会员等级折扣 Start ------ Author Lucas by 2019-12-19 17:48-------------
+	var is_mb_level_buy = $("input[name='is_mb_level_buy']:checked").val();
+	console.log('是否参与会员折扣：' , is_mb_level_buy);
+	if(is_mb_level_buy == 2){
+		$('.j-member-discount').show();
+	}else{
+		$('.j-member-discount').hide();
+	}
+	form.on('radio(is_mb_level_buy)', function(data){
+		var is_mb_level_buy1 = $("input[name='is_mb_level_buy']:checked").val();
+		console.log('是否参与会员折扣：' , is_mb_level_buy1);
+		if(is_mb_level_buy1 == 2){
+			$('.j-member-discount').show();
+		}else{
+			$('.j-member-discount').hide();
+		}
+	});
+	//--------- 会员等级折扣 End ----------------------------------------------------------
+
+	
+
+	
+
+	 
 	
 	form.on('checkbox(is_modify_sendscore)', function(data){
 		console.log(data.elem.checked)
@@ -1385,6 +1436,7 @@ function cancle_bind(obj,sdiv)
 						var chose_cate_id_arr = [];
 							$(function(){
 								
+
 								$('#cates2').on('change',function(){
 									var s_length = $("#cates2 option:selected").length -1;
 									var options_name = $("#cates2 option:selected:eq("+s_length+")").text();

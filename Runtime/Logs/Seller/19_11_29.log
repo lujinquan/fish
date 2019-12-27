@@ -1,6 +1,0 @@
-[ 2019-11-29T14:20:30+08:00 ] 103.63.154.99 /seller.php?s=/supply/floworder
-ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order by id desc   limit 0,20' at line 2
-
-[ 2019-11-29T14:20:31+08:00 ] 103.63.154.99 /seller.php?s=/supply/tixianlist
-ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order by id desc   limit 0,20' at line 2
-

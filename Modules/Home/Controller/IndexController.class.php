@@ -946,12 +946,16 @@ class IndexController extends CommonController {
 		}
 		
 	}
-	
+
+	/**
+	 * 小程序的首页商品列表页api
+	 * @return [type] [description]
+	 */
 	public function load_gps_goodslist()
 	{
 		$gpc = I('request.');
 		
-	
+	//dump($gpc);exit;
 		$token = $gpc['token'];
 		$head_id = $gpc['head_id'];
 		
@@ -1055,7 +1059,7 @@ class IndexController extends CommonController {
 		}
 		
 		//head_id
-		
+	
 		if( !empty($head_id) && $head_id >0 )
 		{
 
@@ -1209,13 +1213,14 @@ class IndexController extends CommonController {
 		{
 			$order_sort = 'g.index_sort desc,g.id desc ';
 		}
-		
+		//--------- 获取小程序商品列表供应商 Start ------ Author Lucas by 2019-12-26 16:04-----------------
 		if($is_random == 1)
 		{
-			$community_goods = D('Home/Pingoods')->get_community_index_goods('g.*,gc.begin_time,gc.end_time,gc.big_img,gc.is_take_fullreduction,gc.labelname,gc.video ,gc.pick_up_type,gc.pick_up_modify ', $where,$offset,$per_page,$order_sort,' rand() ');
+			$community_goods = D('Home/Pingoods')->get_community_index_goods('g.*,gc.begin_time,gc.end_time,gc.big_img,gc.is_take_fullreduction,gc.labelname,gc.video ,gc.pick_up_type,gc.supply_id,gc.pick_up_modify,gs.shopname ', $where,$offset,$per_page,$order_sort,' rand() ');
 		}else{
-			$community_goods = D('Home/Pingoods')->get_community_index_goods('g.*,gc.begin_time,gc.end_time,gc.big_img,gc.is_take_fullreduction,gc.labelname,gc.video,gc.pick_up_type,gc.pick_up_modify ', $where,$offset,$per_page,$order_sort);
+			$community_goods = D('Home/Pingoods')->get_community_index_goods('g.*,gc.begin_time,gc.supply_id,gc.end_time,gc.big_img,gc.is_take_fullreduction,gc.labelname,gc.video,gc.pick_up_type,gc.pick_up_modify,gs.shopname ', $where,$offset,$per_page,$order_sort);
 		}
+		//--------- 获取小程序商品列表供应商 End ---------------------------------------------------------
 		
 		
 		if( !empty($community_goods) )
@@ -1240,11 +1245,14 @@ class IndexController extends CommonController {
 			$copy_text_arr = array();
 			$today_time = strtotime( date('Y-m-d').' 00:00:00' );
 			
-			
+		//dump($community_goods);exit;	
 			foreach($community_goods as $val)
 			{
 				$tmp_data = array();
 				$tmp_data['actId'] = $val['id'];
+				//--------- 获取小程序商品列表供应商 Start ------ Author Lucas by 2019-12-26 16:04-----------------
+				$tmp_data['supplier'] = $val['shopname']?$val['shopname']:'平台自营';
+				//--------- 获取小程序商品列表供应商 End ----------------------------------------------------------
 				$tmp_data['spuName'] = $val['goodsname'];
 				$tmp_data['spuCanBuyNum'] = $val['total'];
 				$tmp_data['spuDescribe'] = $val['subtitle'];
@@ -1403,7 +1411,7 @@ class IndexController extends CommonController {
 	public function load_comming_goodslist()
 	{
 		$_GPC = I('request.');
-		
+		//dump($_GPC);exit;
 		$head_id = $_GPC['head_id'];
 		$pageNum = $_GPC['pageNum'];
 		$per_page = 10;

@@ -11,15 +11,24 @@ class PingoodsModel {
   
 	public function get_community_index_goods($fields='*', $where='1=1',$offset=0,$perpage=10,$order='g.istop DESC, g.settoptime DESC,g.index_sort desc,g.id desc ' )
 	{	
-		
+		//--------- 获取小程序商品列表供应商 Start ------ Author Lucas by 2019-12-26 16:04-----------------
 		$sql_pingoods = "select {$fields} from "
-                        .C('DB_PREFIX')."lionfish_comshop_goods as g,".C('DB_PREFIX')."lionfish_comshop_good_common as gc   
+                        .C('DB_PREFIX')."lionfish_comshop_goods as g,".C('DB_PREFIX')."lionfish_comshop_good_common as gc left join ".C('DB_PREFIX')."lionfish_comshop_supply as gs " ." on  gc.supply_id=gs.id  
         	           where  {$where}   and g.id=gc.goods_id  order by {$order} limit {$offset},{$perpage} ";
-		
+		//--------- 获取小程序商品列表供应商 End ---------------------------------------------------------
 		
 		$list_pingoods = M()->query($sql_pingoods);
 		
+		// if($list_pingoods){
+
+		// 	$sql_pingoods = "select {$fields} from "
+  //                       .C('DB_PREFIX')."lionfish_comshop_goods as g,".C('DB_PREFIX')."lionfish_comshop_good_common as gc,".C('DB_PREFIX')."lionfish_comshop_supply as gs " ."  
+  //       	           where  {$where}   and g.id=gc.goods_id  and gc.supply_id=gs.id order by {$order} limit {$offset},{$perpage} ";
 		
+		
+		// 	$list_pingoods = M()->query($sql_pingoods);
+		// }
+		//dump($list_pingoods);exit;
         return $list_pingoods;
         
         

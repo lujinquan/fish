@@ -51,6 +51,13 @@ class UserController extends CommonController{
 		{
 			$condition .= ' and groupid = '.$groupid;
 		}
+
+		$telephone = I('request.telephone');
+		$this->telephone = $telephone;
+		if( isset($telephone) && !empty($telephone))
+		{
+			$condition .= ' and telephone  like '.'"%' . $telephone . '%"';
+		}
 		
 	
 		
