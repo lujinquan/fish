@@ -218,7 +218,7 @@ class OrderModel{
 		}
 		
 		//$is_fenxiao = I('request.is_fenxiao','intval',0);
-		
+		//var_dump('关键词是：',$keyword);exit;
 		$keyword = I('request.keyword');
 		if( !empty($searchfield) && !empty($keyword))
 		{
@@ -337,6 +337,7 @@ class OrderModel{
 			}
 		}
 		
+		//var_dump('检索日期是：',$searchtime);exit;
 		if( !empty($searchtime) )
 		{
 			switch( $searchtime )
@@ -362,9 +363,8 @@ class OrderModel{
 		
 		
 		//----begin----
-		
-		if (defined('ROLE') && ROLE == 'agenter' ) {
-			
+		//var_dump('当前登录的角色是：',ROLE);exit;
+		if (defined('ROLE') && ROLE == 'agenter' ) {	
 			$supper_info = get_agent_logininfo();
 		
 		
@@ -437,7 +437,7 @@ class OrderModel{
 		$order_status_arr = $this->get_order_status_name();
 		
 		$export = I('request.export', 0);
-		
+		//var_dump('是否是导出',$export);exit;
 		if ($export == 1) 
 		{
 			@set_time_limit(0);
@@ -577,8 +577,8 @@ class OrderModel{
 								FROM ' . C('DB_PREFIX') . 'lionfish_comshop_order as o  '.$sqlcondition.' where '  . $condition . ' ORDER BY o.head_id asc,ogc.goods_id desc,  o.`order_id` DESC  limit '."{$offset},500";
 						
 						$list = M()->query( $sql );
-						
-					
+						//echo '<pre>';var_dump($list);exit;
+		
 						$look_member_arr = array();
 						$area_arr = array();
 						
@@ -586,6 +586,7 @@ class OrderModel{
 						{
 							foreach($list as $val)
 							{
+								
 								if (defined('ROLE') && ROLE == 'agenter' ) 
 								{
 									$supper_info = get_agent_logininfo();
@@ -752,11 +753,21 @@ class OrderModel{
 									$tmp_exval['head_money'] = $head_commiss_order['money'];
 								}
 								
-								
-								
-								
-								$tmp_exval['status'] = $order_status_arr[$val['order_status_id']];
-								
+								//--------- 有退款且成功的显示退款成功 Start ------ Author Lucas by 2019-12-19 17:48----------------
+								$refund_info = M('lionfish_comshop_order_refund')->where( array('order_id' => $val['order_id'] ,'order_goods_id' => $val['order_goods_id']) )->field('state')->find();
+								if($refund_info['state'] == 3){
+									$tmp_exval['status'] = '退款成功';
+								}else{
+									// if($val['order_status_id'] == 7){
+									// 	$tmp_exval['status'] = '退款成功';
+									// }else{
+										$tmp_exval['status'] = $order_status_arr[$val['order_status_id']];
+									// }
+								}
+								//--------- 有退款且成功的显示退款成功 End ----------------------------------------------------------
+								//原来的代码
+								//$tmp_exval['status'] = $order_status_arr[$val['order_status_id']];
+
 								$tmp_exval['createtime'] = date('Y-m-d H:i:s', $val['date_added']);
 								
 								
@@ -798,8 +809,7 @@ class OrderModel{
 		}
 		
 			
-		if (!(empty($total))) {
-			
+		if (!(empty($total))) {		
 			$sql = 'SELECT o.* FROM ' .C('DB_PREFIX'). 'lionfish_comshop_order as o  '.$sqlcondition.' where '  . $condition . ' ORDER BY  o.`order_id` DESC LIMIT ' . (($pindex - 1) * $psize) . ',' . $psize;
 			
 			
@@ -950,7 +960,7 @@ class OrderModel{
 		$count_status_14 = $this->get_order_count(" {$count_where} and order_status_id = 14 ");
 		
 
-		
+
 		
 		return array('total' => $total, 'total_money' => $total_money,'pager' => $pager, 'all_count' => $all_count,
 				'list' =>$list,
