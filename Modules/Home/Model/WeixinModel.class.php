@@ -346,7 +346,7 @@ class WeixinModel{
 			
 			
 			$res = \WxPayApi::refund($input,6,$order_info['from_type']);
-			//dump('微信付款返回信息：',$res);exit;
+			//dump($res);exit;
 			if( $res['err_code_des'] == '订单已全额退款' )
 			{
 				$res['result_code'] = 'SUCCESS';

@@ -532,7 +532,7 @@ class OrderController extends CommonController{
 				// 如果当前订单状态满足（2或4或5或14）则可以支持主动退款
 				if( in_array($orders['order_status_id'],array(1,2,4,5,14)))
 				{
-					$res = $weixin_model->refundOrder($order_id,$refund_money,0,$order_goods_id);
+					$res = $weixin_model->refundOrder($order_info['order_id'],$refund_money,0,$order_goods_id);
 					//dump($res);exit;
 					$model->commit();  // 开启事务   
 					if( $res['code'] == 0 )
