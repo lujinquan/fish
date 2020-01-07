@@ -396,7 +396,8 @@
                                                 <div>
 													<?php if( !empty($g['option_sku'])){ ?>{$g['option_sku']}<?php } ?>
 												</div>
-                                                <div class="order_icon_items">  
+                                                <div class="order_icon_items">
+                                                  
 													<?php if($item['order_status_id'] == 7){ ?>
 														已退款
 													<?php }else if($g['is_refund_state'] == 1 && !empty($g['refund_info']) ){ ?>		
@@ -410,8 +411,16 @@
 														<?php  } ?>
 														<br/><br/>
 														<a class="btn btn-primary btn-xs " href="{:U('order/oprefund', array('id' => $item['order_id'], 'ref_id' => $g['refund_info']['ref_id'] ))}" >退款详情</a>
-														
+													<!--  主动退款 Start -- Author Lucas by 2020-01-07 17:48----->	
+													<?php  }else{ ?>
+
+														<a class='btn btn-primary btn-xs op' data-toggle="ajaxModal" href="javascript:;" data-href="{:U('order/oprefund_do_extra', array('order_id' => $g['order_id'],'order_goods_id'=>$g['order_goods_id']))}" >
+														<i class="icow icow-yibiaoji" style="color: #999;display: inline-block;vertical-align: middle" title="  立即退款" ></i>
+														立即退款
+														</a>&nbsp;&nbsp;
+													<!--  主动退款 End -- Author Lucas by 2020-01-07 17:48----->
 													<?php  } ?>	
+													
                                                 </div>
 												
 												
@@ -1071,11 +1080,12 @@ $(function(){
 	$("[data-toggle='ajaxModal']").click(function () {
         var s_url = $(this).attr('data-href');
 		ajax_url = s_url;
-		console.log(23);
-       $.ajax({
+		console.log('立即退款，发送的链接：',s_url);
+        $.ajax({
 				url:s_url,
 				type:"get",
 				success:function(shtml){
+					console.log('立即退款，返回的数据：',shtml);
 					$('#ajaxModal').html(shtml);
 					$("#ajaxModal").modal();
 				}	

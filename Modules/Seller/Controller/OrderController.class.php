@@ -45,7 +45,8 @@ class OrderController extends CommonController{
 		
 
 		$need_data = D('Seller/Order')->load_order_list();
-		
+// echo '<pre>';
+// dump($need_data);exit;		
 		$cur_controller = 'order/index';
 		$total = $need_data['total'];
 		$total_money = $need_data['total_money'];
@@ -128,6 +129,7 @@ class OrderController extends CommonController{
 			}
 	
 		}
+
 //dump($_GPC['is_fenxiao']);dump($_GPC['commiss_member_id']);dump($is_community);exit;
 		$this->is_can_look_headinfo = $is_can_look_headinfo;
 		$this->is_can_nowrfund_order = $is_can_nowrfund_order;
@@ -370,10 +372,13 @@ class OrderController extends CommonController{
 	{
 		$_GPC = I('request.');
 		
-		$opdata = $this->check_order_data();		
+		$opdata = $this->check_order_data();
+
 		extract($opdata);
-		
-		
+
+		// echo '<pre>';
+		// var_dump($opdata);exit;
+
 		$id = $_GPC['id'];
 		
 		//付款总额
@@ -390,7 +395,6 @@ class OrderController extends CommonController{
 				$weixin_model = D('Home/Weixin');
 						
 				$id = $_GPC['id'];
-				
 				$model = M('lionfish_comshop_order');
 				$model->startTrans();  // 开启事务
 				$order_info = $model->lock(true)->where(array('order_id'=>$id))->find();
@@ -472,6 +476,138 @@ class OrderController extends CommonController{
 		}
 		
 		$this->id = $id;
+		$this->free_tongji = $free_tongji;
+		$this->item = $item;
+		
+		$this->display();
+		
+	}
+
+	public function oprefund_do_extra()
+	{
+		$_GPC = I('request.');
+		
+		$order_goods_id = I('request.order_goods_id',0);
+		//$order_id = I('request.order_id',0);
+		
+		$item = M('lionfish_comshop_order_goods')->where( array('order_goods_id' => $order_goods_id) )->find();
+		//dump($item);exit;
+		if (empty($item)) {
+			
+				show_json(0, '未找到订单!');
+			
+		}
+		$opdata = array('order_goods_id' => $order_goods_id, 'item' => $item);
+
+		//$opdata = $this->check_order_data();
+
+		extract($opdata);
+
+		// echo '<pre>';
+		// var_dump($opdata);exit;
+
+		//$id = $_GPC['id'];
+		
+		//付款总额
+		$free_tongji = $opdata['item']['total']+$opdata['item']['shipping_fare']-$opdata['item']['voucher_credit']-$opdata['item']['fullreduction_money'];
+		
+		if( IS_POST )
+		{
+			$refund_money = isset($_GPC['refund_money']) && $_GPC['refund_money'] >0  ? $_GPC['refund_money']: 0;
+			
+			if($refund_money > $free_tongji){
+					show_json(0, array('message' => '填写金额大于总退款金额' ) );
+			}else{
+				
+				$weixin_model = D('Home/Weixin');
+						
+				//$id = $_GPC['id'];
+				
+				$model = M('lionfish_comshop_order_goods');
+				$model->startTrans();  // 开启事务
+				$order_info = $model->lock(true)->where(array('order_goods_id'=>$order_goods_id))->find();
+
+				$orders = M('lionfish_comshop_order')->where(array('order_id'=>$order_info['order_id']))->find();
+//dump($orders);exit;
+				// 如果当前订单状态满足（2或4或5或14）则可以支持主动退款
+				if( in_array($orders['order_status_id'],array(1,2,4,5,14)))
+				{
+					$res = $weixin_model->refundOrder($order_id,$refund_money,0,$order_goods_id);
+					//dump($res);exit;
+					$model->commit();  // 开启事务   
+					if( $res['code'] == 0 )
+					{
+						show_json(0, array('message' => $res['msg']) );
+					}else{
+						
+						
+						//integral
+						$order_info = M('lionfish_comshop_order')->where( array('order_num_alias' => $id ) )->find();
+						
+						$comment = '后台操作立即退款,退款金额:'.$refund_money.'元';
+						
+						if( $order_info['type'] == 'integral' )
+						{
+							
+							if( $order_info['shipping_fare'] > 0 )
+							{
+								$comment = '后台操作立即退款,退款金额:'.$order_info['shipping_fare'].'元，积分:'.$order_info['total'];
+							}else{
+								$comment = '后台操作立即退款,退还积分:'.$order_info['total'];
+							}
+							//$comment = '后台操作立即退款,退款金额:'.$refund_money.'元';
+						}
+						
+						$history_data = array();
+						$history_data['order_id'] = $id;
+						$history_data['order_status_id'] = 7;
+						$history_data['notify'] = 0;
+						$history_data['comment'] = $comment;
+						$history_data['date_added'] = time();
+						
+						M('lionfish_comshop_order_history')->add($history_data);
+						
+						M('lionfish_comshop_order')->where( array('order_id' => $order_info['order_id']) )->save( array('order_status_id' => 7) );
+						//将所有在退款中的状态，全部重置成已退款成功
+						M('lionfish_comshop_order_refund')->where( array('order_id' => $order_info['order_id'], 'state' => 0) )->save( array('state' => 3) );
+						
+						//将退款中的 申请订单，全部改成已退款  
+						
+						$refund_all = M('lionfish_comshop_order_refund')->where( array('order_id' =>$order_info['order_id'], 'state' => 0 ) )->select();
+						
+						if( !empty($refund_all) )
+						{
+							foreach( $refund_all as $val )
+							{
+								$ins_data = array();
+								
+								$ins_data['ref_id'] = $val['ref_id'];
+								$ins_data['order_id'] = $val['order_id'];
+								$ins_data['order_goods_id'] = $val['order_goods_id'];
+								$ins_data['message'] = '平台同意退款   ,退款成功';
+								$ins_data['type'] = 2;
+								$ins_data['addtime'] = time();
+								
+								M('lionfish_comshop_order_refund_history')->add( $ins_data );
+								
+								M('lionfish_comshop_order_refund')->where( array('ref_id' => $val['ref_id']) )->save( array('state' => 3) );
+								
+							}
+						}
+					
+						show_json(1, array('message' => '退款成功！') );
+					}
+					 
+				}else{
+					$model->rollback();  // 回滚
+					show_json(0,  array('message' => '请勿重复提交'));
+				}
+		
+			}
+			
+		}
+		
+		$this->id = $order_goods_id;
 		$this->free_tongji = $free_tongji;
 		$this->item = $item;
 		
@@ -989,7 +1125,7 @@ class OrderController extends CommonController{
 		$id = $id?$id:I('request.id',0);
 		
 		$item = M('lionfish_comshop_order')->where( array('order_id' => $id) )->find();
-		//dump($item);
+		//dump($item);exit;
 		if (empty($item)) {
 			
 				show_json(0, '未找到订单!');
