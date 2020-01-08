@@ -398,9 +398,9 @@
 												</div>
                                                 <div class="order_icon_items">
                                                   
-													<?php if($item['order_status_id'] == 7){ ?>
-														已退款
-													<?php }else if($g['is_refund_state'] == 1 && !empty($g['refund_info']) ){ ?>		
+													
+														
+													<?php if($g['is_refund_state'] == 1 && !empty($g['refund_info']) ){ ?>		
 														退款金额：<?php echo $g['refund_info']['ref_money']; ?> 元,
 														<?php if($g['refund_info']['state'] == 0 ){ ?>
 															<span class="layui-badge">申请中</span>
@@ -412,7 +412,7 @@
 														<br/><br/>
 														<a class="btn btn-primary btn-xs " href="{:U('order/oprefund', array('id' => $item['order_id'], 'ref_id' => $g['refund_info']['ref_id'] ))}" >退款详情</a>
 													<!--  主动退款 Start -- Author Lucas by 2020-01-07 17:48----->	
-													<?php  }else{ ?>
+													<?php  }elseif(!in_array($item['order_status_id'],array(3,7,8,9,12,13))){ ?>
 
 														<a class='btn btn-primary btn-xs op' data-toggle="ajaxModal" href="javascript:;" data-href="{:U('order/oprefund_do_extra', array('order_id' => $g['order_id'],'order_goods_id'=>$g['order_goods_id']))}" >
 														<i class="icow icow-yibiaoji" style="color: #999;display: inline-block;vertical-align: middle" title="  立即退款" ></i>

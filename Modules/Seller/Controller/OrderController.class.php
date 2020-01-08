@@ -525,14 +525,17 @@ class OrderController extends CommonController{
 				
 				$model = M('lionfish_comshop_order_goods');
 				$model->startTrans();  // 开启事务
-				$order_info = $model->lock(true)->where(array('order_goods_id'=>$order_goods_id))->find();
+				$order_goods_info = $model->lock(true)->where(array('order_goods_id'=>$order_goods_id))->find();
+				
+				$order_info = M('lionfish_comshop_order')->where(array('order_id'=>$order_goods_info['order_id']))->find();
+				$member_info = M('lionfish_comshop_member')->where(array('member_id'=>$order_info['member_id']))->find();
 
-				$orders = M('lionfish_comshop_order')->where(array('order_id'=>$order_info['order_id']))->find();
-//dump($orders);exit;
+
 				// 如果当前订单状态满足（2或4或5或14）则可以支持主动退款
-				if( in_array($orders['order_status_id'],array(1,2,4,5,14)))
+				if(!in_array($item['order_status_id'],array(3,7,8,9,12,13)))
 				{
 					$res = $weixin_model->refundOrder($order_info['order_id'],$refund_money,0,$order_goods_id);
+					//$res['code'] = 1;
 					//dump($res);exit;
 					$model->commit();  // 开启事务   
 					if( $res['code'] == 0 )
@@ -542,8 +545,8 @@ class OrderController extends CommonController{
 						
 						
 						//integral
-						$order_info = M('lionfish_comshop_order')->where( array('order_num_alias' => $id ) )->find();
-						
+						//$order_info = M('lionfish_comshop_order')->where( array('order_num_alias' => $id ) )->find();
+						//dump($order_info);exit;
 						$comment = '后台操作立即退款,退款金额:'.$refund_money.'元';
 						
 						if( $order_info['type'] == 'integral' )
@@ -559,7 +562,7 @@ class OrderController extends CommonController{
 						}
 						
 						$history_data = array();
-						$history_data['order_id'] = $id;
+						$history_data['order_id'] = $order_info['order_id'];
 						$history_data['order_status_id'] = 7;
 						$history_data['notify'] = 0;
 						$history_data['comment'] = $comment;
@@ -567,40 +570,80 @@ class OrderController extends CommonController{
 						
 						M('lionfish_comshop_order_history')->add($history_data);
 						
-						M('lionfish_comshop_order')->where( array('order_id' => $order_info['order_id']) )->save( array('order_status_id' => 7) );
+						
+
+						//修改退款状态
+						M('lionfish_comshop_order_goods')->where(array('order_goods_id'=>$order_goods_id))->save( array('is_refund_state' => 1) );
+						//dump(1);exit;
+						
+
+						
+			
+						//直接写入退款记录
+						$refdata = array();
+						$refdata['order_id'] = intval($order_info['order_id']);
+						$refdata['order_goods_id'] = $order_goods_id;
+						$refdata['ref_type'] = 1;  //退款理由：默认1仅退款
+						$refdata['ref_money'] = floatval($refund_money); //退款金额
+						$refdata['ref_member_id'] = $order_info['member_id'];
+						$refdata['ref_name'] = '平台主动退款';
+						$refdata['ref_mobile'] = htmlspecialchars($member_info['telephone']); //联系人手机号
+						$refdata['ref_description'] = '';
+						$refdata['complaint_name'] = htmlspecialchars($member_info['username']); //联系人姓名
+						$refdata['state'] = 3;
+						$refdata['addtime'] = time();
+						$refdata['store_id'] = $order_info['store_id'];
+						$refdata['head_id'] = $order_info['head_id'];
+						$ref_id = M('lionfish_comshop_order_refund')->add($refdata);
+
+						//判断如果订单内的商品全部退款了，就修改订单状态为退款状态
+						$refund_sql = 'select og.order_goods_id,og.is_refund_state,ore.state from ' . C('DB_PREFIX') .'lionfish_comshop_order_goods og left join '.C('DB_PREFIX').'lionfish_comshop_order_refund ore on og.order_goods_id = ore.order_goods_id where og.order_id = '.$order_info['order_id'];
+						$refund_infos = M()->query($refund_sql);
+						$ref = true;
+						foreach ($refund_infos as $refund) {
+							if($refund['is_refund_state'] == 0 || ($refund['is_refund_state'] == 1 && $refund['state'] != 3)){
+								$ref = false;
+							}
+						}
+						//dump($ref);exit;
+						if($ref){
+							M('lionfish_comshop_order')->where( array('order_id' => $order_info['order_id']) )->save( array('order_status_id' => 7) );
+						}
+
+
 						//将所有在退款中的状态，全部重置成已退款成功
-						M('lionfish_comshop_order_refund')->where( array('order_id' => $order_info['order_id'], 'state' => 0) )->save( array('state' => 3) );
+						//M('lionfish_comshop_order_refund')->where( array('order_id' => $order_info['order_id'], 'state' => 0) )->save( array('state' => 3) );
 						
 						//将退款中的 申请订单，全部改成已退款  
 						
-						$refund_all = M('lionfish_comshop_order_refund')->where( array('order_id' =>$order_info['order_id'], 'state' => 0 ) )->select();
+						// $refund_all = M('lionfish_comshop_order_refund')->where( array('order_id' =>$order_info['order_id'], 'state' => 0 ) )->select();
 						
-						if( !empty($refund_all) )
-						{
-							foreach( $refund_all as $val )
-							{
-								$ins_data = array();
+						// if( !empty($refund_all) )
+						// {
+						// 	foreach( $refund_all as $val )
+						// 	{
+						// 		$ins_data = array();
 								
-								$ins_data['ref_id'] = $val['ref_id'];
-								$ins_data['order_id'] = $val['order_id'];
-								$ins_data['order_goods_id'] = $val['order_goods_id'];
-								$ins_data['message'] = '平台同意退款   ,退款成功';
-								$ins_data['type'] = 2;
-								$ins_data['addtime'] = time();
+						// 		$ins_data['ref_id'] = $val['ref_id'];
+						// 		$ins_data['order_id'] = $val['order_id'];
+						// 		$ins_data['order_goods_id'] = $val['order_goods_id'];
+						// 		$ins_data['message'] = '平台同意退款   ,退款成功';
+						// 		$ins_data['type'] = 2;
+						// 		$ins_data['addtime'] = time();
 								
-								M('lionfish_comshop_order_refund_history')->add( $ins_data );
+						// 		M('lionfish_comshop_order_refund_history')->add( $ins_data );
 								
-								M('lionfish_comshop_order_refund')->where( array('ref_id' => $val['ref_id']) )->save( array('state' => 3) );
+						// 		M('lionfish_comshop_order_refund')->where( array('ref_id' => $val['ref_id']) )->save( array('state' => 3) );
 								
-							}
-						}
+						// 	}
+						// }
 					
 						show_json(1, array('message' => '退款成功！') );
 					}
 					 
 				}else{
 					$model->rollback();  // 回滚
-					show_json(0,  array('message' => '请勿重复提交'));
+					show_json(0,  array('message' => '不满足退款条件'));
 				}
 		
 			}
