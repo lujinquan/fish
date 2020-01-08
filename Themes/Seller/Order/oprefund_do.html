@@ -11,10 +11,10 @@
             <div class="modal-body" style = "padding: 10px;" >
 			        <?php $total = $item['total']+$item['shipping_fare']-$item['voucher_credit']-$item['fullreduction_money'];
 						  $score_for_money = $item['score_for_money'];
-						  $free_tongji = $total - $score_for_money;
-						  if($free_tongji < 0){
-							$free_tongji = 0;
-						  }
+						  //$free_tongji = $total - $score_for_money;
+						  //if($free_tongji < 0){
+							//$free_tongji = 0;
+						  //}
 					?>
 					<?php if( !empty( $score_for_money ) && $score_for_money > 0 ){ ?>
 					<p style="line-height:26px;font-size:13px;">积分抵扣：￥{$score_for_money}</p>

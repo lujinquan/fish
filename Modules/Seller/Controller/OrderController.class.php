@@ -371,18 +371,32 @@ class OrderController extends CommonController{
 	public function oprefund_do()
 	{
 		$_GPC = I('request.');
-		
+		$id = $_GPC['id'];
 		$opdata = $this->check_order_data();
 
+		$opdata = array('order_goods_id' => $order_goods_id, 'item' => $item);
 		extract($opdata);
 
-		// echo '<pre>';
-		// var_dump($opdata);exit;
+		//--------- 主动退款 Start ------ Author Lucas by 2020-01-08 10:03-------------
+		$goods_total = M('lionfish_comshop_order_goods')->where( array('order_id' => $id) )->select();
+		if (empty($goods_total)) {
+				show_json(0, '未找到订单!');
+		}
+		$free_tongji = 0;
+		foreach ($goods_total as $g) {
+			if($g['is_refund_state'] == 0){
+				$free_tongji += ($g['total']+$g['shipping_fare']-$g['voucher_credit']-$g['fullreduction_money']);
+			}
+		}
+		if($free_tongji < 0){
+			$free_tongji = 0;
+		}
+		//--------- 主动退款 End ------ Author Lucas by 2020-01-08 10:03-------------
 
-		$id = $_GPC['id'];
-		
+		//--------- 原数据 Start ------ Author Lucas by 2020-01-08 10:03-------------
 		//付款总额
-		$free_tongji = $opdata['item']['total']+$opdata['item']['shipping_fare']-$opdata['item']['voucher_credit']-$opdata['item']['fullreduction_money'];
+		//$free_tongji = $opdata['item']['total']+$opdata['item']['shipping_fare']-$opdata['item']['voucher_credit']-$opdata['item']['fullreduction_money'];
+		//------------------ End ------ Author Lucas by 2020-01-08 10:03-------------
 		
 		if( IS_POST )
 		{
@@ -749,6 +763,7 @@ class OrderController extends CommonController{
 	{
 	
 		$opdata = $this->check_order_data();
+
 		extract($opdata);
 		
 		D('Seller/Order')->do_send_tuanz($item['order_id']);
