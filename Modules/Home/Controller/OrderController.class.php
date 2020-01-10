@@ -53,7 +53,7 @@ class OrderController extends CommonController {
 		$order_id = $_GPC['order_id'];
 		
 		$order_info = M('lionfish_comshop_order')->where( array('member_id' => $member_id,'order_id' => $order_id) )->find();
-		
+	//echo $order_id;exit;	
 		
 		if( empty($order_info) )
 		{

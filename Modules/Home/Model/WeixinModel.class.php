@@ -46,7 +46,24 @@ class WeixinModel{
 			$total_fee = ( $order_info["shipping_fare"] )*100;
 		
 		}else{
-			$total_fee = ($order_info["total"] + $order_info["shipping_fare"]-$order_info['voucher_credit']-$order_info['fullreduction_money'] - $order_info['score_for_money'] )*100;
+			//原代码
+			//$total_fee = ($order_info["total"] + $order_info["shipping_fare"]-$order_info['voucher_credit']-$order_info['fullreduction_money'] - $order_info['score_for_money'] )*100;
+
+			//--------- 主动退款 Start ------ Author Lucas by 2020-01-08 10:03-------------
+			$goods_total = M('lionfish_comshop_order_goods')->where( array('order_id' => $order_id) )->select();
+			if (empty($goods_total)) {
+					show_json(0, '未找到订单!');
+			}
+			$total_fee = 0;
+			foreach ($goods_total as $g) {
+				if($g['is_refund_state'] == 0){
+					$total_fee += ($g['total']+$g['shipping_fare']-$g['voucher_credit']-$g['fullreduction_money']-$g['score_for_money'])*100;
+				}
+			}
+			if($total_fee < 0){
+				$total_fee = 0;
+			}
+			//--------- 主动退款 End ------ Author Lucas by 2020-01-08 10:03-------------
 		}
 		
 		
@@ -56,7 +73,7 @@ class WeixinModel{
 		if( !empty($order_goods_id) )
 		{
 			$order_goods_info = M('lionfish_comshop_order_goods')->where( array('order_goods_id' =>$order_goods_id ) )->find();
-			
+			//原代码
 			//$refund_fee = ($order_goods_info["total"] + $order_goods_info["shipping_fare"]-$order_goods_info['voucher_credit']-$order_goods_info['fullreduction_money'] - $order_goods_info['score_for_money'])*100;
 
 			//--------- 主动退款 Start ------ Author Lucas by 2020-01-08 10:03-------------
@@ -76,7 +93,7 @@ class WeixinModel{
 			//--------- 主动退款 End ------ Author Lucas by 2020-01-08 10:03-------------
 		}
 		
-		
+		//var_dump($order_goods_id);var_dump($refund_fee);exit;
 		
 		
 		if($money > 0)
@@ -345,7 +362,7 @@ class WeixinModel{
                 }
             }
 			
-			
+			//dump($total_fee);dump($refund_fee);exit;
 			$input = new \WxPayRefund();
 			
 			$input->SetTransaction_id($transaction_id);
