@@ -77,6 +77,7 @@ class OrderController extends CommonController {
 				
 				M('lionfish_comshop_order_history')->add($order_history);
 				
+				
 				//5、处理订单
 				$result = D('Home/Weixin')->del_cancle_order($order_id);
 				

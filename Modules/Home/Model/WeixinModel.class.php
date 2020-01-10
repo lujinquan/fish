@@ -47,22 +47,22 @@ class WeixinModel{
 		
 		}else{
 			//原代码
-			//$total_fee = ($order_info["total"] + $order_info["shipping_fare"]-$order_info['voucher_credit']-$order_info['fullreduction_money'] - $order_info['score_for_money'] )*100;
+			$total_fee = ($order_info["total"] + $order_info["shipping_fare"]-$order_info['voucher_credit']-$order_info['fullreduction_money'] - $order_info['score_for_money'] )*100;
 
 			//--------- 主动退款 Start ------ Author Lucas by 2020-01-08 10:03-------------
-			$goods_total = M('lionfish_comshop_order_goods')->where( array('order_id' => $order_id) )->select();
-			if (empty($goods_total)) {
-					show_json(0, '未找到订单!');
-			}
-			$total_fee = 0;
-			foreach ($goods_total as $g) {
-				if($g['is_refund_state'] == 0){
-					$total_fee += ($g['total']+$g['shipping_fare']-$g['voucher_credit']-$g['fullreduction_money']-$g['score_for_money'])*100;
-				}
-			}
-			if($total_fee < 0){
-				$total_fee = 0;
-			}
+			// $goods_total = M('lionfish_comshop_order_goods')->where( array('order_id' => $order_id) )->select();
+			// if (empty($goods_total)) {
+			// 		show_json(0, '未找到订单!');
+			// }
+			// $total_fee = 0;
+			// foreach ($goods_total as $g) {
+			// 	if($g['is_refund_state'] == 0){
+			// 		$total_fee += ($g['total']+$g['shipping_fare']-$g['voucher_credit']-$g['fullreduction_money']-$g['score_for_money'])*100;
+			// 	}
+			// }
+			// if($total_fee < 0){
+			// 	$total_fee = 0;
+			// }
 			//--------- 主动退款 End ------ Author Lucas by 2020-01-08 10:03-------------
 		}
 		
@@ -74,33 +74,21 @@ class WeixinModel{
 		{
 			$order_goods_info = M('lionfish_comshop_order_goods')->where( array('order_goods_id' =>$order_goods_id ) )->find();
 			//原代码
-			//$refund_fee = ($order_goods_info["total"] + $order_goods_info["shipping_fare"]-$order_goods_info['voucher_credit']-$order_goods_info['fullreduction_money'] - $order_goods_info['score_for_money'])*100;
+			$refund_fee = ($order_goods_info["total"] + $order_goods_info["shipping_fare"]-$order_goods_info['voucher_credit']-$order_goods_info['fullreduction_money'] - $order_goods_info['score_for_money'])*100;
 
-			//--------- 主动退款 Start ------ Author Lucas by 2020-01-08 10:03-------------
-			$goods_total = M('lionfish_comshop_order_goods')->where( array('order_id' => $order_id) )->select();
-			if (empty($goods_total)) {
-					show_json(0, '未找到订单!');
-			}
-			$refund_fee = 0;
-			foreach ($goods_total as $g) {
-				if($g['is_refund_state'] == 0){
-					$refund_fee += ($g['total']+$g['shipping_fare']-$g['voucher_credit']-$g['fullreduction_money']-$g['score_for_money'])*100;
-				}
-			}
-			if($refund_fee < 0){
-				$refund_fee = 0;
-			}
-			//--------- 主动退款 End ------ Author Lucas by 2020-01-08 10:03-------------
+			
 		}
+
+
 		
-		//var_dump($order_goods_id);var_dump($refund_fee);exit;
+		//var_dump($order_info);var_dump($refund_fee);exit;
 		
 		
 		if($money > 0)
 		{
 			$refund_fee = $money * 100;
 		}
-		
+		//dump($money);dump($refund_fee);exit;
 		if($order_info['payment_code'] == 'yuer')
 		{
 			//余额支付的，退款到余额
@@ -681,7 +669,26 @@ class WeixinModel{
 		//判断订单状态是否已付款，避免多次退款，不合理
 		if( $order_info['order_status_id'] == 1 )
 		{
-			$result = $this->refundOrder($order_id);
+			//--------- 主动退款 Start ------ Author Lucas by 2020-01-08 10:03-------------
+			$goods_total = M('lionfish_comshop_order_goods')->where( array('order_id' => $order_id) )->select();
+			if (empty($goods_total)) {
+					show_json(0, '未找到订单!');
+			}
+			$refund_fee = 0;
+			foreach ($goods_total as $g) {
+				if($g['is_refund_state'] == 0){
+					$refund_fee += $g['total']+$g['shipping_fare']-$g['voucher_credit']-$g['fullreduction_money']-$g['score_for_money'];
+				}
+			}
+			if($refund_fee < 0){
+				$refund_fee = 0;
+			}
+			// 由于后台可以主动退款，所以用户取消订单不能直接退订单的总金额，必须减去已经退掉的部分钱，所以直接指定退款金额为：$refund_fee
+			$result = $this->refundOrder($order_id,$refund_fee);
+			//--------- 主动退款 End ------ Author Lucas by 2020-01-08 10:03-------------
+			
+			//原代码
+			//$result = $this->refundOrder($order_id);
 			
 			if( $result['code'] == 1 )
 			{
