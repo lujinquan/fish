@@ -25,7 +25,6 @@ class WeixinModel{
 		
 		
 		$order_info = M('lionfish_comshop_order')->where( array('order_id' => $order_id) )->find();
-		
 				
 		$member_info = M('lionfish_comshop_member')->where( array('member_id' => $order_info['member_id'] ) )->find();		
 		
@@ -58,7 +57,23 @@ class WeixinModel{
 		{
 			$order_goods_info = M('lionfish_comshop_order_goods')->where( array('order_goods_id' =>$order_goods_id ) )->find();
 			
-			$refund_fee = ($order_goods_info["total"] + $order_goods_info["shipping_fare"]-$order_goods_info['voucher_credit']-$order_goods_info['fullreduction_money'] - $order_goods_info['score_for_money'])*100;
+			//$refund_fee = ($order_goods_info["total"] + $order_goods_info["shipping_fare"]-$order_goods_info['voucher_credit']-$order_goods_info['fullreduction_money'] - $order_goods_info['score_for_money'])*100;
+
+			//--------- 主动退款 Start ------ Author Lucas by 2020-01-08 10:03-------------
+			$goods_total = M('lionfish_comshop_order_goods')->where( array('order_id' => $order_id) )->select();
+			if (empty($goods_total)) {
+					show_json(0, '未找到订单!');
+			}
+			$refund_fee = 0;
+			foreach ($goods_total as $g) {
+				if($g['is_refund_state'] == 0){
+					$refund_fee += ($g['total']+$g['shipping_fare']-$g['voucher_credit']-$g['fullreduction_money']-$g['score_for_money'])*100;
+				}
+			}
+			if($refund_fee < 0){
+				$refund_fee = 0;
+			}
+			//--------- 主动退款 End ------ Author Lucas by 2020-01-08 10:03-------------
 		}
 		
 		
