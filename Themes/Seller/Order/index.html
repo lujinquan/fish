@@ -730,7 +730,7 @@ layui.use(['jquery', 'layer','form'], function(){
   //alert(3);
   // 批量配送
   	
-  		
+  		console.log('所有的order_id：',{$order_ids});
 
     $(".batchprocess").click(function () {
     	var that = $(this);
@@ -747,8 +747,11 @@ layui.use(['jquery', 'layer','form'], function(){
 
 		if(ids_arr.length < 1)
 		{
-			layer.msg('请选择要操作的内容');
-			return false;
+			//layer.msg('请选择要操作的内容');
+			//return false;
+			var ids_arr = {$order_ids};
+			console.log('一个都不选就传这个值：',ids_arr);
+			//console.log('值的类型：',typeof(ids_arr));
 		}
 
         var s_url = that.attr('data-href');

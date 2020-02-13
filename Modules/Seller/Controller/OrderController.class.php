@@ -45,8 +45,7 @@ class OrderController extends CommonController{
 		
 
 		$need_data = D('Seller/Order')->load_order_list();
-// echo '<pre>';
-// dump($need_data);exit;		
+		
 		$cur_controller = 'order/index';
 		$total = $need_data['total'];
 		$total_money = $need_data['total_money'];
@@ -60,8 +59,10 @@ class OrderController extends CommonController{
 		$count_status_7 = $need_data['count_status_7'];
 		$count_status_11 = $need_data['count_status_11'];
 		$count_status_14 = $need_data['count_status_14'];
-		
-	
+
+		//所有筛选条件下的order_id	
+		$this->order_ids = json_encode($need_data['order_ids']);
+
 		$this->cur_controller = $cur_controller;
 		$this->total = $total;
 		$this->total_money = $total_money;
@@ -778,7 +779,8 @@ class OrderController extends CommonController{
 	public function opsend_tuanz_all()
 	{
 		$ids =  I('request.ids');
-
+// echo '<pre>';
+// var_dump($ids);exit;
 		foreach ($ids as $id) {
 			$opdata = $this->check_order_data($id);
 			extract($opdata);

@@ -559,7 +559,12 @@ class OrderModel{
 					
 					$sql_count = 'SELECT count(o.order_id) as count   
 								FROM ' . C('DB_PREFIX'). 'lionfish_comshop_order as o  '.$sqlcondition.' where '  . $condition ;
-						
+					// by lucas 2020-02-13
+					$sql_ids = 'SELECT o.order_id   
+								FROM ' . C('DB_PREFIX'). 'lionfish_comshop_order as o  '.$sqlcondition.' where '  . $condition ;
+					$total_order_ids_arr = M()->query($sql_ids);
+
+
 					$total_arr = M()->query($sql_count);	
 					
 					$total = $total_arr[0]['count'];
@@ -811,7 +816,13 @@ class OrderModel{
 			
 		if (!(empty($total))) {		
 			$sql = 'SELECT o.* FROM ' .C('DB_PREFIX'). 'lionfish_comshop_order as o  '.$sqlcondition.' where '  . $condition . ' ORDER BY  o.`order_id` DESC LIMIT ' . (($pindex - 1) * $psize) . ',' . $psize;
-			
+			// by Lucas 2020-02-13
+			$sql1 = 'SELECT o.order_id FROM ' .C('DB_PREFIX'). 'lionfish_comshop_order as o  '.$sqlcondition.' where '  . $condition . ' ORDER BY  o.`order_id` DESC';
+			$order_ids_all = M()->query($sql1);
+			$order_ids = [];
+			foreach($order_ids_all as $order_id){
+				$order_ids[] = $order_id['order_id'];
+			}
 			
 			$list = M()->query($sql);
 			$need_list = array();
@@ -948,7 +959,8 @@ class OrderModel{
 			}
 			
 		}
-		
+		// echo '<pre>';var_dump($order_ids);
+		// exit;
 		
 		$all_count = $this->get_order_count($count_where);
 		$count_status_1 = $this->get_order_count(" {$count_where} and order_status_id = 1 ");
@@ -964,6 +976,7 @@ class OrderModel{
 		
 		return array('total' => $total, 'total_money' => $total_money,'pager' => $pager, 'all_count' => $all_count,
 				'list' =>$list,
+				'order_ids' =>$order_ids,
 				'count_status_1' => $count_status_1,'count_status_3' => $count_status_3,'count_status_4' => $count_status_4,
 				'count_status_5' => $count_status_5, 'count_status_7' => $count_status_7, 'count_status_11' => $count_status_11,
 				'count_status_14' => $count_status_14

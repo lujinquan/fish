@@ -35,7 +35,7 @@ class PublicController extends \Think\Controller {
 		
 		//孕育小主
 		$seller=M('Seller')->where( array('s_uname' => $username) )->find();
-		
+//var_dump(think_ucenter_encrypt('ctnmit',C('SELLER_PWD_KEY')));exit;	
 		//用户存在且可用|| true
 		if($seller&&$seller['s_status']==1){
 		   //验证密码
