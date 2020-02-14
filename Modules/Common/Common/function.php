@@ -971,7 +971,9 @@ function pagination2($total, $pageIndex, $pageSize = 15, $url = '', $context = a
 				$html .= '<li><span class=\'input\' style=\'margin-right: 0;\'><input value=\'' . $pdata['cindex'] . '\' type=\'tel\'/></span></li>';
 				$html .= '<li><a ' . $pdata['jump'] . ' class="pager-nav pager-nav-jump">跳转</a></li>';
 				$html .= '</ul>';
-				$html .= '<script>$(function() {$(".pagination .input input").bind("input propertychange", function() {var val=$(this).val(),elm=$(this).closest("ul").find(".pager-nav-jump"),href=elm.data("href");if(!val || typeof(val) !=="number"){return false;}href = href.substring(0,href.lastIndexOf("=")+1);elm.attr("href", href+val)}).on("keydown", function(e) {if (e.keyCode == "13") {var val=$(this).val(),elm=$(this).closest("ul").find(".pager-nav-jump"),href=elm.data("href"); location.href=href+val;}});})</script>';
+				$html .= '<script>$(function() {$(".pagination .input input").bind("input propertychange", function() {var val=parseInt($(this).val()),elm=$(this).closest("ul").find(".pager-nav-jump"),href=elm.data("href");
+				if(!val){return false;}
+				href = href.substring(0,href.lastIndexOf("=")+1);elm.attr("href", href+val)}).on("keydown", function(e) {if (e.keyCode == "13") {var val=$(this).val(),elm=$(this).closest("ul").find(".pager-nav-jump"),href=elm.data("href"); location.href=href+val;}});})</script>';
 			}
 		}
 	}
