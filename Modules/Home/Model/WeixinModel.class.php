@@ -323,34 +323,8 @@ class WeixinModel{
 			//检测是否有需要退回积分的订单
 			
 		} else {
-			
-			$relative_list = M('lionfish_comshop_order_relate')->where( array('order_id' => $order_id ) )->find();
-			
-         	 $account_money = 0;
-            if(!empty($relative_list))
-            {
-              	$order_all_id = $relative_list['order_all_id'];
-              
-				$relative_list_all = M('lionfish_comshop_order_relate')->where( array('order_all_id' => $order_all_id ) )->select();
-				
-				
-				
-              	if( count($relative_list_all) > 1 )
-                {
-                	foreach($relative_list_all as $val)
-                    {
-						$order_info_tmp = M('lionfish_comshop_order')->where( array('order_id' => $val['order_id'] ) )->find();
-						
-                    	$account_money += ($order_info_tmp["total"] + $order_info_tmp["shipping_fare"]-$order_info_tmp['voucher_credit']-$order_info_tmp['fullreduction_money'] );
-                    }
-					
-					
-					$account_money = $account_money * 100;
-					$total_fee = $account_money;
-                }
-            }
 
-            /**
+			/**
              * 功能描述：如果传入了$money代表直接退款$money的钱
              * =====================================
              * @author  Lucas 
@@ -363,7 +337,34 @@ class WeixinModel{
              * @return  返回值  
              * @version 版本  1.0
              */
-			if($money > 0){ $total_fee = $money * 100; }
+			// $relative_list = M('lionfish_comshop_order_relate')->where( array('order_id' => $order_id ) )->find();
+			
+   //       	$account_money = 0;
+   //          if(!empty($relative_list))
+   //          {
+   //            	$order_all_id = $relative_list['order_all_id'];
+              
+			// 	$relative_list_all = M('lionfish_comshop_order_relate')->where( array('order_all_id' => $order_all_id ) )->select();
+				
+				
+				
+   //            	if( count($relative_list_all) > 1 )
+   //              {
+   //              	foreach($relative_list_all as $val)
+   //                  {
+			// 			$order_info_tmp = M('lionfish_comshop_order')->where( array('order_id' => $val['order_id'] ) )->find();
+						
+   //                  	$account_money += ($order_info_tmp["total"] + $order_info_tmp["shipping_fare"]-$order_info_tmp['voucher_credit']-$order_info_tmp['fullreduction_money'] );
+   //                  }
+					
+					
+			// 		$account_money = $account_money * 100;
+			// 		$total_fee = $account_money;
+   //              }
+   //          }
+
+            
+			
 			
 			//dump($total_fee);dump($refund_fee);exit;
 			$input = new \WxPayRefund();
