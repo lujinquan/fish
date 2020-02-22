@@ -349,6 +349,21 @@ class WeixinModel{
 					$total_fee = $account_money;
                 }
             }
+
+            /**
+             * 功能描述：如果传入了$money代表直接退款$money的钱
+             * =====================================
+             * @author  Lucas 
+             * email:   598936602@qq.com 
+             * Website  address:  www.mylucas.com.cn
+             * =====================================
+             * 创建时间: 2020-02-21 15:28:04 
+             * @example 
+             * @link    文档参考地址：
+             * @return  返回值  
+             * @version 版本  1.0
+             */
+			if($money > 0){ $total_fee = $money * 100; }
 			
 			//dump($total_fee);dump($refund_fee);exit;
 			$input = new \WxPayRefund();
