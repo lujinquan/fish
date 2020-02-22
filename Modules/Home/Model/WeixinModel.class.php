@@ -40,7 +40,7 @@ class WeixinModel{
 		//money
 		$transaction_id = $order_info["transaction_id"];
 		
-		
+//var_dump($order_info);		
 		if( $order_info['type'] == 'integral' )
 		{
 			$total_fee = ( $order_info["shipping_fare"] )*100;
@@ -48,7 +48,7 @@ class WeixinModel{
 		}else{
 			//原代码
 			$total_fee = ($order_info["total"] + $order_info["shipping_fare"]-$order_info['voucher_credit']-$order_info['fullreduction_money'] - $order_info['score_for_money'] )*100;
-
+//dump('51行：'.$total_fee);
 			//--------- 主动退款 Start ------ Author Lucas by 2020-01-08 10:03-------------
 			// $goods_total = M('lionfish_comshop_order_goods')->where( array('order_id' => $order_id) )->select();
 			// if (empty($goods_total)) {
@@ -342,34 +342,42 @@ class WeixinModel{
 			$relative_list = M('lionfish_comshop_order_relate')->where( array('order_id' => $order_id ) )->find();
 			
          	$account_money = 0;
-         	if($money == 0){
-         		
+         	//if($order_info['store_id']){ //如果是多商户的就开启
+//dump('$relative_list处理前：'.$total_fee);	
 	            if(!empty($relative_list))
 	            {
 	              	$order_all_id = $relative_list['order_all_id'];
 	              
 					$relative_list_all = M('lionfish_comshop_order_relate')->where( array('order_all_id' => $order_all_id ) )->select();
-					
-					
-					
-	              	if( count($relative_list_all) > 1 )
-	                {
-	                	foreach($relative_list_all as $val)
-	                    {
-							$order_info_tmp = M('lionfish_comshop_order')->where( array('order_id' => $val['order_id'] ) )->find();
+//dump($order_all_id);
+					//如果是非场景六，transaction_id存在，则执行下面的代码
+					$order_all_info = M('lionfish_comshop_order_all')->where( array('id' => $order_all_id ) )->find();
+					if($order_all_info['transaction_id']){
+						//var_dump($relative_list_all);
+		              	if( count($relative_list_all) > 1 )
+		                {
+		                	foreach($relative_list_all as $val)
+		                    {
+								$order_info_tmp = M('lionfish_comshop_order')->where( array('order_id' => $val['order_id'] ) )->find();
+								
+		                    	$account_money += ($order_info_tmp["total"] + $order_info_tmp["shipping_fare"]-$order_info_tmp['voucher_credit']-$order_info_tmp['fullreduction_money'] );
+		                    }
 							
-	                    	$account_money += ($order_info_tmp["total"] + $order_info_tmp["shipping_fare"]-$order_info_tmp['voucher_credit']-$order_info_tmp['fullreduction_money'] );
-	                    }
-						
-						
-						$account_money = $account_money * 100;
-						$total_fee = $account_money;
-	                }
+							
+							$account_money = $account_money * 100;
+							$total_fee = $account_money;
+//dump('$relative_list处理中：'.$total_fee);
+		                }
+					}
+					
+					
 	            }
-
-            }
-			
-			
+//dump('$relative_list处理后：'.$total_fee);exit;
+            //}
+//$total_fee = 300;		
+			// if($money > 0){
+			// 	$refund_fee = $money * 100;
+			// }
 			//dump($total_fee);dump($refund_fee);exit;
 			$input = new \WxPayRefund();
 			
@@ -519,6 +527,7 @@ class WeixinModel{
 		
 		
 		$total_fee = ($order_info["total"])*100;
+dump('524行：'.$total_fee);
 		$refund_fee = $total_fee;
 		if($money > 0)
 		{
