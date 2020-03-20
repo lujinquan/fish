@@ -632,6 +632,71 @@ class DeliveryController extends CommonController{
 		D('Seller/Excel')->export_delivery_list($exportlist, array('list_info' => $lists_info,'title' => '清单数据', 'columns' => $columns));
 		die();
 	}
+	public function orders_downexcel()
+	{
+		$gpc = I('request.');
+		
+		$list_id = $gpc['list_id'];
+		
+		//$condition = " and list_id={$list_id} ";
+		
+        $list = M()->query('SELECT * FROM ' . C('DB_PREFIX') . "lionfish_comshop_deliverylist_goods 
+		WHERE 1 order by id desc ");
+       
+	    //dump($list);exit;
+	   
+		$exportlist = array();
+		
+		$i =1;
+		foreach($list as $val)
+		{
+			$tmp_exval = array();
+			$tmp_exval['num_no'] = $i;
+			$tmp_exval['name'] = $val['goods_name'];
+			$tmp_exval['quantity'] = $val['goods_count'];
+			$tmp_exval['sku_str'] = $val['sku_str'];
+			
+			$info = M('lionfish_comshop_order_goods')->field('price')->where( array('rela_goodsoption_valueid' => $val['rela_goodsoption_valueid'],'goods_id' => $val['goods_id']) )->order('order_goods_id desc')->find();
+			
+			
+			$tmp_exval['price'] = $info['price'];
+			$tmp_exval['total_price'] = round($info['price'] * $val['goods_count'],2) ;
+			
+			//goods_id  rela_goodsoption_valueid
+			
+			$exportlist[] = $tmp_exval;
+			$i++;
+		}
+		
+		$columns = array(
+			array('title' => '序号', 'field' => 'num_no', 'width' => 12),
+			array('title' => '商品名称', 'field' => 'name', 'width' => 24),
+			array('title' => '数量', 'field' => 'quantity', 'width' => 12),
+			array('title' => '规格', 'field' => 'sku_str', 'width' => 24),
+			array('title' => '单价', 'field' => 'price', 'width' => 24),
+			array('title' => '总价', 'field' => 'total_price', 'width' => 24),
+		);
+		
+					
+		$list_info = M('lionfish_comshop_deliverylist')->select();
+		foreach ($list_info as $k => $v) {
+			dump($v);exit;
+		}
+		dump($exportlist);dump($list_info);exit;
+		//$params['list_info']
+		
+		// $lists_info = array(
+		// 					'line1' => $list_info['head_name'],//团老大
+		// 					'line2' => '团长：'.$list_info['head_name'].'     提货地址：'.$list_info['head_address'].'     联系电话：'.$list_info['head_mobile'],//团长：团老大啦     提货地址：湖南大剧院     联系电话：13000000000
+		// 					'line3' => '配送单：'.$list_info['list_sn'].'     时间：'.date('Y-m-d H:i:s', $list_info['create_time']),
+		// 					'line4' => '配送路线：'.$list_info['line_name'].'     配送员：'.$list_info['clerk_name'],
+		// 				);
+		
+		//dump($exportlist);dump($lists_info);dump($columns);exit;
+		
+		D('Seller/Excel')->export_delivery_list($exportlist, array('list_info' => $lists_info,'title' => '清单数据', 'columns' => $columns));
+		die();
+	}
 	
 	public function list_goodslist()
 	{

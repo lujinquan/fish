@@ -363,11 +363,22 @@ class CommunityheadController extends CommonController {
 		}
 	}
 	
+	// public function test()
+	// {
+	// 	$model=new CommunityheadModel(); 
+	// 	$delivery_date = $model->get_delivery_date(6);
+	// 	dump($delivery_date);exit;
+	// }
 	//------begin-------
 	
 	public function usergroup()
 	{
-		
+		//---------------------------------- 计算提货日期 by lucas start ---------------------
+		// $model=new CommunityheadModel(); 
+		// $delivery_date = $model->get_delivery_date(6);
+		// dump($delivery_date);exit;
+		//---------------------------------- 计算提货日期 by lucas end -----------------------
+
 		$_GPC = I('request.');
 		
 		$membercount = M('lionfish_community_head')->where("groupid=0")->count();
@@ -439,23 +450,32 @@ class CommunityheadController extends CommonController {
 	{
 		$_GPC = I('request.');
 		$id = intval($_GPC['id']);
-		
-				
+			
 		$group = M('lionfish_community_head_group')->where( array('id' => $id ) )->find();		
 
 		if (IS_POST) {
-			$data = array( 'groupname' => trim($_GPC['groupname']) );
-
+			$data = array( 
+				'groupname' => trim($_GPC['groupname']) ,
+				'close_order_time' => trim(strtotime($_GPC['close_order_time'])) ,
+				'send_order_time' => trim(strtotime($_GPC['send_order_time'])) ,
+				'delivery_cycle' => trim($_GPC['delivery_cycle']) ,
+			);
+			
 			if (!(empty($id))) {
 				M('lionfish_community_head_group')->where( array('id' => $id) )->save( $data );
 			}
 			 else {
+
 				$id = M('lionfish_community_head_group')->add($data);
 			}
 
 			show_json(1, array('url' => U('communityhead/usergroup', array('op' => 'display'))));
 		}
-		
+
+		// $item['begin_time'] = time();
+		// $item['end_time'] = time() + 86400;
+		// $this->item = $item;
+		//dump($group);exit;
 		$this->id = $id;
 		$this->group = $group;
 		

@@ -12,6 +12,7 @@
  *
  */
 namespace Home\Controller;
+use Seller\Model\CommunityheadModel;
 
 class CarController extends CommonController {
 	
@@ -2093,13 +2094,20 @@ class CarController extends CommonController {
 	{
 		$man_free_shipping = 0;
 	}
-	
+	$delivery_date = '';
 	//if( $buy_type == 'dan' )
 	if( $buy_type == 'dan'  || ($pintuan_model_buy == 1 && $buy_type != 'dan' && $buy_type != 'integral'  ) )			
 	{
 		//...判断团长是否开启自定义的情况 store_buy_total_money
-		$community_info_modify = M('lionfish_community_head')->field('is_modify_shipping_method,is_modify_shipping_fare,shipping_fare')->where( array('id' => $community_id) )->find();				
-								
+		$community_info_modify = M('lionfish_community_head')->field('groupid,is_modify_shipping_method,is_modify_shipping_fare,shipping_fare')->where( array('id' => $community_id) )->find();				
+		//------------------- by lucas S 小程序调用提交订单页面时，显示提货的时间--------------
+		$community_head_group = M('lionfish_community_head_group')->where( array('id' => $community_info_modify['groupid']) )->find();
+		$model = new CommunityheadModel(); 
+		$delivery_date = $model->get_delivery_date($community_info_modify['groupid']);
+		//dump($delivery_date);exit;
+		//$delivery_time = '提货时间： 2020-03-20';				
+		//var_dump('$community_info_modify: ',$community_info_modify);exit; //by lucas
+		//------------------- by lucas E --------------						
 		
 		if( !empty($community_info_modify['is_modify_shipping_method']) && $community_info_modify['is_modify_shipping_method'] == 1 )
 		{
@@ -2484,6 +2492,10 @@ class CarController extends CommonController {
 	
 	$need_data = array();
 	$need_data['code'] = 1;
+	
+	//--------------- by lucas start -------------
+	$need_data['delivery_date'] = $delivery_date;
+	//--------------- by lucas end --------------
 	
 	$need_data['open_score_buy_score'] = $open_score_buy_score;//1开启积分抵扣
 	$need_data['score'] = $member_info['score'];//会员持有的积分

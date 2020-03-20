@@ -264,6 +264,79 @@ class ExcelModel{
 		exit;
 		
 	}
+
+	public function export_delivery_all_list($list, $params = array())
+	{
+		if (PHP_SAPI == 'cli') {
+			exit('This example should only be run from a Web Browser');
+		}
+		
+		require_once ROOT_PATH . '/ThinkPHP/Library/Vendor/phpexcel/PHPExcel.php';
+		$excel = new \PHPExcel();
+		
+		$excel->getProperties()->setCreator('狮子鱼商城')->setLastModifiedBy('狮子鱼商城')->setTitle('Office 2007 XLSX Test Document')->setSubject('Office 2007 XLSX Test Document')->setDescription('Test document for Office 2007 XLSX, generated using PHP classes.')->setKeywords('office 2007 openxml php')->setCategory('report file');
+		$sheet = $excel->setActiveSheetIndex(0);
+		$rownum = 1;
+		
+		$list_info = $params['list_info'];
+		
+		$sheet->setCellValue('A1', $list_info['line1']); 
+		
+	
+		//$sheet->mergeCells('A1:D1');
+		$rownum++;
+		
+		$sheet->setCellValue('A2', $list_info['line2']); 
+		//$sheet->mergeCells('A2:D2');
+		$rownum++;
+		
+		$sheet->setCellValue('A3', $list_info['line3']); 
+		//$sheet->mergeCells('A3:D3');
+		$rownum++;
+		
+		$sheet->setCellValue('A4', $list_info['line4']); 
+		//$sheet->mergeCells('A4:D4');
+		$rownum++;
+		
+		 
+		foreach ($params['columns'] as $key => $column ) {
+			$sheet->setCellValue($this->column($key, $rownum), $column['title']);
+
+			if (!(empty($column['width']))) {
+				$sheet->getColumnDimension($this->column_str($key))->setWidth($column['width']);
+			}
+
+		}
+
+		++$rownum;
+		$len = count($params['columns']);
+
+		foreach ($list as $row ) {
+			$i = 0;
+
+			while ($i < $len) {
+				$value = ((isset($row[$params['columns'][$i]['field']]) ? $row[$params['columns'][$i]['field']] : ''));
+				$sheet->setCellValue($this->column($i, $rownum), $value);
+				++$i;
+			}
+
+			++$rownum;
+		}
+		 
+		
+		
+		$excel->getActiveSheet()->setTitle($params['title']);
+		$filename = ($params['title'] . '-' . date('Y-m-d H:i', time()));
+		
+		
+		header('pragma:public');
+		header('Content-type:application/vnd.ms-excel;charset=utf-8;name="'.$params['title'].'.xls"');
+		header("Content-Disposition:attachment;filename=".$filename.".xls");//attachment新窗口打印inline本窗口打印
+		$objWriter = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
+		$objWriter->save('php://output');
+		exit;
+		
+	}
 	
 	
 	/**
