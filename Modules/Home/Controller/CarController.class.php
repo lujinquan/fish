@@ -3810,9 +3810,19 @@ public function sub_order()
 				$o['order_status_id'] =  $order['is_pin'] == 1 ? 2:1;
 				$o['paytime']=time();
 				$o['transaction_id'] = $transaction_id;
+				//------------------------- by lucas 入库提货日期 S-----------------------
+				$order_all_new_info = M('lionfish_comshop_order_all')->where( array('id' => $out_trade_no) )->field('member_id,delivery_date')->find();
+				if(!$order_all_new_info['delivery_date']){
+					$member_new_info = M('lionfish_comshop_member')->where( array('id' => $order_all_new_info['member_id']) )->field('groupid')->find();
+					$model = new CommunityheadModel(); 
+					$delivery_date = $model->get_delivery_date($member_new_info['groupid']);//dump($delivery_date);exit;
+					$o['delivery_date'] = $delivery_date;
+				}
 				
+				//------------------------- by lucas 入库提货日期 E-----------------------
 				M('lionfish_comshop_order_all')->where( array('id' => $out_trade_no) )->save($o);
 				
+
 				// ims_ 
 				
 				$order_relate_list = M('lionfish_comshop_order_relate')->where( array('order_all_id' => $order_all['id']) )->select();
