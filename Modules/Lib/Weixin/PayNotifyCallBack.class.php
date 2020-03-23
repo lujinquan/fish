@@ -239,7 +239,10 @@ class PayNotifyCallBack extends WxPayNotify
 				$o['order_status_id'] =  $order_all['is_pin'] == 1 ? 2:1;
 				$o['paytime']=time();
 				$o['transaction_id'] = $transaction_id;
-				
+				//------------------ by lucas 微信支付成功后的回调，S 写入交易单号transaction_id-------------------
+				$o['extra'] = 11;
+				//$o['delivery_date'] = '2020-04-01';
+				//------------------ by lucas 微信支付成功后的回调 E-------------------
 				M('lionfish_comshop_order_all')->where( array('id' => $out_trade_no) )->save($o);
 				
 				$order_relate_list = M('lionfish_comshop_order_relate')->where( array('order_all_id' => $order_all['id']) )->select();

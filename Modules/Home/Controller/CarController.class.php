@@ -3016,7 +3016,10 @@ public function sub_order()
 	$order_all_data['paytime'] = 0;
 	
 	$order_all_data['addtime'] = time();
-	
+	//--------------------- by lucas S ------------
+	//$order_all_data['delivery_date'] = '2020-03-11';
+	$order_all_data['extra'] = 2;
+	//--------------------- by lucas E ------------
 	$order_all_id = M('lionfish_comshop_order_all')->add($order_all_data);
 	
 	
@@ -3810,16 +3813,12 @@ public function sub_order()
 				$o['order_status_id'] =  $order['is_pin'] == 1 ? 2:1;
 				$o['paytime']=time();
 				$o['transaction_id'] = $transaction_id;
-				//------------------------- by lucas 入库提货日期 S-----------------------
-				$order_all_new_info = M('lionfish_comshop_order_all')->where( array('id' => $out_trade_no) )->field('member_id,delivery_date')->find();
-				if(!$order_all_new_info['delivery_date']){
-					$member_new_info = M('lionfish_comshop_member')->where( array('id' => $order_all_new_info['member_id']) )->field('groupid')->find();
-					$model = new CommunityheadModel(); 
-					$delivery_date = $model->get_delivery_date($member_new_info['groupid']);//dump($delivery_date);exit;
-					$o['delivery_date'] = $delivery_date;
-				}
+
 				
-				//------------------------- by lucas 入库提货日期 E-----------------------
+				//--------------------- by lucas S ------------
+				$o['extra'] = 3;
+				//--------------------- by lucas E ------------
+				
 				M('lionfish_comshop_order_all')->where( array('id' => $out_trade_no) )->save($o);
 				
 
@@ -3937,8 +3936,8 @@ public function sub_order()
 			$openid =       $payment['we_openid'];
 			$out_trade_no = $order_all_id.'-'.time();
 			
-			//out_trade_no 
-			M('lionfish_comshop_order_all')->where( array('id' => $order_all_id ) )->save( array('out_trade_no' => $out_trade_no ) );
+			
+			M('lionfish_comshop_order_all')->where( array('id' => $order_all_id ) )->save( array('out_trade_no' => $out_trade_no ,'extra' => 4) );
 			
 			
 			$spbill_create_ip = $_SERVER['REMOTE_ADDR'];
@@ -3987,12 +3986,17 @@ public function sub_order()
 				$tmp['timeStamp'] = "$time";
 				
 				$prepay_id = (string)$array['PREPAY_ID'];
+							
+				//------------------------- by lucas 入库提货日期 2020-03-21 S-----------------------
+				$comshop_order_info = M('lionfish_comshop_order')->where( array('order_id' => array('in', $order_ids_arr)) )->find();
+				$comshop_head_info = M('lionfish_community_head')->where( array('id' => $comshop_order_info['head_id']) )->find();
+				$model = new CommunityheadModel(); 
+				$delivery_date = $model->get_delivery_date($comshop_head_info['groupid']);//dump($delivery_date);exit;
+				M('lionfish_comshop_order_all')->where( array('id' => $order_all_id ) )->save( array('extra' => 10,'delivery_date' => $delivery_date ) );
+				//------------------------- by lucas 入库提货日期 2020-03-21 E-----------------------
 				
-				
-				M('lionfish_comshop_order')->where( array('order_id' => array('in', $order_ids_arr)) )->save( array('perpay_id' => $prepay_id) );
-				
-				
-				
+				M('lionfish_comshop_order')->where( array('order_id' => array('in', $order_ids_arr)) )->save( array('perpay_id' => $prepay_id, 'delivery_date' => $delivery_date ) );
+
 				//M('order')->where( array('order_id' => array('in',$order_ids_arr) ) )->save( array('perpay_id' => (string)$array['PREPAY_ID']) );
 				$data = array();
 				$data['code'] = 0;
@@ -4427,7 +4431,10 @@ public function sub_order()
 		$order_all_data['paytime'] = 0;
 		$order_all_data['total_money'] = $order['total']+ $order['shipping_fare']-$order['voucher_credit']-$order['fullreduction_money'];
 		$order_all_data['addtime'] = time();
-		
+		//--------------------- by lucas S ------------
+		//$order_all_data['delivery_date'] = '2020-03-10';
+		$order_all_data['extra'] = 1;
+		//--------------------- by lucas E ------------
 		$order_all_id = M('lionfish_comshop_order_all')->add($order_all_data);
 			
 		$order_relate_data = array();

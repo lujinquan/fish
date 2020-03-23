@@ -265,7 +265,20 @@ class ExcelModel{
 		
 	}
 
-	public function export_delivery_all_list($list, $params = array())
+	/**
+	 * 功能描述： 批量导出团长的配送清单
+	 * =====================================
+	 * @author  Lucas 
+	 * email:   598936602@qq.com 
+	 * Website  address:  www.mylucas.com.cn
+	 * =====================================
+	 * 创建时间: 2020-03-22 20:04:05
+	 * @example 
+	 * @link    文档参考地址：
+	 * @return  返回值  
+	 * @version 版本  1.0
+	 */
+	public function export_delivery_all_list($lists, $params = array())
 	{
 		if (PHP_SAPI == 'cli') {
 			exit('This example should only be run from a Web Browser');
@@ -274,61 +287,69 @@ class ExcelModel{
 		require_once ROOT_PATH . '/ThinkPHP/Library/Vendor/phpexcel/PHPExcel.php';
 		$excel = new \PHPExcel();
 		
-		$excel->getProperties()->setCreator('狮子鱼商城')->setLastModifiedBy('狮子鱼商城')->setTitle('Office 2007 XLSX Test Document')->setSubject('Office 2007 XLSX Test Document')->setDescription('Test document for Office 2007 XLSX, generated using PHP classes.')->setKeywords('office 2007 openxml php')->setCategory('report file');
-		$sheet = $excel->setActiveSheetIndex(0);
-		$rownum = 1;
+		$excel->getProperties()->setCreator('武房小店')->setLastModifiedBy('武房小店')->setTitle('Office 2007 XLSX Test Document')->setSubject('Office 2007 XLSX Test Document')->setDescription('Test document for Office 2007 XLSX, generated using PHP classes.')->setKeywords('office 2007 openxml php')->setCategory('report file');
 		
-		$list_info = $params['list_info'];
-		
-		$sheet->setCellValue('A1', $list_info['line1']); 
-		
-	
-		//$sheet->mergeCells('A1:D1');
-		$rownum++;
-		
-		$sheet->setCellValue('A2', $list_info['line2']); 
-		//$sheet->mergeCells('A2:D2');
-		$rownum++;
-		
-		$sheet->setCellValue('A3', $list_info['line3']); 
-		//$sheet->mergeCells('A3:D3');
-		$rownum++;
-		
-		$sheet->setCellValue('A4', $list_info['line4']); 
-		//$sheet->mergeCells('A4:D4');
-		$rownum++;
-		
-		 
-		foreach ($params['columns'] as $key => $column ) {
-			$sheet->setCellValue($this->column($key, $rownum), $column['title']);
+		foreach ($lists as $l => $list ) {
+			// 创建sheet
+			$excel->createSheet();
+			$sheet = $excel->setActiveSheetIndex($l);
+			$rownum = 1;		
+			 
+			foreach ($params['columns'] as $key => $column ) {
+				//dump($this->column($key, $rownum)); // 获取单元格："A1"
+				//dump($this->column_str($key));exit; // 获取行："A"
+				$sheet->setCellValue($this->column($key, $rownum), $column['title']);
 
-			if (!(empty($column['width']))) {
-				$sheet->getColumnDimension($this->column_str($key))->setWidth($column['width']);
+				if (!(empty($column['width']))) {
+					$sheet->getColumnDimension($this->column_str($key))->setWidth($column['width']);
+					
+					//$sheet->getColumnDimension($this->column_str($key))->setRowHeight(28);
+				}
+				// 设置字体加粗
+				$sheet->getstyle($this->column($key, $rownum))->getFont()->setBold(true);
+				// 设置标题行填充色
+				$sheet->getStyle($this->column($key, $rownum))->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID);
+				$sheet->getStyle($this->column($key, $rownum))->getFill()->getStartColor()->setARGB('80EEEEEE');
 			}
-
-		}
-
-		++$rownum;
-		$len = count($params['columns']);
-
-		foreach ($list as $row ) {
-			$i = 0;
-
-			while ($i < $len) {
-				$value = ((isset($row[$params['columns'][$i]['field']]) ? $row[$params['columns'][$i]['field']] : ''));
-				$sheet->setCellValue($this->column($i, $rownum), $value);
-				++$i;
-			}
-
+		
 			++$rownum;
+			$len = count($params['columns']);
+			// 遍历每个工作组的列表数据
+			foreach ($list as $row ) {
+				$i = 0;
+
+				while ($i < $len) {
+					$value = ((isset($row[$params['columns'][$i]['field']]) ? $row[$params['columns'][$i]['field']] : ''));
+					$sheet->setCellValue($this->column($i, $rownum), $value);
+					//需要合并的行如 第二行和第三行，$i < 2代表合并D列前面的列,0为A,1为B,2为C
+					// $mergeColStartNum = '2';
+					// $mergeColEndNum = '3';
+					foreach ($params['sheetsMergeArr'][$l][0] as $p => $m) {
+						if($rownum == $m && $i < 3){
+							$i_name = $this->column_str($i);
+							$sheet->mergeCells($i_name.$m.':'.$i_name.$params['sheetsMergeArr'][$l][1][$p]);
+							//// 将合并的单元格设置样式垂直居中
+							// $sheet->getstyle($i_name.$m)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+							// $sheet->getstyle($i_name.$m)->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
+						}
+					}
+					$sheet->getstyle($this->column($i, $rownum))->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+					$sheet->getstyle($this->column($i, $rownum))->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
+					// if($rownum == $mergeColStartNum && $i < 3){
+					// 	$i_name = $this->column_str($i);
+					// 	$sheet->mergeCells($i_name.$mergeColStartNum.':'.$i_name.$mergeColEndNum);
+					// }
+					++$i;
+				}
+				$sheet->getRowDimension($rownum)->setRowHeight(24);
+				++$rownum;
+			}
+
+			$excel->getActiveSheet()->setTitle($params['sheetsTitleArr'][$l]);
 		}
-		 
 		
-		
-		$excel->getActiveSheet()->setTitle($params['title']);
 		$filename = ($params['title'] . '-' . date('Y-m-d H:i', time()));
-		
-		
+
 		header('pragma:public');
 		header('Content-type:application/vnd.ms-excel;charset=utf-8;name="'.$params['title'].'.xls"');
 		header("Content-Disposition:attachment;filename=".$filename.".xls");//attachment新窗口打印inline本窗口打印

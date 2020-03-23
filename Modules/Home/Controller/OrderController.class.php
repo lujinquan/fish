@@ -164,7 +164,11 @@ class OrderController extends CommonController {
 	    
 	    
 		$order_info = M('lionfish_comshop_order')->where( array('member_id' => $member_id,'order_id' => $order_id) )->find();
-		
+		//--------------------by lucas 显示提货日期 S----------------
+		$order_relate_info = M('lionfish_comshop_order_relate')->where( array('order_id' => $order_id) )->find();
+		$order_all_info = M('lionfish_comshop_order_all')->where( array('id' => $order_relate_info['order_all_id']) )->find();
+		$delivery_date = $order_all_info['delivery_date'];//'2020-04-01';
+		//--------------------by lucas 显示提货日期 E----------------
 		$pick_up_info = array();
 		$pick_order_info = array();
 		
@@ -500,8 +504,9 @@ class OrderController extends CommonController {
 		}else if($order_info['delivery'] == 'tuanz_send'){
 			$order_info['delivery_name'] = '团长配送';
 		}
-		
-		
+		//--------------------by lucas 显示提货日期 S----------------
+		$need_data['delivery_date'] = $delivery_date;
+		//--------------------by lucas 显示提货日期 E----------------
 		$need_data['order_info'] = $order_info;
 		$need_data['order_status_info'] = $order_status_info;
 		$need_data['shipping_province'] = $shipping_province;
