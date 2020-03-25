@@ -70,17 +70,18 @@
                     <div class="layui-form-item">
     					<span class="layui-input-inline">
     						<select name='searchtime' class='form-control' style="width:100px;padding:0 5px;"  id="searchtime">
-    							<option value=''>不按时间</option>
+    							<!-- <option value=''>不按时间</option>
     							<option value='create_time' <?php if( $gpc['searchtime']=='create_time'){ ?>selected<?php } ?>>创建清单时间</option>
     							<option value='express_time' <?php if( $gpc['searchtime']=='express_time'){ ?>selected<?php } ?>>配送时间</option>
-    							<option value='head_get_time' <?php if( $gpc['searchtime']=='head_get_time'){ ?>selected<?php } ?>>送达时间</option>
+    							<option value='head_get_time' <?php if( $gpc['searchtime']=='head_get_time'){ ?>selected<?php } ?>>送达时间</option> -->
+                                <option value='delivery' <?php if( $gpc['searchtime']=='delivery'){ ?>selected<?php } ?>>配送日期</option>
     						</select>
     					</span>
-    					<span class="layui-input-inline" style="width: 285px;">
+    					<span class="layui-input-inline" style="width: 285px;" id="time">
     						{:tpl_form_field_daterange('time', array('starttime'=>date('Y-m-d H:i', $starttime),'endtime'=>date('Y-m-d H:i', $endtime)),true);}
     					</span>
                         <span class="layui-input-inline" style="width: 285px;">
-                            {:tpl_form_field_date('send_date', date('Y-m-d'),false);}
+                            {:tpl_form_field_date('delivery_date', date('Y-m-d',$delivery_time),false);}
                         </span>
                         <div class="layui-input-inline">
                             <input type="hidden" name="export" id="export" value="0">
@@ -136,7 +137,7 @@
                                             一键打印所有团长配送清单
                                         </span>
                                     </a> -->
-                                    <a class="btn layui-btn layui-btn-sm " href="{:U('delivery/orders_downexcel', array('list_id' => 3))}"  target='_blank'>
+                                    <a class="btn layui-btn layui-btn-sm " href="{:U('delivery/orders_downexcel', array('delivery_date' => $delivery_date))}"  target='_blank'>
                                             <span data-toggle="tooltip" data-placement="top" title="" data-original-title="一键导出所有团长配送清单">
                                                 一键导出所有团长配送清单
                                             </span>
@@ -282,7 +283,8 @@ var $;
 layui.use(['jquery', 'layer','form'], function(){ 
     $ = layui.$;
     var form = layui.form;
-	
+	$('#time').hide();
+
 	$("[data-toggle='ajaxModal']").click(function () {
         var s_url = $(this).attr('data-href');
 		ajax_url = s_url;

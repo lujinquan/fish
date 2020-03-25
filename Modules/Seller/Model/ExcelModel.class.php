@@ -321,11 +321,11 @@ class ExcelModel{
 				while ($i < $len) {
 					$value = ((isset($row[$params['columns'][$i]['field']]) ? $row[$params['columns'][$i]['field']] : ''));
 					$sheet->setCellValue($this->column($i, $rownum), $value);
-					//需要合并的行如 第二行和第三行，$i < 2代表合并D列前面的列,0为A,1为B,2为C
+					//需要合并的行如 第二行和第三行，$i < 4代表合并E列前面的列,0为A,1为B,2为C,3为D
 					// $mergeColStartNum = '2';
 					// $mergeColEndNum = '3';
 					foreach ($params['sheetsMergeArr'][$l][0] as $p => $m) {
-						if($rownum == $m && $i < 3){
+						if($rownum == $m && $i < 4){
 							$i_name = $this->column_str($i);
 							$sheet->mergeCells($i_name.$m.':'.$i_name.$params['sheetsMergeArr'][$l][1][$p]);
 							//// 将合并的单元格设置样式垂直居中
@@ -344,7 +344,25 @@ class ExcelModel{
 				$sheet->getRowDimension($rownum)->setRowHeight(24);
 				++$rownum;
 			}
-
+			$sheet->setCellValue('H2', '配送信息');
+			$sheet->setCellValue('H3', '配送日期');
+			$sheet->setCellValue('I3', $params['delivery_date']);
+			$sheet->setCellValue('H4', '送达时间');
+			$sheet->setCellValue('I4', '上午');
+			$sheet->setCellValue('H5', '配送地址');
+			$sheet->setCellValue('I5', $params['sheetsAttrArr'][$l]['address']);
+			$sheet->setCellValue('H6', '联系人');
+			$sheet->setCellValue('I6', $params['sheetsAttrArr'][$l]['head_name']);
+			$sheet->setCellValue('H7', '联系方式');
+			$sheet->setCellValue('I7', $params['sheetsAttrArr'][$l]['head_mobile']);
+			$sheet->setCellValue('H8', '备注');
+			//$sheet->setCellValue('I8', '湖北省武汉市洪山区梨园街道东沙花园小区物业');
+			// $sheet->setCellValue('H9', '配送合计');
+			// $sheet->setCellValue('H10', '品种');
+			// $sheet->setCellValue('I10', '1387148498');
+			$sheet->getColumnDimension('I')->setWidth(30);
+			$sheet->getstyle('I3')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$sheet->getstyle('I4')->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
 			$excel->getActiveSheet()->setTitle($params['sheetsTitleArr'][$l]);
 		}
 		

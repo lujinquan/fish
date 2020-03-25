@@ -26,10 +26,16 @@ class DeliveryController extends CommonController{
         $pindex    = max(1, intval($gpc['page']));
         $psize     = 20;
 		
-		$searchtime = isset($gpc['searchtime']) ? $gpc['searchtime'] : '';
+		$searchtime = isset($gpc['searchtime']) ? $gpc['searchtime'] : 'delivery';
 		$starttime = isset($gpc['time']['start']) ? strtotime($gpc['time']['start']) : strtotime(date('Y-m-d'.' 00:00:00'));
 		$endtime = isset($gpc['time']['end']) ? strtotime($gpc['time']['end']) : strtotime(date('Y-m-d'.' 23:59:59'));
-		
+
+		//------------------------- by lucas S------------------------
+		$delivery_date = isset($gpc['delivery_date']) ? $gpc['delivery_date'] : date('Y-m-d');
+		//dump($delivery_date);exit;
+		$this->delivery_date = $delivery_date;
+		$this->delivery_time = strtotime($delivery_date);
+		//------------------------- by lucas E------------------------
 		
 		$this->searchtime = $searchtime;
 		$this->starttime = $starttime;
@@ -51,6 +57,11 @@ class DeliveryController extends CommonController{
 			{
 				$condition .= " and d.head_get_time > {$starttime} and d.head_get_time < {$endtime} ";
 			}
+			//------------------------- by lucas S------------------------
+			if( $searchtime == 'delivery' ){
+				$condition .= " and delivery_date = '" . $delivery_date . "' ";
+			}
+			//------------------------- by lucas E------------------------
 		}
 		
 
@@ -85,6 +96,11 @@ class DeliveryController extends CommonController{
 				{
 					$excel_title .= "送达时间:".date('Y-m-d H:i:s', $starttime).'  '.date('Y-m-d H:i:s', $endtime);
 					$search_tiaoj .= "送达时间： ".date('Y-m-d H:i:s', $starttime).'  '.date('Y-m-d H:i:s', $endtime);
+				}
+				if( $searchtime == 'delivery')
+				{
+					$excel_title .= "送达时间:".$delivery_date;
+					$search_tiaoj .= "送达时间:".$delivery_date;
 				}
 			}
 			$excel_title = "";
@@ -288,7 +304,8 @@ class DeliveryController extends CommonController{
         
 		$list = M()->query('SELECT d.*,h.community_name FROM ' . C('DB_PREFIX'). "lionfish_comshop_deliverylist as d , ".C('DB_PREFIX')."lionfish_community_head as h 
 				WHERE  d.head_id = h.id " . $condition . ' order by d.id desc limit ' . (($pindex - 1) * $psize) . ',' . $psize);
-		//dump($list);exit;
+		// dump('SELECT d.*,h.community_name FROM ' . C('DB_PREFIX'). "lionfish_comshop_deliverylist as d , ".C('DB_PREFIX')."lionfish_community_head as h WHERE  d.head_id = h.id " . $condition . ' order by d.id desc limit ' . (($pindex - 1) * $psize) . ',' . $psize);
+		// dump($list);exit;
 		
 		if( !empty($list) )
 		{
@@ -937,13 +954,183 @@ class DeliveryController extends CommonController{
 		D('Seller/Excel')->export_delivery_list($exportlist, array('list_info' => $lists_info,'title' => '清单数据', 'columns' => $columns));
 		die();
 	}
+
 	public function orders_downexcel()
 	{
-		// $list = M()->query('SELECT * FROM ' . C('DB_PREFIX') . "lionfish_comshop_deliverylist_goods 
-		// WHERE 1 " . $condition . ' order by id desc ');
-       
-	   
-	   
+		$gpc = I('request.');
+		$delivery_date = $gpc['delivery_date'];
+		
+		$list = M()->query('SELECT * FROM ' . C('DB_PREFIX') . "lionfish_comshop_deliverylist where state = 1 and delivery_date = '" .$delivery_date . "' order by id desc ");
+		//show_json(1, array('msg' =>'配送清单成功','url' => $_SERVER['HTTP_REFERER'] ));
+		//dump($list);exit;
+		$orders = [];
+        foreach ($list as $k => $l) {
+       		$orderids = M('lionfish_comshop_deliverylist_order')->field('order_id')->where( array('list_id' => $l['id']) )->select();
+       		$ids = [];
+       		foreach ($orderids as $o) {
+       			$ids[] = $o['order_id'];
+       		}
+       		//dump($orderids);exit;
+       		$order = M('lionfish_comshop_order')->field('order_id,shipping_tel,shipping_name,order_id,member_id,order_num_alias')->where( array('order_id' => array('in',$ids)) )->select();
+       		foreach ($order as $e => $v) {
+       			$all_info = M('lionfish_comshop_order_relate')->field('order_all_id')->where( array('order_id' => $v['order_id']) )->find();
+       			$v['head_id'] = $l['head_id'];
+       			$v['head_name'] = $l['head_name'];
+       			$v['head_mobile'] = $l['head_mobile'];
+       			$v['head_address'] = $l['head_address'];
+       			$v['order_all_id'] = $all_info['order_all_id'];
+       			$orders[] = $v;
+       		}
+       		// foreach ($order as $e => $v) {
+       		// 	//$order = M('lionfish_comshop_deliverylist_goods')->field('order_id')->where( array('list_id' => $l['id']) )->select();
+       		// }
+       		// $order = M('lionfish_comshop_deliverylist_goods')->where( array('list_id' => $l['id']) )->select();
+       		// dump($order);exit;
+       }
+		//M()->query('SELECT * FROM ' . C('DB_PREFIX') . "lionfish_comshop_deliverylist where state = 1 order by id desc ");
+       $heads = M('lionfish_community_head')->field('id,community_name,head_name,head_mobile,address')->where( array('list_id' => $l['id']) )->select();
+       $temps = [];
+       foreach ($heads as $h) {
+       		foreach ($orders as $ord) {
+       			if($h['id'] == $ord['head_id']){
+       				$ord['community_name'] = $h['community_name'];
+       				$ord['head_name'] = $h['head_name'];
+       				$ord['head_mobile'] = $h['head_mobile'];
+       				$ord['address'] = $h['address'];
+       				$temps[$h['id']][] = $ord;
+       			}
+       		}
+       }
+	   //dump($temps);exit;
+       $i = 0;
+       $examps = [];
+       $sheetsTitleArr = []; //sheet标题
+       $sheetsAttrArr = []; //团长信息
+       foreach ($temps as $temp) {
+       		$s = 0;
+       		foreach ($temp as $t) {
+       			$order_goods = M()->query('SELECT name,order_goods_id,quantity FROM ' . C('DB_PREFIX') . "lionfish_comshop_order_goods where order_id = ".$t['order_id']);
+       			//dump($t);exit;
+       			foreach ($order_goods as $u => $op) {
+       				// $y = M()->query('SELECT value FROM ' . C('DB_PREFIX') . "lionfish_comshop_order_option where order_id = ".$t['order_id']." and order_goods_id = ".$op['order_goods_id']);
+       				$r = [];
+       				$r['community_name'] = $t['community_name']; // 小区的名字
+       				$r['num'] = ''; // 编号
+       				$r['shipping_name'] = $t['shipping_name']; // 收货人姓名
+       				$r['shipping_tel'] = $t['shipping_tel']; // 收货人联系电话
+       				$r['name'] = $op['name']; //商品的名称
+       				$r['quantity'] = $op['quantity'];
+       				$r['member_id'] = $t['member_id'];
+       				$r['order_num_alias'] = "\t".$t['order_num_alias']."\t";
+       				$r['order_all_id'] = $t['order_all_id']; // 小区的名字
+       				//$r['num'] = 2 + $s; // 计算合并用
+       				//dump($r);exit;
+       				$examps[$i][$s] = $r;
+       				$s++;
+       			}
+       			
+       			
+       		}
+       		$sheetsTitleArr[$i] = $temp[0]['community_name'];
+       		$sheetsAttrArr[$i] = [
+       			'head_name' => $temp[0]['head_name'],
+       			'head_mobile' => $temp[0]['head_mobile'],
+       			'address' => $temp[0]['address'],
+       		];
+       	 	//$examps[] = $temp;
+       	 	$i++;
+       }
+       //dump($sheetsAttrArr);exit;
+       // 序列号组
+       $no_arr = [];
+      	// 组装列表数据(将列表中会员id一样，商品名一样的去重，并重新排序)
+       foreach($examps as $j => $d){
+       		//$ss = [];
+       		foreach ($d as $v => $r) {
+       			$kk = 0;
+       			
+       			foreach ($d as $q => $ww) {
+       				if($r['member_id'] == $ww['member_id'] && $r['name'] == $ww['name']){
+       					// dump($v);dump($q);
+       					
+       					$kk += $ww['quantity'];
+       					if($v != $q){
+       						//$ss[] = $q;
+       						//dump(11);exit;
+       						unset($examps[$j][$q]);
+       					}
+       				}
+       			}
+       			// dump($ss);exit;
+       			// if(!in_array($v, $ss[$v])){
+       				$r['quantity'] = $kk;
+       				$examps[$j][$v] = $r;
+       			//}
+       			
+       		}
+      		// 根据member_id排序
+			// $member_ids = array_column($examps[$j],'member_id');
+			// array_multisort($member_ids,SORT_DESC,$examps[$j]);
+			// 根据shipping_name排序
+			$shipping_names = array_column($examps[$j],'shipping_name');
+			$shipping_name_sort = array_unique($shipping_names);
+			//dump(array_unique($shipping_names));exit;
+			array_multisort($shipping_name_sort,SORT_DESC);
+			$no_arr[$j] = $shipping_name_sort;
+			
+			array_multisort($shipping_names,SORT_DESC,$examps[$j]);
+			foreach ($examps[$j] as $ex => &$valu) {
+				$valu['num'] =  $ex + 2;
+			}
+       		//array_multisort($examps[$j]);
+       } 
+		//dump($no_arr);exit;
+
+       // 获取需要合并单元，并给出序列号
+	   $sheetsMergeArr = [];
+       foreach($examps as $n => $x){
+       		$numb = 0;
+       		foreach ($x as $g => $p) {
+       			$c = 0;
+
+       			foreach ($x as $w) { 
+       				//if($p['order_all_id'] == $w['order_all_id']){ //根据order_all_id分组
+       				if($p['shipping_name'] == $w['shipping_name']){ //根据member_id分组
+       					$c++;
+       					if($c == 1){
+       						$sheetsMergeArr[$n][0][$g] = $w['num'];
+       					}
+       					if($c > 1){
+       						$sheetsMergeArr[$n][1][$g] = $w['num'];
+       					}
+       					
+       				}
+       			}
+       			$numb++;
+       			if($c == 1){
+
+       				 unset($sheetsMergeArr[$n][0][$g]);
+       				// unset($sheetsMergeArr[$n][1][$g]);
+       			}else{
+       				//$numb--;
+       			}
+       			$examps[$n][$g]['no'] = 1 + array_search($p['shipping_name'], $no_arr[$n]);
+       		}
+       		$z = array_unique(array_values($sheetsMergeArr[$n][0]));
+       		array_multisort($z);
+       		$sheetsMergeArr[$n][0] = $z;
+
+       		$b = array_unique(array_values($sheetsMergeArr[$n][1]));
+       		array_multisort($b);
+       		$sheetsMergeArr[$n][1] = $b;
+
+
+       		//dump($x);exit;
+       }
+
+//dump($examps);exit;
+	$exportlist = $examps; 
+	//$sheetsMergeArr = [];
 		// $exportlist = array();
 		
 		// $i =1;
@@ -985,34 +1172,36 @@ class DeliveryController extends CommonController{
 		// }
 		
 		$columns = array(
-			array('title' => '小区', 'field' => 'num_no', 'width' => 24),
-			array('title' => '编号', 'field' => 'name', 'width' => 8),
-			array('title' => '联系电话', 'field' => 'quantity', 'width' => 18),
-			array('title' => '收货姓名', 'field' => 'sku_str', 'width' => 24),
-			array('title' => '商品名称', 'field' => 'price', 'width' => 24),
-			array('title' => '数量', 'field' => 'total_price', 'width' => 8),
+			array('title' => '小区', 'field' => 'community_name', 'width' => 24),
+			array('title' => '编号', 'field' => 'no', 'width' => 8),
+			array('title' => '联系电话', 'field' => 'shipping_tel', 'width' => 18),
+			array('title' => '收货姓名', 'field' => 'shipping_name', 'width' => 24),
+			array('title' => '商品名称', 'field' => 'name', 'width' => 24),
+			array('title' => '数量', 'field' => 'quantity', 'width' => 8),
+			//array('title' => '订单编号', 'field' => 'order_num_alias', 'width' => 24),
+			//array('title' => '总订单编号', 'field' => 'order_all_id', 'width' => 12),
 		);
 		
-		$exportlist = array(
-			// 这是第一个sheet数据
-			array(
-				array('num_no'=>'VV+车联网产业园','name'=>1,'quantity'=>'13072791863','sku_str'=>'熊伟15一1一401','price'=>'面粉(5kg)','total_price'=>1),
-				array('num_no'=>'VV+车联网产业园','name'=>1,'quantity'=>'13072791863','sku_str'=>'熊伟15一1一401','price'=>'云鹤牌无碘盐 350g','total_price'=>4),
-				array('num_no'=>'VV+车联网产业园','name'=>2,'quantity'=>'13098812852','sku_str'=>'甄桂云','price'=>'红茄子(约3斤装)','total_price'=>1),
-				array('num_no'=>'VV+车联网产业园','name'=>2,'quantity'=>'13098812852','sku_str'=>'甄桂云','price'=>'上海青(约2斤装)','total_price'=>1),
-				array('num_no'=>'VV+车联网产业园','name'=>2,'quantity'=>'13098812852','sku_str'=>'甄桂云','price'=>'豌豆(约2斤)','total_price'=>1),
-				array('num_no'=>'VV+车联网产业园','name'=>2,'quantity'=>'13098812852','sku_str'=>'甄桂云','price'=>'香干(约2斤)','total_price'=>1),
-			),
-			// 这是第二个sheet数据
-			array(
-				array('num_no'=>'VV+车联网产业园','name'=>1,'quantity'=>'13072791863','sku_str'=>'熊伟15一1一401','price'=>'面粉(5kg)','total_price'=>1),
-				array('num_no'=>'VV+车联网产业园','name'=>1,'quantity'=>'13072791863','sku_str'=>'熊伟15一1一401','price'=>'云鹤牌无碘盐 350g','total_price'=>4),
-				array('num_no'=>'VV+车联网产业园','name'=>2,'quantity'=>'13098812852','sku_str'=>'甄桂云','price'=>'红茄子(约3斤装)','total_price'=>1),
-				array('num_no'=>'VV+车联网产业园','name'=>2,'quantity'=>'13098812852','sku_str'=>'甄桂云','price'=>'上海青(约2斤装)','total_price'=>1),
-				array('num_no'=>'VV+车联网产业园','name'=>2,'quantity'=>'13098812852','sku_str'=>'甄桂云','price'=>'豌豆(约2斤)','total_price'=>1),
-				array('num_no'=>'VV+车联网产业园','name'=>2,'quantity'=>'13098812852','sku_str'=>'甄桂云','price'=>'香干(约2斤)','total_price'=>1),
-			)
-		);
+		// $exportlist = array(
+		// 	// 这是第一个sheet数据
+		// 	array(
+		// 		array('num_no'=>'VV+车联网产业园','name'=>1,'quantity'=>'13072791863','sku_str'=>'熊伟15一1一401','price'=>'面粉(5kg)','total_price'=>1),
+		// 		array('num_no'=>'VV+车联网产业园','name'=>1,'quantity'=>'13072791863','sku_str'=>'熊伟15一1一401','price'=>'云鹤牌无碘盐 350g','total_price'=>4),
+		// 		array('num_no'=>'VV+车联网产业园','name'=>2,'quantity'=>'13098812852','sku_str'=>'甄桂云','price'=>'红茄子(约3斤装)','total_price'=>1),
+		// 		array('num_no'=>'VV+车联网产业园','name'=>2,'quantity'=>'13098812852','sku_str'=>'甄桂云','price'=>'上海青(约2斤装)','total_price'=>1),
+		// 		array('num_no'=>'VV+车联网产业园','name'=>2,'quantity'=>'13098812852','sku_str'=>'甄桂云','price'=>'豌豆(约2斤)','total_price'=>1),
+		// 		array('num_no'=>'VV+车联网产业园','name'=>2,'quantity'=>'13098812852','sku_str'=>'甄桂云','price'=>'香干(约2斤)','total_price'=>1),
+		// 	),
+		// 	// 这是第二个sheet数据
+		// 	array(
+		// 		array('num_no'=>'VV+车联网产业园','name'=>1,'quantity'=>'13072791863','sku_str'=>'熊伟15一1一401','price'=>'面粉(5kg)','total_price'=>1),
+		// 		array('num_no'=>'VV+车联网产业园','name'=>1,'quantity'=>'13072791863','sku_str'=>'熊伟15一1一401','price'=>'云鹤牌无碘盐 350g','total_price'=>4),
+		// 		array('num_no'=>'VV+车联网产业园','name'=>2,'quantity'=>'13098812852','sku_str'=>'甄桂云','price'=>'红茄子(约3斤装)','total_price'=>1),
+		// 		array('num_no'=>'VV+车联网产业园','name'=>2,'quantity'=>'13098812852','sku_str'=>'甄桂云','price'=>'上海青(约2斤装)','total_price'=>1),
+		// 		array('num_no'=>'VV+车联网产业园','name'=>2,'quantity'=>'13098812852','sku_str'=>'甄桂云','price'=>'豌豆(约2斤)','total_price'=>1),
+		// 		array('num_no'=>'VV+车联网产业园','name'=>2,'quantity'=>'13098812852','sku_str'=>'甄桂云','price'=>'香干(约2斤)','total_price'=>1),
+		// 	)
+		// );
 
 		// foreach($exportlist as $e){
 		// 	foreach ($e as $v) {
@@ -1020,12 +1209,12 @@ class DeliveryController extends CommonController{
 		// 	}
 		// }
 		
-		$sheetsTitleArr = ['张团长','李团长'];
-
-		$sheetsMergeArr = [
-			[[2,4],[3,7]], //第一个sheet的需合并的行数，例如第2行和第3行，第4行和第7行
-			[[2,4],[3,7]]
-		];
+		//$sheetsTitleArr = ['张团长','李团长'];
+//$sheetsMergeArr = [];
+		// $sheetsMergeArr = [
+		// 	[[2,4],[3,7]], //第一个sheet的需合并的行数，例如第2行和第3行，第4行和第7行
+		// 	[[2,4],[3,7]]
+		// ];
 					
 		// $list_info = M('lionfish_comshop_deliverylist')->select();
 		// foreach ($list_info as $k => $v) {
@@ -1043,7 +1232,7 @@ class DeliveryController extends CommonController{
 		
 		//dump($exportlist);dump($lists_info);dump($columns);exit;
 		
-		D('Seller/Excel')->export_delivery_all_list($exportlist, array('title' => '清单数据', 'columns' => $columns , 'sheetsTitleArr' => $sheetsTitleArr ,'sheetsMergeArr' => $sheetsMergeArr));
+		D('Seller/Excel')->export_delivery_all_list($exportlist, array('title' => $delivery_date.'清单数据', 'columns' => $columns , 'sheetsTitleArr' => $sheetsTitleArr ,'sheetsMergeArr' => $sheetsMergeArr ,'sheetsAttrArr' => $sheetsAttrArr,'delivery_date' => $delivery_date));
 		die();
 	}
 	
@@ -1143,9 +1332,9 @@ class DeliveryController extends CommonController{
 					}
 				}
 			}
-			//-------------------- by lucas 入库配送日期 S --------------------------------
-			M('lionfish_comshop_deliverylist')->where( array('id' => $list_id ) )->save( array('state' => 1,'express_time' => time(), 'delivery_date' => date('Y-m-d')) );
-			//-------------------- by lucas 入库配送日期 E --------------------------------
+			
+			M('lionfish_comshop_deliverylist')->where( array('id' => $list_id ) )->save( array('state' => 1,'express_time' => time()) );
+			
 		}
 		
 	}
@@ -1450,7 +1639,7 @@ class DeliveryController extends CommonController{
 								(SELECT order_id from ".C('DB_PREFIX')."lionfish_comshop_order where is_delivery_flag = 0 and head_id={$head_id} {$order_condition} and delivery != 'express'   and order_status_id =1 )";
 		
 		$goods_list = M()->query($goods_count_sql);
-		
+//dump($goods_list);exit;		
 		$show_goods_list = array();
 
 		$goods_count =0;
@@ -1768,7 +1957,11 @@ class DeliveryController extends CommonController{
 	**/
 	public function auto_get_delivery_list()
 	{
+		$_GPC = I('request.');
 		
+		$delivery_date = $_GPC['delivery_date'];
+		//dump($delivery_date);exit;
+		$this->delivery_date = $delivery_date;
 		$this->display();
 	}
 	
@@ -1776,7 +1969,11 @@ class DeliveryController extends CommonController{
 	{
 		@set_time_limit(1);
 		$condition = " and is_delivery_flag = 0 and order_status_id =1 and delivery != 'express' ";
+		$_GPC = I('request.');
 		
+		$delivery_date = $_GPC['delivery_date'];
+		$condition .= "and delivery_date ='" . $delivery_date . "'";
+//dump($delivery_date);dump($condition);exit;		
 		$list = M()->query('SELECT head_id FROM ' . C('DB_PREFIX'). "lionfish_comshop_order  
 			WHERE 1 " . $condition . ' group by head_id order by head_id desc limit 0,10');
 			
@@ -1809,7 +2006,7 @@ class DeliveryController extends CommonController{
 										(SELECT order_id from ".C('DB_PREFIX')."lionfish_comshop_order where is_delivery_flag = 0 and head_id={$head_id} {$order_condition} and delivery != 'express'   and order_status_id =1 )";
 				
 				$goods_list = M()->query($goods_count_sql);
-				
+//dump($goods_list);exit;				
 				$show_goods_list = array();
 
 				$goods_count =0;
@@ -1882,7 +2079,7 @@ class DeliveryController extends CommonController{
 					$clerk_name = $clerk_info['name'];
 					$clerk_mobile = $clerk_info['mobile'];
 				}
-				
+//dump($order_id_list);exit;			
 				
 				$lionfish_comshop_deliverylist_data = array();
 				$lionfish_comshop_deliverylist_data['list_sn'] = build_order_no($head_id);
@@ -1900,6 +2097,8 @@ class DeliveryController extends CommonController{
 				$lionfish_comshop_deliverylist_data['express_time'] = 0;
 				$lionfish_comshop_deliverylist_data['create_time'] = time();
 				$lionfish_comshop_deliverylist_data['addtime'] = time();
+
+				$lionfish_comshop_deliverylist_data['delivery_date'] = $delivery_date;
 				
 				$list_id =  M('lionfish_comshop_deliverylist')->add($lionfish_comshop_deliverylist_data);
 				
@@ -1936,7 +2135,7 @@ class DeliveryController extends CommonController{
 			}
 			
 			$condition = " and is_delivery_flag = 0 and order_status_id =1 and delivery != 'express' ";
-		
+			$condition .= "and delivery_date ='" . $delivery_date . "'";
 			$total_arr = M()->query('SELECT order_id, head_id FROM ' .C('DB_PREFIX'). 'lionfish_comshop_order WHERE 1 ' . $condition.' group by head_id  order by head_id desc ' );
 		  
 			$total = count($total_arr);
@@ -1964,25 +2163,31 @@ class DeliveryController extends CommonController{
 	{
 		$_GPC = I('request.');
 		
-		$searchtime = isset($_GPC['searchtime']) ? $_GPC['searchtime'] : '';
+		$searchtime = isset($_GPC['searchtime']) ? $_GPC['searchtime'] : 'delivery';
 		$starttime = isset($_GPC['time']['start']) ? strtotime($_GPC['time']['start']) : strtotime(date('Y-m-d'.' 00:00:00'));
 		$endtime = isset($_GPC['time']['end']) ? strtotime($_GPC['time']['end']) : strtotime(date('Y-m-d'.' 23:59:59'));
 		
 		$keyword = isset($_GPC['keyword']) ? $_GPC['keyword'] : '';
 		
 		$line_id = isset($_GPC['line_id']) ? intval($_GPC['line_id']) : 0;
-		
+		//------------------------- by lucas S------------------------
+		$delivery_date = isset($_GPC['delivery_date']) ? $_GPC['delivery_date'] : date('Y-m-d');
+		//------------------------- by lucas E------------------------
 		
 		$this->searchtime = $searchtime; 
 		$this->starttime = $starttime; 
 		$this->endtime = $endtime; 
 		$this->keyword = $keyword; 
 		$this->line_id = $line_id; 
+		//------------------------- by lucas S------------------------
+		$this->delivery_date = $delivery_date;
+		$this->delivery_time = strtotime($delivery_date);
+		//------------------------- by lucas E------------------------
 		
 		$condition = " and is_delivery_flag = 0 and order_status_id =1 and delivery != 'express' ";
 		
 		$timewhere = "";
-		
+//dump($searchtime);dump($delivery_date);exit;
 		if( !empty($searchtime) )
 		{
 			if( $searchtime == 'create' )
@@ -1994,7 +2199,13 @@ class DeliveryController extends CommonController{
 				$condition .= " and pay_time >={$starttime} and pay_time<= {$endtime} ";
 				
 				$timewhere .= " and pay_time >={$starttime} and pay_time<= {$endtime} ";
+			//------------------------- by lucas S------------------------
+			}else if( $searchtime == 'delivery' ){
+				$condition .= " and delivery_date = '" . $delivery_date . "'";
+				
+				$timewhere .= " and 1 ";
 			}
+			//------------------------- by lucas E------------------------
 		}
 		
 		if( !empty($keyword) )
@@ -2048,7 +2259,7 @@ class DeliveryController extends CommonController{
 	 
 	   
 	    $total_arr = M()->query('SELECT order_id, head_id FROM ' .C('DB_PREFIX'). 'lionfish_comshop_order WHERE 1 ' . $condition.' and head_id > 0 group by head_id  order by head_id desc ' );
-      
+//dump('SELECT order_id, head_id FROM ' .C('DB_PREFIX'). 'lionfish_comshop_order WHERE 1 ' . $condition.' and head_id > 0 group by head_id  order by head_id desc');dump($total_arr);exit;
 		$total = count($total_arr);
 		
 		foreach($list as $key => $val)
@@ -2083,11 +2294,12 @@ class DeliveryController extends CommonController{
         $pager = pagination2($total, $pindex, $psize);
 		
 		$line_list = M('lionfish_comshop_deliveryline')->select();
-		
+//dump($delivery_date);exit;		
 		$this->list = $list;
 		$this->line_list = $line_list;
 		$this->pager = $pager;
 		$this->gpc = $_GPC;
+		
 		
 		$this->display();
 	}
