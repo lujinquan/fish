@@ -3017,8 +3017,12 @@ public function sub_order()
 	
 	$order_all_data['addtime'] = time();
 	//--------------------- by lucas S ------------
+	// $comshop_order_info = M('lionfish_comshop_order')->where( array('order_id' => array('in', $order_ids_arr)) )->find();
+	// $comshop_head_info = M('lionfish_community_head')->where( array('id' => $comshop_order_info['head_id']) )->find();
+	// $model = new CommunityheadModel(); 
+	// $delivery_date = $model->get_delivery_date($comshop_head_info['groupid']);
 	//$order_all_data['delivery_date'] = '2020-03-11';
-	$order_all_data['extra'] = 2;
+	$order_all_data['extra'] = 2;//dump($order_all_data);exit;
 	//--------------------- by lucas E ------------
 	$order_all_id = M('lionfish_comshop_order_all')->add($order_all_data);
 	
@@ -3044,12 +3048,18 @@ public function sub_order()
 	{
 		$community_info = M('lionfish_community_head')->where( array('id' => $data_s['pick_up_id'] ) )->find();	
 		$community_detail_info = D('Home/Front')->get_community_byid($data_s['pick_up_id']);
-	}else{			
+	}else{	
+
 		$community_info = M('lionfish_community_head')->where( array('id' => $data_s['pick_up_id'] ) )->find();	
 		$community_detail_info = D('Home/Front')->get_community_byid($data_s['pick_up_id']);
+		//----------------------------- by lucas S-------------------------------
+		$model = new CommunityheadModel(); 
+		$delivery_date = $model->get_delivery_date($community_info['groupid']);
+		M('lionfish_comshop_order_all')->where( array('id' => $order_all_id ) )->save( array('delivery_date' => $delivery_date) );
+		//----------------------------- by lucas E-------------------------------
 	}
 	
-	
+	//dump($buy_type);dump($pintuan_model_buy);exit;
 	
 	$address_info = M('lionfish_comshop_address')->where( array('address_id' => $data_s['address_id'] ) )->find();					
 						
