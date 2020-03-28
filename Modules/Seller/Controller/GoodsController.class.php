@@ -309,7 +309,9 @@ class GoodsController extends CommonController{
 			}
 			
 		}
+
 		
+		//dump($headgroups);exit;
 		$categorys = D('Seller/GoodsCategory')->getFullCategory(true);
 		$category = array();
 

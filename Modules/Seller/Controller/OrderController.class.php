@@ -26,6 +26,7 @@ class OrderController extends CommonController{
 		$starttime = isset($time['start']) ? strtotime($time['start']) : strtotime(date('Y-m-d'.' 00:00:00'));
 		$endtime = isset($time['end']) ? strtotime($time['end']) : strtotime(date('Y-m-d'.' 23:59:59'));
 		
+		$this->groupid = I('request.groupid', '');
 		
 		$this->searchfield = I('request.searchfield','');
 		$this->keyword = I('request.keyword','');
@@ -130,6 +131,9 @@ class OrderController extends CommonController{
 			}
 	
 		}
+
+		$headgroups = M('lionfish_community_head_group')->where( array('goods_id' => $value['id'] ) )->select();
+		$this->headgroups = $headgroups;
 
 //dump($_GPC['is_fenxiao']);dump($_GPC['commiss_member_id']);dump($is_community);exit;
 		$this->is_can_look_headinfo = $is_can_look_headinfo;
