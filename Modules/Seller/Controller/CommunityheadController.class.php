@@ -374,9 +374,9 @@ class CommunityheadController extends CommonController {
 	public function usergroup()
 	{
 		//---------------------------------- 计算提货日期 by lucas start ---------------------
-		// $model=new CommunityheadModel(); 
-		// $delivery_date = $model->get_delivery_date(6);
-		// dump($delivery_date);exit;
+		// $model = new CommunityheadModel(); 
+		// $delivery_date = $model->get_delivery_date(9);
+		//dump($delivery_date);exit;
 		//---------------------------------- 计算提货日期 by lucas end -----------------------
 
 		$_GPC = I('request.');
