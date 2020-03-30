@@ -2918,6 +2918,51 @@ class GoodsController extends CommonController{
 		
 		show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
 	}
+
+	public function changetisort()
+	{
+		
+		$id = I('request.id',0);
+		
+		
+	
+		//ids
+		if (empty($id)) {
+			$ids = I('request.ids');
+			
+			$id = ((is_array($ids) ? implode(',', $ids) : 0));
+		}
+
+	
+	
+		if (empty($id)) {
+			show_json(0, array('message' => '参数错误'));
+		}
+			
+
+		$type = I('request.type');
+		$value = I('request.value');
+	
+
+		// if (!(in_array($type, array('goodsname', 'price','index_sort','is_index_show', 'total','grounding', 'goodssn', 'productsn', 'displayorder')))) {
+		// 	show_json(0, array('message' => '参数错误'));
+		// }
+		
+		
+		$items = M('lionfish_comshop_goods')->field('id')->where( array('id' => array('in', $id)) )->select();	
+			
+		foreach ($items as $item ) {
+			M('lionfish_comshop_goods')->where( array('id' => $item['id']) )->save( array($type => $value) );
+			
+			
+			if($type == 'total')
+			{
+				D('Seller/Redisorder')->sysnc_goods_total($item['id']);
+			}
+		}
+		
+		show_json(1, array('url' => $_SERVER['HTTP_REFERER']));
+	}
 	
 	public function delete()
 	{

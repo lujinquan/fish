@@ -1010,7 +1010,7 @@ class GoodsModel extends Model{
 		$post_data_goods['buyagain'] = I('post.buyagain');
 		$post_data_goods['buyagain_condition'] = I('post.buyagain_condition');
 		$post_data_goods['buyagain_sale'] = I('post.buyagain_sale');
-		
+		$post_data_goods['ti_sort'] =  I('post.ti_sort',1000,'intval');
 		$post_data_goods['is_all_sale'] =  I('post.is_all_sale',0,'intval');
 		
 		$post_data_goods['is_seckill'] =  I('post.is_seckill',0,'intval');

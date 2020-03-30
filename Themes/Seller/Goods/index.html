@@ -243,7 +243,7 @@
 									<th  style="width:120px;" >是否满减</th>
 									<?php } ?>
 									<th  style="width:180px;" >是否上架<?php if($is_open_shenhe==1){ ?><br/>是否审核<?php } ?></th>
-								
+									<th  style="width:80px;text-align:center;" >提货排序</th>
 								<?php if($is_top){ ?>
 									<?php if($index_sort_method == 1){ ?>
 									<th>首页排序</th>
@@ -411,7 +411,11 @@
 									<?php } ?>
 								<?php } ?>
 							</td>
-							
+							<td style="text-align:center;">
+								<a href='javascript:;' data-toggle='ajaxEdit' data-href="{:U('goods/changetisort',array('type'=>'ti_sort','id'=>$item['id']))}" >
+									<span class="text-danger">{$item['ti_sort']}</span>
+								</a>
+							</td>
 						<?php if($is_top){ ?>
 							
 							<?php if($index_sort_method == 1){ ?>

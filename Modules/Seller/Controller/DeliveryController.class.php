@@ -1131,20 +1131,55 @@ class DeliveryController extends CommonController{
        		array_multisort($b);
        		$sheetsMergeArr[$n][1] = $b;
 
-
        		//dump($x);exit;
        }
+//dump($sheetsMergeArr);
+// $exportlist = [];
+// foreach ($examps as $k1 => $v1) {
+// 	$ii = 0;
+// 	foreach ($v1 as $k2 => $v2) {
+// 		//dump($k2);p($ii);
+// 		$exportlist[$k1][$ii][] = $v2;
+// 		//p($exportlist);
+// 		foreach ($sheetsMergeArr[$k1][1] as $k3 => $v3) {
+// 			if($k2 == $v3){
+// 				$ii++;
+// 				$exportlist[$k1][$ii][] = [];
+// 			}
 
+// 		}
+		
+		
+// 	}
+// }
+// p($exportlist);
+// dump($exportlist);exit;
+// foreach ($sheetsMergeArr as $key => &$value) {
+// 	$spaceline1 = 0;
+// 	foreach ($value[0] as $key1 => &$value1) {
+// 		$value1 += $spaceline1;
+// 		//$sheetsMergeArr[$key][1][$key1] = $value1 + $spaceline;
+// 		$spaceline1++;
+// 	}
+// 	$spaceline2 = 0;
+// 	foreach ($value[1] as $key2 => &$value2) {
+// 		$value2 += $spaceline2;
+// 		//$sheetsMergeArr[$key][1][$key1] = $value1 + $spaceline;
+// 		$spaceline2++;
+// 	}
+// }
+
+
+//p($sheetsMergeArr);
 
 		$exportlist = $examps; 
-
 		
 		$columns = array(
 			array('title' => '小区', 'field' => 'community_name', 'width' => 24),
 			array('title' => '编号', 'field' => 'no', 'width' => 8),
 			array('title' => '联系电话', 'field' => 'shipping_tel', 'width' => 18),
 			array('title' => '收货姓名', 'field' => 'shipping_name', 'width' => 24),
-			array('title' => '商品名称', 'field' => 'name', 'width' => 24),
+			array('title' => '商品名称', 'field' => 'name', 'width' => 36),
 			array('title' => '数量', 'field' => 'quantity', 'width' => 8),
 			//array('title' => '订单编号', 'field' => 'order_num_alias', 'width' => 24),
 			//array('title' => '总订单编号', 'field' => 'order_all_id', 'width' => 12),
