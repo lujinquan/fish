@@ -279,7 +279,7 @@ class ExcelModel{
 	 * @version 版本  1.0
 	 */
 	public function export_delivery_all_list($lists, $params = array())
-	{
+	{//dump($lists);exit;
 		if (PHP_SAPI == 'cli') {
 			exit('This example should only be run from a Web Browser');
 		}
@@ -315,7 +315,7 @@ class ExcelModel{
 			++$rownum;
 			$len = count($params['columns']);
 			// 遍历每个工作组的列表数据
-			foreach ($list as $row ) {
+			foreach ($list as $eee => $row ) {
 				$i = 0;
 
 				while ($i < $len) {
@@ -343,6 +343,7 @@ class ExcelModel{
 				}
 				$sheet->getRowDimension($rownum)->setRowHeight(24);
 				++$rownum;
+				unset($list[$eee]);
 			}
 			$sheet->setCellValue('H2', '配送信息');
 			$sheet->setCellValue('H3', '配送日期');
@@ -364,6 +365,7 @@ class ExcelModel{
 			$sheet->getstyle('I3')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 			$sheet->getstyle('I4')->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
 			$excel->getActiveSheet()->setTitle($params['sheetsTitleArr'][$l]);
+			unset($lists[$l]);
 		}
 		
 		$filename = ($params['title'] . '-' . date('Y-m-d H:i', time()));

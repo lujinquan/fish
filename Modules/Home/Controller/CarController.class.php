@@ -3849,7 +3849,9 @@ public function sub_order()
 						$o['date_modified']=time();
 						$o['pay_time']=time();
 						$o['transaction_id'] = $is_integral ==1? '积分兑换':'余额支付';
-						
+						//-------------- bu lucas --------------------
+						$o['delivery_date']=$order_all['delivery_date'];
+						//-------------- bu lucas --------------------
 						M('lionfish_comshop_order')->where( array('order_id' => $order['order_id'] ) )->save($o);
 						
 						
