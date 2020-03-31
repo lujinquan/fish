@@ -1888,7 +1888,11 @@ class IndexController extends CommonController {
 				
 				echo json_encode(array('code' => 0,'spikebuy_goodslist' => $spikebuy_goodslist, 'comming_goodslist' => $list , 'cur_time' => time() ,'full_reducemoney' => $full_reducemoney,'full_money' => $full_money,'is_open_fullreduction' => $is_open_fullreduction ));
 			}else{
-				echo json_encode( array('code' => 1) );
+				if($list){
+					echo json_encode(array('code' => 0,'comming_goodslist' => $list , 'cur_time' => time() ,'full_reducemoney' => $full_reducemoney,'full_money' => $full_money,'is_open_fullreduction' => $is_open_fullreduction ));
+				}else{
+					echo json_encode( array('code' => 1) );
+				}
 			}
 			
 			die();
