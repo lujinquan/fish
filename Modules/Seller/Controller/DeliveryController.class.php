@@ -955,7 +955,7 @@ class DeliveryController extends CommonController{
 		die();
 	}
 
-	public function orders_downexcel()
+	public function orders_downexcel_duo()
 	{
 		@set_time_limit(0);
 		@ini_set('memory_limit','1024M');
@@ -1172,7 +1172,224 @@ class DeliveryController extends CommonController{
 		die();
 	}
 
-	public function orders_downexcel_old()
+	public function orders_downexcel_dan()
+	{
+		@set_time_limit(0);
+		@ini_set('memory_limit','1024M');
+		$gpc = I('request.');
+		$delivery_date = $gpc['delivery_date'];
+	
+		$list = M()->query('SELECT * FROM ' . C('DB_PREFIX') . "lionfish_comshop_deliverylist where state = 1 and delivery_date = '" .$delivery_date . "' order by id desc ");
+		//show_json(1, array('msg' =>'配送清单成功','url' => $_SERVER['HTTP_REFERER'] ));
+		//dump($list);exit;
+		$orders = [];
+        foreach ($list as $k => $l) {
+       		$orderids = M('lionfish_comshop_deliverylist_order')->field('order_id')->where( array('list_id' => $l['id']) )->select();
+       		$ids = [];
+       		foreach ($orderids as $o) {
+       			$ids[] = $o['order_id'];
+       		}
+       		//dump($orderids);exit;
+       		$order = M('lionfish_comshop_order')->field('order_id,shipping_tel,shipping_name,order_id,member_id,order_num_alias')->where( array('order_id' => array('in',$ids)) )->select();
+       		foreach ($order as $e => $v) {
+       			$all_info = M('lionfish_comshop_order_relate')->field('order_all_id')->where( array('order_id' => $v['order_id']) )->find();
+       			$v['head_id'] = $l['head_id'];
+       			$v['head_name'] = $l['head_name'];
+       			$v['head_mobile'] = $l['head_mobile'];
+       			$v['head_address'] = $l['head_address'];
+       			$v['order_all_id'] = $all_info['order_all_id'];
+       			$orders[] = $v;
+       		}
+  
+       }
+
+       $heads = M('lionfish_community_head')->field('id,community_name,head_name,head_mobile,address')->where( array('list_id' => $l['id']) )->select();
+       $temps = [];
+       foreach ($heads as $h) {
+       		foreach ($orders as $ord) {
+       			if($h['id'] == $ord['head_id']){
+       				$ord['community_name'] = $h['community_name'];
+       				$ord['head_name'] = $h['head_name'];
+       				$ord['head_mobile'] = $h['head_mobile'];
+       				$ord['address'] = $h['address'];
+       				$temps[$h['id']][] = $ord;
+       			}
+       		}
+       }
+		//p($temps);	   
+       $i = 0;
+       $examps = [];
+       $sheetsTitleArr = []; //sheet标题
+       $sheetsAttrArr = []; //团长信息
+       $sheetsTagsArr = []; //标识
+       foreach ($temps as $temp) {
+       		$s = 0;
+       		foreach ($temp as $t) {
+       			$order_goods = M()->query('SELECT a.name,b.ti_sort,a.goods_id,a.order_goods_id,a.quantity FROM ' . C('DB_PREFIX') . "lionfish_comshop_order_goods as a inner join ". C('DB_PREFIX') ."lionfish_comshop_goods as b on a.goods_id = b.id where a.order_id = ".$t['order_id']);
+       			foreach ($order_goods as $u => $op) {
+       				$r = [];
+       				$r['community_name'] = $t['community_name']; // 小区的名字
+       				$r['num'] = ''; // 编号
+       				$r['shipping_name'] = $t['shipping_name']; // 收货人姓名
+       				$r['shipping_tel'] = $t['shipping_tel']; // 收货人联系电话
+       				$r['name'] = $op['name']; //商品的名称
+       				$r['ti_sort'] = $op['ti_sort']; //商品的提货顺序
+       				$r['quantity'] = $op['quantity'];
+       				$r['member_id'] = $t['member_id'];
+       				$r['order_num_alias'] = "\t".$t['order_num_alias']."\t";
+       				$r['order_all_id'] = $t['order_all_id']; // 小区的名字
+       				$r['zuhe'] = $t['member_id'] . $t['shipping_name'];
+       				$examps[$i][$s] = $r;
+       				$sheetsTagsArr[$i][] = $t['member_id'] . $t['shipping_name'];
+       				$s++;
+       			}
+       		}
+       		$sheetsTitleArr[$i] = $temp[0]['community_name'];
+       		$sheetsAttrArr[$i] = [
+       			'head_name' => $temp[0]['head_name'],
+       			'head_mobile' => $temp[0]['head_mobile'],
+       			'address' => $temp[0]['address'],
+       		];
+       		$sheetsTagsArr[$i] = array_unique($sheetsTagsArr[$i]);
+       		sort($sheetsTagsArr[$i]);
+       	 	$i++;
+       }
+       //p($sheetsTagsArr);
+       //dump($sheetsAttrArr);exit;
+       // 序列号组
+       $no_arr = [];
+      	// 组装列表数据(将列表中会员id一样，商品名一样的去重，并重新排序)
+       foreach($examps as $j => $d){
+       		//$ss = [];
+       		foreach ($d as $v => $r) {
+       			$kk = 0;
+       			
+       			foreach ($d as $q => $ww) {
+       				if($r['member_id'] == $ww['member_id'] && $r['name'] == $ww['name']){
+       					// dump($v);dump($q);
+       					
+       					$kk += $ww['quantity'];
+       					if($v != $q){
+       						//$ss[] = $q;
+       						//dump(11);exit;
+       						unset($examps[$j][$q]);
+       					}
+       				}
+       			}
+       			// dump($ss);exit;
+       			// if(!in_array($v, $ss[$v])){
+       				$r['quantity'] = $kk;
+       				$examps[$j][$v] = $r;
+       			//}
+       			
+       		}
+      		// 根据member_id排序
+			// $member_ids = array_column($examps[$j],'member_id');
+			// array_multisort($member_ids,SORT_DESC,$examps[$j]);
+			// 根据shipping_name排序
+			$shipping_names = array_column($examps[$j],'shipping_name');
+			$shipping_name_sort = array_unique($shipping_names);
+
+			$ti_sorts = array_column($examps[$j],'ti_sort');
+			$ti_sorts_sort = array_unique($ti_sorts);
+			//dump(array_unique($shipping_names));exit;
+			array_multisort($shipping_name_sort,SORT_DESC);
+			$no_arr[$j] = $shipping_name_sort;
+			
+			array_multisort($shipping_names,SORT_DESC,$ti_sorts , SORT_ASC,$examps[$j]);
+			//dump($shipping_names);dump($examps[$j]);exit;
+			foreach ($examps[$j] as $ex => &$valu) {
+				$valu['num'] =  $ex + 2;
+			}
+       		//array_multisort($examps[$j]);
+       } 
+ 		//p($examps);
+		$exportlist = [];
+        // 获取需要合并单元，并给出序列号
+	   $sheetsMergeArr = [];
+       foreach($examps as $n => $x){
+       		foreach ($x as $g => $p) {
+       			$jian = array_search($p['zuhe'], $sheetsTagsArr[$n]);
+       			$exportlist[$n][$jian][] = $p;
+       		}
+       }
+       //p($exportlist);
+       
+       $exportlists = [];
+       // ------------方案一： 按6个一组，拆分----------------------
+       foreach($exportlist as $ex => $exp){
+       		$ji = 1;
+       		$jis = 1;
+       	 	foreach ($exp as $ex1 => $exp1) {
+       	 		
+       	 		$newArr = array_chunk($exp1,6,true); // false则每组从0开始重排，true则不重排
+       	 		foreach ($newArr as $nek => $nev) {
+       	 			$str = '';
+       	 			//$nek1 = 0;
+       	 			foreach ($nev as $nek1 => $nev2) {
+       	 				$str .= ($nek1 + 1) .'、 '.$nev2['name']. '   x'. $nev2['quantity']."\r\n";
+       	 			}
+       	 			$str = trim($str,"\r\n");
+	       	 		//dump($str);exit;
+	       	 		$exportlists[$ex][$ji]['community_name'] = $exp1[0]['community_name'];
+	   	 			$exportlists[$ex][$ji]['num'] = $exp1[0]['num'];
+	   	 			if(count($newArr) == 1){
+	   	 				$exportlists[$ex][$ji]['no'] = $jis;
+	   	 			}else{
+	   	 				$exportlists[$ex][$ji]['no'] = $jis.'-'.($nek+1);
+	   	 			}
+	   	 			
+	   	 			$exportlists[$ex][$ji]['jishu'] = count($nev);
+	   	 			$exportlists[$ex][$ji]['shipping_name'] = $exp1[0]['shipping_name'];
+	   	 			$exportlists[$ex][$ji]['shipping_tel'] = $exp1[0]['shipping_tel'];
+	   	 			$exportlists[$ex][$ji]['name'] = $str;
+	   	 			$ji++;
+       	 		}
+       	 		$jis++;
+       	 		
+   	 			
+       	 	}
+       	 	$sheetsAttrArr[$ex]['count_ji'] = $ji - 1;
+       }
+       // ------------方案二： 不拆分----------------------
+       /*foreach($exportlist as $ex => $exp){
+       		$ji = 1;     		
+       	 	foreach ($exp as $ex1 => $exp1) {
+       	 		$str = '';
+       	 		foreach ($exp1 as $nek => $exp2) {
+       	 			$str .= $exp2['name']. '   x'. $exp2['quantity']."\r\n";	       	 		
+       	 		}
+       	 		$str = trim($str,"\r\n");
+       	 		$exportlists[$ex][$ji]['community_name'] = $exp1[0]['community_name'];
+   	 			$exportlists[$ex][$ji]['num'] = $exp1[0]['num'];
+   	 			$exportlists[$ex][$ji]['no'] = $ji;
+   	 			$exportlists[$ex][$ji]['jishu'] = count($exp1);
+   	 			$exportlists[$ex][$ji]['shipping_name'] = $exp1[0]['shipping_name'];
+   	 			$exportlists[$ex][$ji]['shipping_tel'] = $exp1[0]['shipping_tel'];
+   	 			$exportlists[$ex][$ji]['name'] = $str;
+   	 			$ji++;
+       	 	}
+       	 	$sheetsAttrArr[$ex]['count_ji'] = $ji - 1;
+       }*/
+
+
+       //p($exportlists);
+
+		$columns = array(
+			array('title' => '小区', 'field' => 'community_name', 'width' => 24),
+			array('title' => '编号', 'field' => 'no', 'width' => 8),
+			array('title' => '联系电话', 'field' => 'shipping_tel', 'width' => 18),
+			array('title' => '收货姓名', 'field' => 'shipping_name', 'width' => 24),
+			array('title' => '商品名称', 'field' => 'name', 'width' => 40),
+			//array('title' => '数量', 'field' => 'quantity', 'width' => 8),
+		);
+		
+		
+		D('Seller/Excel')->export_delivery_all_list_dan($exportlists, array('title' => $delivery_date.'清单数据', 'columns' => $columns , 'sheetsTitleArr' => $sheetsTitleArr ,'sheetsMergeArr' => $sheetsMergeArr ,'sheetsAttrArr' => $sheetsAttrArr,'delivery_date' => $delivery_date));
+		die();
+	}
+
+	public function orders_downexcel_duo_old()
 	{
 		@set_time_limit(0);
 		@ini_set('memory_limit','1024M');

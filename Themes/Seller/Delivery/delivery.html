@@ -137,11 +137,16 @@
                                             一键打印所有团长配送清单
                                         </span>
                                     </a> -->
-                                    <a class="btn layui-btn layui-btn-sm " href="{:U('delivery/orders_downexcel', array('delivery_date' => $delivery_date))}"  target='_blank'>
-                                            <span data-toggle="tooltip" data-placement="top" title="" data-original-title="一键导出所有团长配送清单">
-                                                一键导出所有团长配送清单
-                                            </span>
-                                        </a>
+                                    <a class="btn layui-btn layui-btn-sm " href="{:U('delivery/orders_downexcel_dan', array('delivery_date' => $delivery_date))}"  target='_blank'>
+                                        <span data-toggle="tooltip" data-placement="top" title="" data-original-title="一键导出所有团长配送清单(单sheet)">
+                                            一键导出所有团长配送清单（单sheet）
+                                        </span>
+                                    </a>
+                                    <a class="btn layui-btn layui-btn-sm " href="{:U('delivery/orders_downexcel_duo', array('delivery_date' => $delivery_date))}"  target='_blank'>
+                                        <span data-toggle="tooltip" data-placement="top" title="" data-original-title="一键导出所有团长配送清单(多sheet)">
+                                            一键导出所有团长配送清单（多sheet）
+                                        </span>
+                                    </a>
 									<a  class='btn layui-btn  layui-btn-sm' id="delivery_allprint" href="javascript:;" data-target="_blank" data-href="{:U('delivery/delivery_allprint')}" >
 										<span data-toggle="tooltip" data-placement="top" title="" data-original-title="一键打印所有团长配送清单">
 											一键打印所有团长配送清单
