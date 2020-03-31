@@ -466,8 +466,11 @@ class ExcelModel{
 			}
 
 			$sheet->freezePane('A2');
-			//p($list);		
-			//++$rownum;
+			//p($list);	
+			if($rownum == 1){
+				++$rownum;
+			}	
+			
 			$len = count($params['columns']);
 			$spaceline = 0;
 			// 遍历每个工作组的列表数据
@@ -515,8 +518,8 @@ class ExcelModel{
 			}
 			
 
-			$sheet->getColumnDimension('H')->setWidth(12);
-			$sheet->getColumnDimension('I')->setWidth(36);
+			// $sheet->getColumnDimension('H')->setWidth(12);
+			// $sheet->getColumnDimension('I')->setWidth(36);
 			//$sheet->setCellValue('H2', '配送信息');
 			
 			// $sheet->getstyle('H3:I7')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
