@@ -338,12 +338,20 @@ class ExcelModel{
 						if($rownum == $m && $i < 4){
 							$i_name = $this->column_str($i);
 							$sheet->mergeCells($i_name.$m.':'.$i_name.$params['sheetsMergeArr'][$l][1][$p]);
+
 							//// 将合并的单元格设置样式垂直居中
 							// $sheet->getstyle($i_name.$m)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 							// $sheet->getstyle($i_name.$m)->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
 						}
 					}
-					$sheet->getstyle($this->column($i, $rownum))->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+					$sheet->getStyle($this->column($i, $rownum))->getAlignment()->setWrapText(TRUE);
+					if($i == 4){
+						$sheet->getstyle($this->column($i, $rownum))->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+					}else{
+						$sheet->getstyle($this->column($i, $rownum))->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+					}
+					
 					$sheet->getstyle($this->column($i, $rownum))->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
 
 					$sheet->getstyle($this->column($i, $rownum))->getBorders()->getTop()->setBorderstyle(\PHPExcel_style_Border::BORDER_THIN);
@@ -356,34 +364,18 @@ class ExcelModel{
 					// }
 					++$i;
 				}
-				$sheet->getRowDimension($rownum)->setRowHeight(24);
+				$sheet->getRowDimension($rownum)->setRowHeight(20*$row['jishu']);
 				++$rownum;
 				unset($list[$eee]);
 			}
+			
+
 			$sheet->getColumnDimension('H')->setWidth(12);
 			$sheet->getColumnDimension('I')->setWidth(36);
 			//$sheet->setCellValue('H2', '配送信息');
 			
-			$sheet->getstyle('H3')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-			$sheet->getstyle('H3')->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
-			$sheet->getstyle('I3')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-			$sheet->getstyle('I3')->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
-			$sheet->getstyle('H4')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-			$sheet->getstyle('H4')->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
-			$sheet->getstyle('I4')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-			$sheet->getstyle('I4')->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
-			$sheet->getstyle('H5')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-			$sheet->getstyle('H5')->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
-			$sheet->getstyle('I5')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-			$sheet->getstyle('I5')->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
-			$sheet->getstyle('H6')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-			$sheet->getstyle('H6')->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
-			$sheet->getstyle('I6')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-			$sheet->getstyle('I6')->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
-			$sheet->getstyle('H7')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-			$sheet->getstyle('H7')->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
-			$sheet->getstyle('I7')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-			$sheet->getstyle('I7')->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
+			$sheet->getstyle('H3:I7')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$sheet->getstyle('H3:I7')->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
 			$sheet->setCellValue('H3', '配送日期：');
 			$sheet->setCellValue('I3', $params['delivery_date']);
 			$sheet->setCellValue('H4', '配送地址：');
@@ -392,7 +384,9 @@ class ExcelModel{
 			$sheet->setCellValue('I5', $params['sheetsAttrArr'][$l]['head_name']);
 			$sheet->setCellValue('H6', '联系方式：');
 			$sheet->setCellValue('I6', $params['sheetsAttrArr'][$l]['head_mobile']);
-			$sheet->setCellValue('H7', '备注：');
+			$sheet->setCellValue('H7', '总单量：');
+			$sheet->setCellValue('I7', $params['sheetsAttrArr'][$l]['count_ji']);
+			$sheet->setCellValue('H8', '备注：');
 			//$sheet->setCellValue('I8', '湖北省武汉市洪山区梨园街道东沙花园小区物业');
 			// $sheet->setCellValue('H9', '配送合计');
 			// $sheet->setCellValue('H10', '品种');
