@@ -1110,13 +1110,18 @@ class DeliveryController extends CommonController{
        	 			$str = '';
        	 			//$nek1 = 0;
        	 			foreach ($nev as $nek1 => $nev2) {
-       	 				$str .= ($nek1 + 1) .':  '.$nev2['name']. '   x'. $nev2['quantity']."\r\n";
+       	 				$str .= ($nek1 + 1) .'、 '.$nev2['name']. '   x'. $nev2['quantity']."\r\n";
        	 			}
        	 			$str = trim($str,"\r\n");
 	       	 		//dump($str);exit;
 	       	 		$exportlists[$ex][$ji]['community_name'] = $exp1[0]['community_name'];
 	   	 			$exportlists[$ex][$ji]['num'] = $exp1[0]['num'];
-	   	 			$exportlists[$ex][$ji]['no'] = $jis.'-'.($nek+1);
+	   	 			if(count($newArr) == 1){
+	   	 				$exportlists[$ex][$ji]['no'] = $jis;
+	   	 			}else{
+	   	 				$exportlists[$ex][$ji]['no'] = $jis.'-'.($nek+1);
+	   	 			}
+	   	 			
 	   	 			$exportlists[$ex][$ji]['jishu'] = count($nev);
 	   	 			$exportlists[$ex][$ji]['shipping_name'] = $exp1[0]['shipping_name'];
 	   	 			$exportlists[$ex][$ji]['shipping_tel'] = $exp1[0]['shipping_tel'];

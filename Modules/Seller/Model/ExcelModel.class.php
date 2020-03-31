@@ -374,24 +374,24 @@ class ExcelModel{
 			$sheet->getColumnDimension('I')->setWidth(36);
 			//$sheet->setCellValue('H2', '配送信息');
 			
-			$sheet->getstyle('H3:I7')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-			$sheet->getstyle('H3:I7')->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
-			$sheet->setCellValue('H3', '配送日期：');
-			$sheet->setCellValue('I3', $params['delivery_date']);
-			$sheet->setCellValue('H4', '配送地址：');
-			$sheet->setCellValue('I4', $params['sheetsAttrArr'][$l]['address']);
-			$sheet->setCellValue('H5', '联系人：');
-			$sheet->setCellValue('I5', $params['sheetsAttrArr'][$l]['head_name']);
-			$sheet->setCellValue('H6', '联系方式：');
-			$sheet->setCellValue('I6', $params['sheetsAttrArr'][$l]['head_mobile']);
-			$sheet->setCellValue('H7', '总单量：');
-			$sheet->setCellValue('I7', $params['sheetsAttrArr'][$l]['count_ji']);
-			$sheet->setCellValue('H8', '备注：');
+			// $sheet->getstyle('H3:I7')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			// $sheet->getstyle('H3:I7')->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
+			// $sheet->setCellValue('H3', '配送日期：');
+			// $sheet->setCellValue('I3', $params['delivery_date']);
+			// $sheet->setCellValue('H4', '配送地址：');
+			// $sheet->setCellValue('I4', $params['sheetsAttrArr'][$l]['address']);
+			// $sheet->setCellValue('H5', '联系人：');
+			// $sheet->setCellValue('I5', $params['sheetsAttrArr'][$l]['head_name']);
+			// $sheet->setCellValue('H6', '联系方式：');
+			// $sheet->setCellValue('I6', $params['sheetsAttrArr'][$l]['head_mobile']);
+			// $sheet->setCellValue('H7', '总单量：');
+			// $sheet->setCellValue('I7', $params['sheetsAttrArr'][$l]['count_ji']);
+			// $sheet->setCellValue('H8', '备注：');
 			//$sheet->setCellValue('I8', '湖北省武汉市洪山区梨园街道东沙花园小区物业');
 			// $sheet->setCellValue('H9', '配送合计');
 			// $sheet->setCellValue('H10', '品种');
 			// $sheet->setCellValue('I10', '1387148498');
-			$sheet->getColumnDimension('I')->setWidth(30);
+			//$sheet->getColumnDimension('I')->setWidth(30);
 			
 			$excel->getActiveSheet()->setTitle($params['sheetsTitleArr'][$l]);
 			unset($lists[$l]);
