@@ -1156,7 +1156,7 @@ class DeliveryController extends CommonController{
        }*/
 
 
-       //p($exportlists);
+       
 
 		$columns = array(
 			array('title' => '小区', 'field' => 'community_name', 'width' => 24),

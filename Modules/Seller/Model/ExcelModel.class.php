@@ -345,33 +345,37 @@ class ExcelModel{
 						}
 					}
 
-					$sheet->getStyle($this->column($i, $rownum))->getAlignment()->setWrapText(TRUE);
-					if($i == 4){
-						$sheet->getstyle($this->column($i, $rownum))->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-					}else{
-						$sheet->getstyle($this->column($i, $rownum))->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-					}
-					
-					$sheet->getstyle($this->column($i, $rownum))->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
-
-					$sheet->getstyle($this->column($i, $rownum))->getBorders()->getTop()->setBorderstyle(\PHPExcel_style_Border::BORDER_THIN);
-					$sheet->getstyle($this->column($i, $rownum))->getBorders()->getLeft()->setBorderstyle(\PHPExcel_style_Border::BORDER_THIN);
-					$sheet->getstyle($this->column($i, $rownum))->getBorders()->getBottom()->setBorderstyle(\PHPExcel_style_Border::BORDER_THIN);
-					$sheet->getstyle($this->column($i, $rownum))->getBorders()->getRight()->setBorderstyle(\PHPExcel_style_Border::BORDER_THIN);
-					// if($rownum == $mergeColStartNum && $i < 3){
-					// 	$i_name = $this->column_str($i);
-					// 	$sheet->mergeCells($i_name.$mergeColStartNum.':'.$i_name.$mergeColEndNum);
+					// $sheet->getStyle($this->column($i, $rownum))->getAlignment()->setWrapText(TRUE);
+					// if($i == 4){
+					// 	$sheet->getstyle($this->column($i, $rownum))->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+					// }else{
+					// 	$sheet->getstyle($this->column($i, $rownum))->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 					// }
+					// $sheet->getstyle($this->column($i, $rownum))->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
+					// $sheet->getstyle($this->column($i, $rownum))->getBorders()->getTop()->setBorderstyle(\PHPExcel_style_Border::BORDER_THIN);
+					// $sheet->getstyle($this->column($i, $rownum))->getBorders()->getLeft()->setBorderstyle(\PHPExcel_style_Border::BORDER_THIN);
+					// $sheet->getstyle($this->column($i, $rownum))->getBorders()->getBottom()->setBorderstyle(\PHPExcel_style_Border::BORDER_THIN);
+					// $sheet->getstyle($this->column($i, $rownum))->getBorders()->getRight()->setBorderstyle(\PHPExcel_style_Border::BORDER_THIN);
+					
 					++$i;
 				}
 				$sheet->getRowDimension($rownum)->setRowHeight(20*$row['jishu']);
 				++$rownum;
 				unset($list[$eee]);
 			}
-			
+			// $sheet->getstyle('A2:A100')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			// $sheet->getstyle('A2:A100')->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
+			// $sheet->getstyle('B2:B100')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			// $sheet->getstyle('B2:B100')->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
+			// $sheet->getstyle('C2:C100')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			// $sheet->getstyle('C2:C100')->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
+			// $sheet->getstyle('D2:D100')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			// $sheet->getstyle('D2:D100')->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
+			// $sheet->getstyle('E2:E100')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			// $sheet->getstyle('E2:E100')->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
 
-			$sheet->getColumnDimension('H')->setWidth(12);
-			$sheet->getColumnDimension('I')->setWidth(36);
+			// $sheet->getColumnDimension('H')->setWidth(12);
+			// $sheet->getColumnDimension('I')->setWidth(36);
 			//$sheet->setCellValue('H2', '配送信息');
 			
 			// $sheet->getstyle('H3:I7')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -396,7 +400,7 @@ class ExcelModel{
 			$excel->getActiveSheet()->setTitle($params['sheetsTitleArr'][$l]);
 			unset($lists[$l]);
 		}
-		
+	p(convert(memory_get_usage(true)));	
 		$filename = ($params['title'] . '-' . date('Y-m-d H:i', time()));
 
 		header('pragma:public');
