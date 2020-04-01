@@ -1388,7 +1388,7 @@ class DeliveryController extends CommonController{
 			array('title' => '联系电话', 'field' => 'shipping_tel', 'width' => 18),
 			array('title' => '收货姓名', 'field' => 'shipping_name', 'width' => 24),
 			array('title' => '商品名称', 'field' => 'name', 'width' => 40),
-			array('title' => '商品备注', 'field' => 'remarksaler', 'width' => 40),
+			array('title' => '商家备注', 'field' => 'remarksaler', 'width' => 40),
 			//array('title' => '数量', 'field' => 'quantity', 'width' => 8),
 		);
 		
