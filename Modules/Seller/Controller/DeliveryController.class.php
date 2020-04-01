@@ -1190,7 +1190,7 @@ class DeliveryController extends CommonController{
        			$ids[] = $o['order_id'];
        		}
        		//dump($orderids);exit;
-       		$order = M('lionfish_comshop_order')->field('order_id,shipping_tel,shipping_name,order_id,member_id,order_num_alias')->where( array('order_id' => array('in',$ids)) )->select();
+       		$order = M('lionfish_comshop_order')->field('order_id,shipping_tel,shipping_name,order_id,member_id,order_num_alias,remarksaler')->where( array('order_id' => array('in',$ids)) )->select();
        		foreach ($order as $e => $v) {
        			$all_info = M('lionfish_comshop_order_relate')->field('order_all_id')->where( array('order_id' => $v['order_id']) )->find();
        			$v['head_id'] = $l['head_id'];
@@ -1207,7 +1207,9 @@ class DeliveryController extends CommonController{
        $temps = [];
        foreach ($heads as $h) {
        		foreach ($orders as $ord) {
+
        			if($h['id'] == $ord['head_id']){
+       				//p($ord);
        				$ord['community_name'] = $h['community_name'];
        				$ord['head_name'] = $h['head_name'];
        				$ord['head_mobile'] = $h['head_mobile'];
@@ -1216,7 +1218,7 @@ class DeliveryController extends CommonController{
        			}
        		}
        }
-		//p($temps);	   
+	   //p($temps);	   
        $i = 0;
        $examps = [];
        $sheetsTitleArr = []; //sheet标题
@@ -1235,6 +1237,7 @@ class DeliveryController extends CommonController{
        				$r['name'] = $op['name']; //商品的名称
        				$r['ti_sort'] = $op['ti_sort']; //商品的提货顺序
        				$r['quantity'] = $op['quantity'];
+       				$r['remarksaler'] = $t['remarksaler'];
        				$r['member_id'] = $t['member_id'];
        				$r['order_num_alias'] = "\t".$t['order_num_alias']."\t";
        				$r['order_all_id'] = $t['order_all_id']; // 小区的名字
@@ -1325,13 +1328,16 @@ class DeliveryController extends CommonController{
        	 		$newArr = array_chunk($exp1,6,true); // false则每组从0开始重排，true则不重排
        	 		foreach ($newArr as $nek => $nev) {
        	 			$str = '';
-       	 			//$nek1 = 0;
+       	 			$remarksaler = '';
        	 			foreach ($nev as $nek1 => $nev2) {
        	 				$str .= ($nek1 + 1) .'、 '.$nev2['name']. '   x'. $nev2['quantity']."\r\n";
+       	 				$remarksaler .= $nev2['remarksaler'] . "\r\n";
        	 			}
        	 			$str = trim($str,"\r\n");
+       	 			$remarksaler = trim($remarksaler,"\r\n");
 	       	 		//dump($str);exit;
 	       	 		$exportlists[$ex][$ji]['community_name'] = $exp1[0]['community_name'];
+	       	 		//$exportlists[$ex][$ji]['remarksaler'] = $exp1[0]['remarksaler'];
 	   	 			$exportlists[$ex][$ji]['num'] = $exp1[0]['num'];
 	   	 			if(count($newArr) == 1){
 	   	 				$exportlists[$ex][$ji]['no'] = $jis;
@@ -1343,6 +1349,7 @@ class DeliveryController extends CommonController{
 	   	 			$exportlists[$ex][$ji]['shipping_name'] = $exp1[0]['shipping_name'];
 	   	 			$exportlists[$ex][$ji]['shipping_tel'] = $exp1[0]['shipping_tel'];
 	   	 			$exportlists[$ex][$ji]['name'] = $str;
+	   	 			$exportlists[$ex][$ji]['remarksaler'] = $remarksaler;
 	   	 			$ji++;
        	 		}
        	 		$jis++;
@@ -1381,6 +1388,7 @@ class DeliveryController extends CommonController{
 			array('title' => '联系电话', 'field' => 'shipping_tel', 'width' => 18),
 			array('title' => '收货姓名', 'field' => 'shipping_name', 'width' => 24),
 			array('title' => '商品名称', 'field' => 'name', 'width' => 40),
+			array('title' => '商品备注', 'field' => 'remarksaler', 'width' => 40),
 			//array('title' => '数量', 'field' => 'quantity', 'width' => 8),
 		);
 		
