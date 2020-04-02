@@ -400,7 +400,7 @@ class ExcelModel{
 			$excel->getActiveSheet()->setTitle($params['sheetsTitleArr'][$l]);
 			unset($lists[$l]);
 		}
-	p(convert(memory_get_usage(true)));	
+	//p(convert(memory_get_usage(true)));	
 		$filename = ($params['title'] . '-' . date('Y-m-d H:i', time()));
 
 		header('pragma:public');
@@ -498,18 +498,18 @@ class ExcelModel{
 					}
 
 					$sheet->getStyle($this->column($i, $rownum))->getAlignment()->setWrapText(TRUE);
-					if($i == 4){
-						$sheet->getstyle($this->column($i, $rownum))->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-					}else{
-						$sheet->getstyle($this->column($i, $rownum))->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-					}
+					// if($i == 4){
+					// 	$sheet->getstyle($this->column($i, $rownum))->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+					// }else{
+					// 	$sheet->getstyle($this->column($i, $rownum))->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+					// }
 					
-					$sheet->getstyle($this->column($i, $rownum))->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
+					// $sheet->getstyle($this->column($i, $rownum))->getAlignment()->setVertical(\PHPExcel_style_Alignment::VERTICAL_CENTER);
 
-					$sheet->getstyle($this->column($i, $rownum))->getBorders()->getTop()->setBorderstyle(\PHPExcel_style_Border::BORDER_THIN);
-					$sheet->getstyle($this->column($i, $rownum))->getBorders()->getLeft()->setBorderstyle(\PHPExcel_style_Border::BORDER_THIN);
-					$sheet->getstyle($this->column($i, $rownum))->getBorders()->getBottom()->setBorderstyle(\PHPExcel_style_Border::BORDER_THIN);
-					$sheet->getstyle($this->column($i, $rownum))->getBorders()->getRight()->setBorderstyle(\PHPExcel_style_Border::BORDER_THIN);
+					// $sheet->getstyle($this->column($i, $rownum))->getBorders()->getTop()->setBorderstyle(\PHPExcel_style_Border::BORDER_THIN);
+					// $sheet->getstyle($this->column($i, $rownum))->getBorders()->getLeft()->setBorderstyle(\PHPExcel_style_Border::BORDER_THIN);
+					// $sheet->getstyle($this->column($i, $rownum))->getBorders()->getBottom()->setBorderstyle(\PHPExcel_style_Border::BORDER_THIN);
+					// $sheet->getstyle($this->column($i, $rownum))->getBorders()->getRight()->setBorderstyle(\PHPExcel_style_Border::BORDER_THIN);
 					// if($rownum == $mergeColStartNum && $i < 3){
 					// 	$i_name = $this->column_str($i);
 					// 	$sheet->mergeCells($i_name.$mergeColStartNum.':'.$i_name.$mergeColEndNum);
