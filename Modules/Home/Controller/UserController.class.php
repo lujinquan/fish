@@ -639,13 +639,14 @@ class UserController extends CommonController {
 			}
 			//----------------- by lucas S 添加优惠券中文名-------------------------
 			//指定商品
-			if($v['is_limit_goods_buy'] == 1){
+			if($val['is_limit_goods_buy'] == 1){
+				//$v['limit_goods_list'] = ''
 				if($val['limit_goods_list']){
 					$row = M()->query('SELECT group_concat(goodsname) as goodsnames FROM ' . C('DB_PREFIX') . "lionfish_comshop_goods where id in (" .$val['limit_goods_list'] . ") ");
 					$val['limit_goods_list_name'] = $row[0]['goodsnames'];
 				}
 			//指定商品类别
-			}elseif($v['is_limit_goods_buy'] == 2){
+			}elseif($val['is_limit_goods_buy'] == 2){
 				$val['goodscates_name'] = $goodscates_list[$val['goodscates']]['name'];
 			}
 			//----------------- by lucas E 添加优惠券中文名-------------------------
