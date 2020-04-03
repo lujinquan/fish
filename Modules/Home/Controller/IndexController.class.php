@@ -1053,10 +1053,17 @@ class IndexController extends CommonController {
 		if($is_seckill ==1)
 		{
 			 $where = " g.grounding =1 and g.is_seckill =1 and  g.type ='normal'   ";
-		}else
-		{
-			 $where = " g.grounding =1 and g.is_seckill =0 and  g.type ='normal'   ";
 		}
+		//----------------------- by lucas S ------------------------
+		else
+		{
+			 $where = " g.grounding =1 and  g.type ='normal'   ";
+		}
+		// else
+		// {
+		// 	 $where = " g.grounding =1 and g.is_seckill =0 and  g.type ='normal'   ";
+		// }
+		//----------------------- by lucas E ------------------------
 		
 		//head_id
 	
@@ -1191,7 +1198,10 @@ class IndexController extends CommonController {
 		{
 				
 		}else{
-			$where .= " and gc.is_new_buy=0 and gc.is_spike_buy = 0 ";
+			//----------------------- by lucas S ------------------------
+			$where .= " and gc.is_new_buy=0 ";
+			//$where .= " and gc.is_new_buy=0 and gc.is_spike_buy = 0 ";
+			//----------------------- by lucas E ------------------------
 		}
 		
 		if( $is_video == 1 )
